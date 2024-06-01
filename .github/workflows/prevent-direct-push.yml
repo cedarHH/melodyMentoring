@@ -1,0 +1,20 @@
+# This workflow will prevent direct push to the main, release, and develop branches.
+
+name: Prevent Direct Push
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  prevent-direct-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Prevent direct push to main, release, and develop branches
+      run: |
+        protected_branches_regex='^refs/heads/main$|^refs/heads/release/.*$|^refs/heads/develop$'
+        if [[ $GITHUB_REF =~ $protected_branches_regex ]]; then
+          echo "Direct pushes to 'main', 'release/*', and 'develop' branches are not allowed."
+          exit 1
+        fi
