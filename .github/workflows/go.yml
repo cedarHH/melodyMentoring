@@ -5,9 +5,9 @@ name: Go CI
 
 on:
   push:
-    branches: [ 'backend/**' ]
+    branches: [ "backend/**" ]
   pull_request:
-    branches: [ "main", "develop", "release/*", 'backend/**' ]
+    branches: [ "main", "develop", "release/*", "backend/**" ]
 
 jobs:
 
