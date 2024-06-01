@@ -11,6 +11,18 @@ on:
 
 jobs:
 
+  prevent-direct-push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+    - name: Prevent direct push to main and release branches
+      run: |
+        protected_branches_regex='^main$|^release/.*$'
+        if [[ $GITHUB_REF =~ $protected_branches_regex ]]; then
+          echo "Direct pushes to 'main' and 'release/*' branches are not allowed."
+          exit 1
+        fi
+
   build:
     runs-on: ubuntu-latest
     steps:
