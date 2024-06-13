@@ -10,5 +10,5 @@ func TestMain(m *testing.M) {
 }
 
 func TestJenkins(t *testing.T) {
-	require.Equal(t, "Hello!!", Hello())
+	require.Equal(t, "Hello!!!", Hello())
 }
