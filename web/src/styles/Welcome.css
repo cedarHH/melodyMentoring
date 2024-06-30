@@ -34,9 +34,9 @@ body, html {
 }
 .lean-box {
     display: flex;
-    transform: rotate(-10deg);
+    transform: rotate(-10deg) translateX(-10%) ;
 }
-@keyframes rowup {
+@keyframes rowUp {
     from {
         transform: translateX(0%);
     }
@@ -48,7 +48,7 @@ body, html {
     margin-top: -10%;
     display: flex;
     flex-wrap: nowrap;
-    animation: rowup 15s linear infinite;
+    animation: rowUp 15s linear infinite;
 }
 .wrapper .film-image:nth-child(even) {
     transform: translate(20%);

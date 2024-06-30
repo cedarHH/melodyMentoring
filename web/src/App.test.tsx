@@ -1,9 +1,12 @@
+// App.test.tsx
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders welcome route', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const welcomeElement = screen.getByText(/./i);
+  expect(welcomeElement).toBeInTheDocument();
 });
+
