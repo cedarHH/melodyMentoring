@@ -1,0 +1,81 @@
+syntax = "v1"
+
+info(
+	title: "user interface"
+	desc: "user interface"
+	author: "xuesong huang"
+)
+
+// Model definitions
+type User {
+    Id       int64  `json:"id"`
+    Mobile   string `json:"email"`
+    Nickname string `json:"nickname"`
+    Sex      int64  `json:"sex"`
+    Avatar   string `json:"avatar"`
+    Info     string `json:"info"`
+}
+
+type UserAuth {
+    Id       int64  `json:"id"`
+    UserId   int64  `json:"userId"`
+    AuthType string `json:"authType"`
+    AuthKey  string `json:"authKey"`
+}
+
+// Request and response messages
+type RegisterReq {
+    Mobile   string `json:"mobile"`
+    Nickname string `json:"nickname"`
+    Password string `json:"password"`
+    AuthKey  string `json:"authKey"`
+    AuthType string `json:"authType"`
+}
+type RegisterResp {
+    AccessToken  string `json:"accessToken"`
+    AccessExpire int64  `json:"accessExpire"`
+    RefreshAfter int64  `json:"refreshAfter"`
+}
+
+type LoginReq {
+    AuthType string `json:"authType"`
+    AuthKey  string `json:"authKey"`
+    Password string `json:"password"`
+}
+type LoginResp {
+    AccessToken  string `json:"accessToken"`
+    AccessExpire int64  `json:"accessExpire"`
+    RefreshAfter int64  `json:"refreshAfter"`
+}
+
+type GetUserInfoReq {
+    Id int64 `json:"id"`
+}
+type GetUserInfoResp {
+    UserInfo User `json:"userInfo"`
+}
+
+type GetUserAuthByAuthKeyReq {
+    AuthKey  string `json:"authKey"`
+    AuthType string `json:"authType"`
+}
+type GetUserAuthByAuthKeyResp {
+    UserAuth UserAuth `json:"userAuth"`
+}
+
+type GetUserAuthByUserIdReq {
+    UserId   int64  `json:"userId"`
+    AuthType string `json:"authType"`
+}
+type GetUserAuthByUserIdResp {
+    UserAuth UserAuth `json:"userAuth"`
+}
+
+type GenerateTokenReq {
+    UserId int64 `json:"userId"`
+}
+type GenerateTokenResp {
+    AccessToken  string `json:"accessToken"`
+    AccessExpire int64  `json:"accessExpire"`
+    RefreshAfter int64  `json:"refreshAfter"`
+}

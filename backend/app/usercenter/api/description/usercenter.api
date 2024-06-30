@@ -1,0 +1,54 @@
+syntax = "v1"
+
+info (
+	title:   "user center service"
+	desc:    "user center service"
+	author:  "xuesong huang"
+	version: "v1"
+)
+
+import (
+	"user/user.api"
+)
+
+//============================> usercenter v1 <============================
+// No need login
+@server (
+	prefix: usercenter/v1
+	group:  user
+)
+service usercenter {
+	@doc "register"
+	@handler register
+	post /user/register (RegisterReq) returns (RegisterResp)
+
+	@doc "login"
+	@handler login
+	post /user/login (LoginReq) returns (LoginResp)
+}
+
+// Need login
+@server (
+	prefix: usercenter/v1
+	group:  user
+	jwt:    JwtAuth
+)
+service usercenter {
+	@doc "get user info"
+	@handler getUserInfo
+	post /user/info (GetUserInfoReq) returns (GetUserInfoResp)
+
+	@doc "get user auth by auth key"
+	@handler getUserAuthByAuthKey
+	post /user/auth/key (GetUserAuthByAuthKeyReq) returns (GetUserAuthByAuthKeyResp)
+
+	@doc "get user auth by user id"
+	@handler getUserAuthByUserId
+	post /user/auth/id (GetUserAuthByUserIdReq) returns (GetUserAuthByUserIdResp)
+
+	@doc "generate token"
+	@handler generateToken
+	post /user/token (GenerateTokenReq) returns (GenerateTokenResp)
+}
+
+// goctl api go -api *.api -dir ../  -style=goZero
