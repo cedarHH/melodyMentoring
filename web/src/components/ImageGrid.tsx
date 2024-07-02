@@ -1,5 +1,4 @@
 import React from 'react';
-import FilmImage from './FilmImage';
 
 const images = [
     { src: "img/welcome/anime1.png", alt: "Anime 1" },
