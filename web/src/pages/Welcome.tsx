@@ -1,31 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ImageGrid from '../components/ImageGrid';
 import Logo from '../components/Logo';
 import Button from '../components/Button';
 import Tagline from '../components/Tagline';
+import AuthModal from "../components/Auth/AuthModal";
 import '../styles/Welcome.css';
+import {AWS_REGION, CLIENT_ID, COGNITO_DOMAIN, REDIRECT_URI} from "../constants/awsCognitoConf";
+
 
 const WelcomePage: React.FC = () => {
+    const [showAuthModal, setShowAuthModal] = useState(false);
+    const [isLogin, setIsLogin] = useState(true);
+
     const handleNewUserClick = () => {
         // Handle new user click
-        const cognitoDomain = process.env.REACT_APP_COGNITO_DOMAIN;
-        const clientId = process.env.REACT_APP_CLIENT_ID;
-        const redirectUri = process.env.REACT_APP_REDIRECT_URI;
-        const region = process.env.REACT_APP_REGION;
+        setIsLogin(false);
+        setShowAuthModal(true);
 
-        if (!cognitoDomain || !clientId || !redirectUri || !region) {
+        if (!COGNITO_DOMAIN || !CLIENT_ID || !REDIRECT_URI || !AWS_REGION) {
             console.error('Missing environment variables');
             return;
         }
 
         let loginUrl: string;
-        loginUrl = `https://${cognitoDomain}.auth.${region}.amazoncognito.com/
-            login?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+        loginUrl = `https://${COGNITO_DOMAIN}.auth.${AWS_REGION}.amazoncognito.com/
+            login?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
         window.location.href = loginUrl;
     };
 
     const handleSignInClick = () => {
         // Handle sign in click
+        setIsLogin(true);
+        setShowAuthModal(true);
     };
 
     return (
@@ -41,6 +47,13 @@ const WelcomePage: React.FC = () => {
                 <Button className="new-user" text="I am new here" onClick={handleNewUserClick}/>
                 <Button className="sign-in" text="Sign In" onClick={handleSignInClick}/>
             </div>
+            {showAuthModal && (
+                <AuthModal
+                    isLogin={isLogin}
+                    setIsLogin={setIsLogin}
+                    onClose={() => setShowAuthModal(false)}
+                />
+            )}
         </div>
     );
 };

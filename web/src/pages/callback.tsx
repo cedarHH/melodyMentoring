@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import queryString from 'query-string';
+import {CLIENT_ID, CLIENT_SECRET, COGNITO_DOMAIN, REDIRECT_URI, AWS_REGION} from "../constants/awsCognitoConf";
 
 const Callback: React.FC = () => {
     const navigate = useNavigate();
@@ -14,27 +15,21 @@ const Callback: React.FC = () => {
             const { code } = queryString.parse(window.location.search);
 
             if (code && typeof code === 'string') {
-                const cognitoDomain = process.env.REACT_APP_COGNITO_DOMAIN;
-                const clientId = process.env.REACT_APP_CLIENT_ID;
-                const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
-                const redirectUri = process.env.REACT_APP_REDIRECT_URI;
-                const region = process.env.REACT_APP_REGION;
-
-                if (!cognitoDomain || !clientId || !clientSecret || !redirectUri || !region) {
+                if (!COGNITO_DOMAIN || !CLIENT_ID || !CLIENT_SECRET || !REDIRECT_URI || !AWS_REGION) {
                     console.error('Missing environment variables');
                     return;
                 }
 
-                const credentials = `${clientId}:${clientSecret}`;
+                const credentials = `${CLIENT_ID}:${CLIENT_SECRET}`;
                 const base64Credentials = btoa(credentials);
                 const basicAuthorization = `Basic ${base64Credentials}`;
-                const tokenResponse = await fetch(`https://${cognitoDomain}.auth.${region}.amazoncognito.com/oauth2/token`, {
+                const tokenResponse = await fetch(`https://${COGNITO_DOMAIN}.auth.${AWS_REGION}.amazoncognito.com/oauth2/token`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                         Authorization: basicAuthorization,
                     },
-                    body: `grant_type=authorization_code&client_id=${clientId}&code=${code}&redirect_uri=${redirectUri}`
+                    body: `grant_type=authorization_code&client_id=${CLIENT_ID}&code=${code}&redirect_uri=${REDIRECT_URI}`
                 });
                 const tokenData = await tokenResponse.json();
 
