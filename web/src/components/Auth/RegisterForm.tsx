@@ -1,10 +1,11 @@
 import React from "react";
 import '../../styles/Welcome.css';
+import Button from "../MISC/Button";
 
 const RegisterForm: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) => {
     return (
         <form>
-            <button type="button" onClick={onSwitch}>Already have an account? Log in</button>
+            <Button className="new-user" text="Already have an account? Log in" onClick={onSwitch}/>
         </form>
     );
 };

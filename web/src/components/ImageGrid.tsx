@@ -1,15 +1,24 @@
 import React from 'react';
+import anime1 from '../assets/img/welcome/anime1.png'
+import anime2 from '../assets/img/welcome/anime2.png'
+import anime3 from '../assets/img/welcome/anime3.png'
+import anime4 from '../assets/img/welcome/anime4.png'
+import anime5 from '../assets/img/welcome/anime5.png'
+import anime6 from '../assets/img/welcome/anime6.png'
+import anime7 from '../assets/img/welcome/anime7.png'
+import anime8 from '../assets/img/welcome/anime8.png'
+import anime9 from '../assets/img/welcome/anime9.png'
 
 const images = [
-    { src: "img/welcome/anime1.png", alt: "Anime 1" },
-    { src: "img/welcome/anime2.png", alt: "Anime 2" },
-    { src: "img/welcome/anime3.png", alt: "Anime 3" },
-    { src: "img/welcome/anime4.png", alt: "Anime 4" },
-    { src: "img/welcome/anime5.png", alt: "Anime 5" },
-    { src: "img/welcome/anime6.png", alt: "Anime 6" },
-    { src: "img/welcome/anime7.png", alt: "Anime 7" },
-    { src: "img/welcome/anime8.png", alt: "Anime 8" },
-    { src: "img/welcome/anime9.png", alt: "Anime 9" },
+    { src: anime1, alt: "Anime 1" },
+    { src: anime2, alt: "Anime 2" },
+    { src: anime3, alt: "Anime 3" },
+    { src: anime4, alt: "Anime 4" },
+    { src: anime5, alt: "Anime 5" },
+    { src: anime6, alt: "Anime 6" },
+    { src: anime7, alt: "Anime 7" },
+    { src: anime8, alt: "Anime 8" },
+    { src: anime9, alt: "Anime 9" },
 ];
 
 const groups = [

@@ -3,7 +3,7 @@ import React from 'react';
 const NotFound: React.FC = () => {
     return (
         <div>
-            <h1>404 - Not Found</h1>
+            <img src="img/statusCode/NotFound.png" alt="404 Not Found"></img>
         </div>
     );
 }

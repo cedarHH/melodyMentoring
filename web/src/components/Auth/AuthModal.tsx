@@ -1,7 +1,6 @@
 import React from "react";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
-import Button from "../Button";
 import "../../styles/AuthModal.css"
 
 interface AuthModalProps {
@@ -12,8 +11,8 @@ interface AuthModalProps {
 
 const AuthModal: React.FC<AuthModalProps> = ({ isLogin, setIsLogin, onClose }) => {
 
-    const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        if (e.target === e.currentTarget) {
+    const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        if (event.target === event.currentTarget) {
             onClose();
         }
     };
@@ -22,11 +21,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isLogin, setIsLogin, onClose }) =
         <div className="auth-modal-overlay" onClick={handleOverlayClick}>
             <div className="auth-modal">
                 {isLogin ? (
-                    <LoginForm onSwitch={() => setIsLogin(false)} />
+                    <LoginForm
+                        onSubmit={() => setIsLogin(false)}
+                    />
                 ) : (
                     <RegisterForm onSwitch={() => setIsLogin(true)} />
                 )}
-                <Button className="new-user" text="close" onClick={onClose}/>
             </div>
         </div>
     );
