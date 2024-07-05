@@ -79,35 +79,9 @@ body, html {
     padding: 3vw;
     z-index: 20;
 }
-.logo {
-    display: flex;
-    align-items: center;
-    margin-bottom: 3vh;
-}
-.logo-icon {
-    width: 6vw;
-    height: 6vw;
-    background-color: #fff;
-    border-radius: 50%;
-    margin-right: 2vw;
-}
-.logo-text {
-    font-size: 4vw;
-    font-weight: bold;
-}
 .tagline {
     font-size: 3vw;
     margin-bottom: 5vh;
-}
-.button {
-    padding: 2vh 4vw;
-    border: none;
-    border-radius: 5vh;
-    font-size: 2.5vw;
-    cursor: pointer;
-    margin-bottom: 2vh;
-    width: 100%;
-    text-align: center;
 }
 .new-user {
     background-color: #5bbce4;

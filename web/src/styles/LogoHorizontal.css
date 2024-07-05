@@ -1,0 +1,25 @@
+.logoH {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3vh;
+}
+.logoH-icon {
+    width: 6vw;
+    height: 6vw;
+    background-color: #fff;
+    border-radius: 50%;
+    margin-right: 2vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.logoH-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.logoH-text {
+    font-size: 4vw;
+    font-weight: bold;
+}
