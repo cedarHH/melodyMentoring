@@ -8,7 +8,6 @@
 
 .buttonStyle {
     width: 100%;
-    padding: 10px;
     background-color: #333;
     color: white;
     border: none;
@@ -22,7 +21,7 @@
     text-decoration: none
 }
 
-.loginContainer {
+.authContainer {
     max-width: 350px;
     margin: auto;
     padding: 20px;

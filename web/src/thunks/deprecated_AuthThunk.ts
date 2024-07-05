@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import {AuthThunk} from '../types/types'
-import { loginRequest, loginSuccess, loginFailure } from '../actions/AuthAction';
+import { loginRequest, loginSuccess, loginFailure } from '../actions/deprecated_AuthAction';
 
 export const login = (email: string, password: string): AuthThunk => {
     return async (dispatch: Dispatch) => {

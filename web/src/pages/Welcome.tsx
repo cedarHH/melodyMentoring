@@ -3,7 +3,7 @@ import ImageGrid from '../components/ImageGrid';
 import LogoHorizontal from '../components/MISC/LogoHorizontal';
 import Button from '../components/MISC/Button';
 import Tagline from '../components/MISC/Tagline';
-import AuthModal from "../components/Auth/AuthModal";
+import AuthModal, {AuthMode} from "../components/Auth/AuthModal";
 import '../styles/Welcome.css';
 import logo from '../assets/img/logo/mygo.png'
 import {AWS_REGION, CLIENT_ID, COGNITO_DOMAIN, REDIRECT_URI} from "../constants/awsCognitoConf";
@@ -11,17 +11,17 @@ import {AWS_REGION, CLIENT_ID, COGNITO_DOMAIN, REDIRECT_URI} from "../constants/
 
 const WelcomePage: React.FC = () => {
     const [showAuthModal, setShowAuthModal] = useState(false);
-    const [isLogin, setIsLogin] = useState(true);
+    const [authMode, setAuthMode] = useState<AuthMode>(AuthMode.LOGIN);
 
     const handleNewUserClick = () => {
         // Handle new user click
-        setIsLogin(false);
+        setAuthMode(AuthMode.REGISTER);
         setShowAuthModal(true);
     };
 
     const handleSignInClick = () => {
         // Handle sign in click
-        setIsLogin(true);
+        setAuthMode(AuthMode.LOGIN);
         setShowAuthModal(true);
     };
 
@@ -44,8 +44,8 @@ const WelcomePage: React.FC = () => {
             </div>
             {showAuthModal && (
                 <AuthModal
-                    isLogin={isLogin}
-                    setIsLogin={setIsLogin}
+                    authMode={authMode}
+                    setAuthMode={setAuthMode}
                     onClose={() => setShowAuthModal(false)}
                 />
             )}

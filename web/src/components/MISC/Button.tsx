@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/button.css'
 
 interface ButtonProps {
     className: string;
@@ -7,7 +8,7 @@ interface ButtonProps {
     onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ className, type, text, onClick }) => (
+const Button: React.FC<ButtonProps> = ({className, type, text, onClick}) => (
     <button className={`button ${className}`} type={type} onClick={onClick}>
         {text}
     </button>

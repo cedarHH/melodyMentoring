@@ -1,4 +1,4 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from '../actions/AuthAction';
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from '../actions/deprecated_AuthAction';
 
 interface AuthState {
     loading: boolean;
@@ -12,7 +12,7 @@ const initialState: AuthState = {
     error: null,
 };
 
-const authReducer = (state = initialState, action: any): AuthState => {
+const deprecated_AuthReducer = (state = initialState, action: any): AuthState => {
     switch (action.type) {
         case LOGIN_REQUEST:
             return { ...state, loading: true, error: null };
@@ -25,5 +25,5 @@ const authReducer = (state = initialState, action: any): AuthState => {
     }
 };
 
-export type authState = ReturnType<typeof authReducer>;
-export default authReducer;
+export type authState = ReturnType<typeof deprecated_AuthReducer>;
+export default deprecated_AuthReducer;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {Dispatch, UnknownAction} from 'redux';
-import { login } from '../thunks/AuthThunk';
-import {authState} from '../reducers/AuthReducer'
+import { login } from '../thunks/deprecated_AuthThunk';
+import {authState} from '../reducers/deprecated_AuthReducer'
 import {ThunkDispatch} from "redux-thunk";
 import LoginForm from '../components/Auth/LoginForm';
 
@@ -11,7 +11,10 @@ interface LoginContainerProps {
 }
 
 const LoginContainer: React.FC<LoginContainerProps> = ({ login }) => {
-    return <LoginForm onSubmit={login} />;
+    return <LoginForm
+        setAuthMode={()=>{}}
+        onClose={()=>{}}
+    />;
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<authState, unknown, UnknownAction>) => ({

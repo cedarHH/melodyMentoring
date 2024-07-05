@@ -1,24 +1,26 @@
 import React, {useState} from "react";
 import Button from "../MISC/Button";
-import '../../styles/LoginForm.css'
-import logo from '../../assets/img/logo/mygo.jpg'
+import {AuthMode} from "./AuthModal";
 import LogoVertical from "../MISC/LogoVertical";
+import logo from '../../assets/img/logo/mygo.jpg'
+import '../../styles/AuthForm.css'
 
 interface LoginFormProps {
-    onSubmit: (email: string, password: string) => void;
+    setAuthMode: React.Dispatch<React.SetStateAction<AuthMode>>;
+    onClose: () => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
+const LoginForm: React.FC< LoginFormProps > = ({ setAuthMode, onClose }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        onSubmit(email,password);
+        onClose();
     };
 
     return (
-        <div className="loginContainer">
+        <div className="authContainer">
             <LogoVertical
                 radius="10vw"
                 imageUrl={logo}
@@ -40,8 +42,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                 <Button className="buttonStyle" type="submit" text="Log in"/>
             </form>
             <div className="bottomContainer">
-                <Button className="transparent-button" type="button" text="Reset password" onClick={() => {}}/>
-                <Button className="transparent-button" type="button" text="New user? Sign up" onClick={() => {}}/>
+                <Button className="transparent-button" type="button" text="Reset password" onClick={() => {setAuthMode(AuthMode.RESET_PASSWORD)}}/>
+                <Button className="transparent-button" type="button" text="New user? Sign up" onClick={() => {setAuthMode(AuthMode.REGISTER)}}/>
             </div>
         </div>
     );

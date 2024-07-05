@@ -1,18 +1,18 @@
 import React, {useState} from "react";
+import '../../styles/Welcome.css';
 import Button from "../MISC/Button";
 import {AuthMode} from "./AuthModal";
 import LogoVertical from "../MISC/LogoVertical";
-import '../../styles/Welcome.css';
 import logo from "../../assets/img/logo/mygo.jpg";
 
-interface RegisterFormProps {
+interface ResetPasswordFormProps {
     setAuthMode: React.Dispatch<React.SetStateAction<AuthMode>>;
     onClose: () => void;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
-    const [username, setUsername] = useState('');
+const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMode, onClose }) => {
     const [email, setEmail] = useState('');
+    const [captcha, setCaptcha] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -26,20 +26,20 @@ const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
             <LogoVertical
                 radius="10vw"
                 imageUrl={logo}
-                text="Register" // Create a free account to discover your personalized learning path
+                text="Reset Password" // Create a free account to discover your personalized learning path
             />
             <form onSubmit={handleSubmit}>
-                <input className="inputStyle"
-                       type="text"
-                       placeholder="Username"
-                       value={username}
-                       onChange={(e) => setUsername(e.target.value)}
-                />
                 <input className="inputStyle"
                        type="email"
                        placeholder="Email"
                        value={email}
                        onChange={(e) => setEmail(e.target.value)}
+                />
+                <input className="inputStyle"
+                       type="text"
+                       placeholder="Enter verification code sent to your email"
+                       value={captcha}
+                       onChange={(e) => setCaptcha(e.target.value)}
                 />
                 <input className="inputStyle"
                        type="password"
@@ -53,17 +53,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
                        value={confirmPassword}
                        onChange={(e) => setConfirmPassword(e.target.value)}
                 />
-                <Button className="buttonStyle" type="submit" text="Sign up"/>
+                <Button className="buttonStyle" type="submit" text="Reset"/>
+                <Button className="buttonStyle" type="button" text="Cancel" onClick={() => {onClose()}}/>
             </form>
-            <div className="bottomContainer">
-                <Button className="transparent-button" type="button" text="Already have an account? Log in"
-                        onClick={() => {
-                            setAuthMode(AuthMode.LOGIN)
-                        }}
-                />
-            </div>
         </div>
-    );
+    )
+        ;
 };
 
-export default RegisterForm;
+export default ResetPasswordForm;
