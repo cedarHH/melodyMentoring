@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import ResetPasswordForm from "./ResetPasswordForm";
@@ -17,15 +17,21 @@ export enum AuthMode {
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ authMode, setAuthMode, onClose }) => {
+    const [mouseDownTarget, setMouseDownTarget] = useState<EventTarget | null>(null);
+
+    const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        setMouseDownTarget(event.target);
+    };
 
     const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        if (event.target === event.currentTarget) {
+        if (event.target === event.currentTarget && mouseDownTarget === event.currentTarget) {
             onClose();
         }
+        setMouseDownTarget(null);
     };
 
     return (
-        <div className="auth-modal-overlay" onClick={handleOverlayClick}>
+        <div className="auth-modal-overlay" onClick={handleOverlayClick} onMouseDown={handleMouseDown}>
             <div className="auth-modal">
                 {authMode === AuthMode.LOGIN && (
                     <LoginForm

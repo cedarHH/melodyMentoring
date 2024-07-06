@@ -6,7 +6,6 @@ import Tagline from '../components/MISC/Tagline';
 import AuthModal, {AuthMode} from "../components/Auth/AuthModal";
 import '../styles/Welcome.css';
 import logo from '../assets/img/logo/mygo.png'
-import {AWS_REGION, CLIENT_ID, COGNITO_DOMAIN, REDIRECT_URI} from "../constants/awsCognitoConf";
 
 
 const WelcomePage: React.FC = () => {
@@ -54,13 +53,3 @@ const WelcomePage: React.FC = () => {
 };
 
 export default WelcomePage;
-
-// if (!COGNITO_DOMAIN || !CLIENT_ID || !REDIRECT_URI || !AWS_REGION) {
-//     console.error('Missing environment variables');
-//     return;
-// }
-//
-// let loginUrl: string;
-// loginUrl = `https://${COGNITO_DOMAIN}.auth.${AWS_REGION}.amazoncognito.com/
-//             login?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
-// window.location.href = loginUrl;

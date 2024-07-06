@@ -1,7 +1,9 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import Button from "../MISC/Button";
 import {AuthMode} from "./AuthModal";
 import LogoVertical from "../MISC/LogoVertical";
+import {AuthContext} from "../../contexts/AuthContext";
+import {useNavigate} from "react-router-dom";
 import '../../styles/Welcome.css';
 import logo from "../../assets/img/logo/mygo.jpg";
 
