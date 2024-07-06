@@ -6,6 +6,8 @@ import {AuthContext} from "../../contexts/AuthContext";
 import {useNavigate} from "react-router-dom";
 import '../../styles/Welcome.css';
 import logo from "../../assets/img/logo/mygo.jpg";
+import {useValidCode, useValidEmail, useValidPassword} from "../../hooks/useAuthHooks";
+import Notification from "../MISC/Notification";
 
 interface RegisterFormProps {
     setAuthMode: React.Dispatch<React.SetStateAction<AuthMode>>;
@@ -14,13 +16,62 @@ interface RegisterFormProps {
 
 const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
     const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const {email, setEmail, emailIsValid} = useValidEmail('');
+    const {password, setPassword, passwordIsValid, formatError} = useValidPassword('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('')
+    const [showNotification, setShowNotification] = useState(false);
+    const authContext = useContext(AuthContext)
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        onClose();
+        setShowNotification(false);
+
+        if (!emailIsValid) {
+            setError('Invalid email format.');
+            setShowNotification(true);
+            return;
+        }
+
+        if (!passwordIsValid) {
+            setError(`${formatError}`);
+            setShowNotification(true);
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError('The passwords do not match');
+            setShowNotification(true);
+            return;
+        }
+
+        try {
+            if (authContext.signUpWithEmail) {
+                await authContext.signUpWithEmail(username, email, password);
+                setAuthMode(AuthMode.VERIFY_CODE)
+            } else {
+                setError('signUpWithEmail is not defined');
+                setShowNotification(true);
+            }
+        } catch (err: any) {
+            switch (err.code) {
+                case 'UsernameExistsException':
+                    setError('An account with this username or email already exists.');
+                    break;
+                case 'InvalidPasswordException':
+                    setError('Password does not meet the minimum requirements.');
+                    break;
+                case 'InvalidParameterException':
+                    setError('Invalid parameters. Please check your input.');
+                    break;
+                case 'UserLambdaValidationException':
+                    setError('The provided email is not valid.');
+                    break;
+                default:
+                    setError(err.message);
+            }
+            setShowNotification(true);
+        }
     };
 
     return (
@@ -30,6 +81,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
                 imageUrl={logo}
                 text="Register" // Create a free account to discover your personalized learning path
             />
+            {showNotification && (
+                <Notification
+                    width="100%"
+                    message={error}
+                />
+            )}
             <form onSubmit={handleSubmit}>
                 <input className="inputStyle"
                        type="text"

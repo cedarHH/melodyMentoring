@@ -12,6 +12,7 @@ export interface IAuth {
     sessionInfo?: { username?: string; email?: string; sub?: string; accessToken?: string; refreshToken?: string }
     attrInfo?: any
     authStatus?: AuthStatus
+    currentUserEmail?: string;
     signInWithEmail?: (username: string, password: string) => Promise<void>
     signUpWithEmail?: (username: string, email: string, password: string) => Promise<void>
     signOut?: () => void
@@ -27,6 +28,7 @@ export interface IAuth {
 const defaultState: IAuth = {
     sessionInfo: {},
     authStatus: AuthStatus.Loading,
+    currentUserEmail: '',
 }
 
 type Props = {
@@ -51,6 +53,7 @@ const AuthProvider = ({ children }: Props) => {
     const [authStatus, setAuthStatus] = useState(AuthStatus.Loading)
     const [sessionInfo, setSessionInfo] = useState({})
     const [attrInfo, setAttrInfo] = useState([])
+    const [currentUserEmail, setCurrentUserEmail] = useState('');
 
     useEffect(() => {
         async function getSessionInfo() {
@@ -89,6 +92,7 @@ const AuthProvider = ({ children }: Props) => {
     async function signUpWithEmail(username: string, email: string, password: string) {
         try {
             await cognito.signUpUserWithEmail(username, email, password)
+            setCurrentUserEmail(email)
         } catch (err) {
             throw err
         }
@@ -159,6 +163,7 @@ const AuthProvider = ({ children }: Props) => {
         authStatus,
         sessionInfo,
         attrInfo,
+        currentUserEmail,
         signUpWithEmail,
         signInWithEmail,
         signOut,

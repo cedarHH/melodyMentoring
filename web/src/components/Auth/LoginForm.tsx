@@ -1,11 +1,13 @@
 import React, {useContext, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import Button from "../MISC/Button";
-import {AuthMode} from "./AuthModal";
 import LogoVertical from "../MISC/LogoVertical";
+import Notification from "../MISC/Notification";
+import {AuthMode} from "./AuthModal";
+import {AuthContext} from "../../contexts/AuthContext";
 import logo from '../../assets/img/logo/mygo.jpg'
 import '../../styles/AuthForm.css'
-import {AuthContext} from "../../contexts/AuthContext";
-import {useNavigate} from "react-router-dom";
+import {useValidEmail} from "../../hooks/useAuthHooks";
 
 interface LoginFormProps {
     setAuthMode: React.Dispatch<React.SetStateAction<AuthMode>>;
@@ -13,29 +15,50 @@ interface LoginFormProps {
 }
 
 const LoginForm: React.FC< LoginFormProps > = ({ setAuthMode, onClose }) => {
-    const [email, setEmail] = useState('');
+    const {email, setEmail, emailIsValid} = useValidEmail('');
     const [password, setPassword] = useState('');
-    const authContext = useContext(AuthContext)
     const [error, setError] = useState('')
+    const [showNotification, setShowNotification] = useState(false);
+    const authContext = useContext(AuthContext)
     const navigate = useNavigate();
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        setError('');
+        setShowNotification(false);
+
+        if (!emailIsValid) {
+            setError('Invalid email format.');
+            setShowNotification(true);
+            return;
+        }
+
         try {
             if (authContext.signInWithEmail) {
-                await authContext.signInWithEmail(email, password)
-                navigate('/home')
+                await authContext.signInWithEmail(email, password);
+                onClose();
+                navigate('/home');
             } else {
-                setError('signInWithEmail is not defined')
+                setError('signInWithEmail is not defined');
+                setShowNotification(true);
             }
         } catch (err: any) {
-            if (err.code === 'UserNotConfirmedException') {
-                //todo
-            } else {
-                setError(err.message)
+            switch (err.code) {
+                case 'UserNotConfirmedException':
+                    setError('Your account is not confirmed. Please check your email for the confirmation link.');
+                    break;
+                case 'NotAuthorizedException':
+                    setError('Incorrect email or password.');
+                    break;
+                // case 'UserNotFoundException':
+                //     setError('User does not exist.');
+                //     break;
+                default:
+                    setError(err.message);
             }
+            setShowNotification(true);
         }
-    }
+    };
 
     return (
         <div className="authContainer">
@@ -44,6 +67,12 @@ const LoginForm: React.FC< LoginFormProps > = ({ setAuthMode, onClose }) => {
                 imageUrl={logo}
                 text="Login"
             />
+            {showNotification && (
+                <Notification
+                    width="100%"
+                    message={error}
+                />
+            )}
             <form onSubmit={handleSubmit}>
                 <input className="inputStyle"
                        type="email"

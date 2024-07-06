@@ -10,9 +10,9 @@ interface ResetPasswordFormProps {
     onClose: () => void;
 }
 
-const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMode, onClose }) => {
+const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({setAuthMode, onClose}) => {
     const [email, setEmail] = useState('');
-    const [captcha, setCaptcha] = useState('');
+    const [verificationCode, setVerificationCode] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -38,8 +38,8 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMode, onCl
                 <input className="inputStyle"
                        type="text"
                        placeholder="Enter verification code sent to your email"
-                       value={captcha}
-                       onChange={(e) => setCaptcha(e.target.value)}
+                       value={verificationCode}
+                       onChange={(e) => setVerificationCode(e.target.value)}
                 />
                 <input className="inputStyle"
                        type="password"
@@ -54,11 +54,12 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMode, onCl
                        onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <Button className="buttonStyle" type="submit" text="Reset"/>
-                <Button className="buttonStyle" type="button" text="Cancel" onClick={() => {onClose()}}/>
+                <Button className="buttonStyle" type="button" text="Cancel" onClick={() => {
+                    onClose()
+                }}/>
             </form>
         </div>
-    )
-        ;
+    );
 };
 
 export default ResetPasswordForm;
