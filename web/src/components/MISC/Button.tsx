@@ -1,17 +1,29 @@
 import React from 'react';
-import '../../styles/button.css'
+import styled from 'styled-components';
 
 interface ButtonProps {
-    className: string;
+    className?: string;
     type?: 'button' | 'submit' | 'reset';
     text: string;
     onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({className, type, text, onClick}) => (
-    <button className={`button ${className}`} type={type} onClick={onClick}>
+const StyledButton = styled.button`
+  padding: 2vh 4vw;
+  border: none;
+  border-radius: 5vh;
+  font-size: 2.5vw;
+  cursor: pointer;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  width: 100%;
+  text-align: center;
+`;
+
+const Button: React.FC<ButtonProps> = ({ className, type = 'button', text, onClick = () => {} }) => (
+    <StyledButton className={className} type={type} onClick={onClick}>
         {text}
-    </button>
+    </StyledButton>
 );
 
 export default Button;

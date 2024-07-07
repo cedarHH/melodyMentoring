@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-
+import axios from 'axios'
 import * as cognito from '../libs/cognito'
 
 export enum AuthStatus {
@@ -12,8 +12,9 @@ export interface IAuth {
     sessionInfo?: { username?: string; email?: string; sub?: string; accessToken?: string; refreshToken?: string }
     attrInfo?: any
     authStatus?: AuthStatus
+    currentUserEmail?: string;
     signInWithEmail?: (username: string, password: string) => Promise<void>
-    signUpWithEmail?: (username: string, email: string, password: string) => Promise<void>
+    signUpWithEmail?: (username: string, email: string, password: string, name: string) => Promise<void>
     signOut?: () => void
     verifyCode?: (username: string, code: string) => Promise<void>
     getSession?: () => Promise<any>
@@ -22,11 +23,13 @@ export interface IAuth {
     changePassword?: (oldPassword: string, newPassword: string) => Promise<void>
     getAttributes?: () => Promise<any>
     setAttribute?: (attr: any) => Promise<any>
+    refreshToken?: () => void,
 }
 
 const defaultState: IAuth = {
     sessionInfo: {},
     authStatus: AuthStatus.Loading,
+    currentUserEmail: '',
 }
 
 type Props = {
@@ -51,6 +54,7 @@ const AuthProvider = ({ children }: Props) => {
     const [authStatus, setAuthStatus] = useState(AuthStatus.Loading)
     const [sessionInfo, setSessionInfo] = useState({})
     const [attrInfo, setAttrInfo] = useState([])
+    const [currentUserEmail, setCurrentUserEmail] = useState('');
 
     useEffect(() => {
         async function getSessionInfo() {
@@ -60,8 +64,11 @@ const AuthProvider = ({ children }: Props) => {
                     accessToken: session.accessToken.jwtToken,
                     refreshToken: session.refreshToken.token,
                 })
-                window.localStorage.setItem('accessToken', `${session.accessToken.jwtToken}`)
-                window.localStorage.setItem('refreshToken', `${session.refreshToken.token}`)
+                // Send tokens to backend to set cookies
+                await axios.post('/api/set-tokens', {
+                    accessToken: session.accessToken.jwtToken,
+                    refreshToken: session.refreshToken.token,
+                })
                 const attr: any = await getAttributes()
                 setAttrInfo(attr)
                 setAuthStatus(AuthStatus.SignedIn)
@@ -86,17 +93,19 @@ const AuthProvider = ({ children }: Props) => {
         }
     }
 
-    async function signUpWithEmail(username: string, email: string, password: string) {
+    async function signUpWithEmail(username: string, email: string, password: string, name: string) {
         try {
-            await cognito.signUpUserWithEmail(username, email, password)
+            await cognito.signUpUserWithEmail(username, email, password, name)
+            setCurrentUserEmail(email)
         } catch (err) {
             throw err
         }
     }
 
-    function signOut() {
+    async function signOut() {
         cognito.signOut()
         setAuthStatus(AuthStatus.SignedOut)
+        await axios.post('/api/clear-tokens')
     }
 
     async function verifyCode(email: string, code: string) {
@@ -155,10 +164,16 @@ const AuthProvider = ({ children }: Props) => {
         }
     }
 
+    async function refreshToken() {
+    // todo
+    }
+
+
     const state: IAuth = {
         authStatus,
         sessionInfo,
         attrInfo,
+        currentUserEmail,
         signUpWithEmail,
         signInWithEmail,
         signOut,
@@ -169,6 +184,7 @@ const AuthProvider = ({ children }: Props) => {
         changePassword,
         getAttributes,
         setAttribute,
+        refreshToken,
     }
 
     return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>
