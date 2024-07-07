@@ -38,26 +38,20 @@ const AuthModal: React.FC<AuthModalProps> = ({ authMode, setAuthMode, onClose })
                 {authMode === AuthMode.LOGIN && (
                     <LoginForm
                         setAuthMode={setAuthMode}
-                        onClose={onClose}
                     />
                 )}
                 {authMode === AuthMode.REGISTER && (
                     <RegisterForm
                         setAuthMode={setAuthMode}
-                        onClose={onClose}
                     />
                 )}
                 {authMode === AuthMode.RESET_PASSWORD && (
                     <ResetPasswordForm
                         setAuthMode={setAuthMode}
-                        onClose={onClose}
                     />
                 )}
                 {authMode === AuthMode.VERIFY_CODE && (
-                    <VerifyCodeForm
-                        setAuthMode={setAuthMode}
-                        onClose={onClose}
-                    />
+                    <VerifyCodeForm/>
                 )}
             </div>
         </div>

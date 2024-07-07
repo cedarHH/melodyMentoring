@@ -51,7 +51,7 @@ export const useValidPassword = (initialValue: string) => {
     const [formatError, setFormatError] = useState<string | null>(null)
 
     useEffect(() => {
-        const specialChars = '^$*.[]{}()?-\"!@#%&/\\,><\':;|_~`+='
+        const specialChars = '^$*.[]{}()?-"!@#%&/\\,><\':;|_~`+='
 
         const passwordSchema = yup.object().shape({
             password: yup.string()

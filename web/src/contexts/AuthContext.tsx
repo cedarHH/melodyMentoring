@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-
+import axios from 'axios'
 import * as cognito from '../libs/cognito'
 
 export enum AuthStatus {
@@ -23,6 +23,7 @@ export interface IAuth {
     changePassword?: (oldPassword: string, newPassword: string) => Promise<void>
     getAttributes?: () => Promise<any>
     setAttribute?: (attr: any) => Promise<any>
+    refreshToken?: () => void,
 }
 
 const defaultState: IAuth = {
@@ -63,8 +64,11 @@ const AuthProvider = ({ children }: Props) => {
                     accessToken: session.accessToken.jwtToken,
                     refreshToken: session.refreshToken.token,
                 })
-                window.localStorage.setItem('accessToken', `${session.accessToken.jwtToken}`)
-                window.localStorage.setItem('refreshToken', `${session.refreshToken.token}`)
+                // Send tokens to backend to set cookies
+                await axios.post('/api/set-tokens', {
+                    accessToken: session.accessToken.jwtToken,
+                    refreshToken: session.refreshToken.token,
+                })
                 const attr: any = await getAttributes()
                 setAttrInfo(attr)
                 setAuthStatus(AuthStatus.SignedIn)
@@ -98,9 +102,10 @@ const AuthProvider = ({ children }: Props) => {
         }
     }
 
-    function signOut() {
+    async function signOut() {
         cognito.signOut()
         setAuthStatus(AuthStatus.SignedOut)
+        await axios.post('/api/clear-tokens')
     }
 
     async function verifyCode(email: string, code: string) {
@@ -159,6 +164,11 @@ const AuthProvider = ({ children }: Props) => {
         }
     }
 
+    async function refreshToken() {
+    // todo
+    }
+
+
     const state: IAuth = {
         authStatus,
         sessionInfo,
@@ -174,6 +184,7 @@ const AuthProvider = ({ children }: Props) => {
         changePassword,
         getAttributes,
         setAttribute,
+        refreshToken,
     }
 
     return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>

@@ -11,10 +11,9 @@ import {useValidCode, useValidEmail} from "../../hooks/useAuthHooks";
 
 interface LoginFormProps {
     setAuthMode: React.Dispatch<React.SetStateAction<AuthMode>>;
-    onClose: () => void;
 }
 
-const LoginForm: React.FC< LoginFormProps > = ({ setAuthMode, onClose }) => {
+const LoginForm: React.FC< LoginFormProps > = ({ setAuthMode }) => {
     const {email, setEmail, emailIsValid} = useValidEmail('');
     const [password, setPassword] = useState('');
     const {code, setCode, codeIsValid} = useValidCode('');

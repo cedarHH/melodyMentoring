@@ -10,10 +10,9 @@ import Notification from "../MISC/Notification";
 
 interface RegisterFormProps {
     setAuthMode: React.Dispatch<React.SetStateAction<AuthMode>>;
-    onClose: () => void;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode}) => {
     const {nickname, setNickname, nicknameIsValid} = useValidNickname('');
     const {email, setEmail, emailIsValid} = useValidEmail('');
     const {password, setPassword, passwordIsValid, formatError} = useValidPassword('');

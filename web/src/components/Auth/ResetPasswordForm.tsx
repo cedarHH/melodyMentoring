@@ -11,10 +11,9 @@ import {useNavigate} from "react-router-dom";
 
 interface ResetPasswordFormProps {
     setAuthMode: React.Dispatch<React.SetStateAction<AuthMode>>;
-    onClose: () => void;
 }
 
-const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({setAuthMode, onClose}) => {
+const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({setAuthMode}) => {
     const [email, setEmail] = useState('');
     const {code, setCode, codeIsValid} = useValidCode('');
     const {password, setPassword, passwordIsValid, formatError} = useValidPassword('');
@@ -106,7 +105,6 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({setAuthMode, onClo
                                onChange={(e) => setEmail(e.target.value)}
                         />
                         <Button className="buttonStyle" type="button" text="Send Code" onClick={sendVerificationCode}/>
-                        <Button className="buttonStyle" type="button" text="Cancel" onClick={onClose}/>
                     </>
                 )}
                 {stage === 'resetPassword' && (
@@ -136,10 +134,14 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({setAuthMode, onClo
                         />
                         <Button className="buttonStyle" type="button" text="Reset Password" onClick={resetPassword}/>
                         <Button className="buttonStyle" type="button" text="Send Again" onClick={sendVerificationCode}/>
-                        <Button className="buttonStyle" type="button" text="Cancel" onClick={onClose}/>
                     </>
                 )}
             </form>
+            <div className="bottomContainer">
+                <Button className="transparent-button" type="button" text="Cancel Reset" onClick={() => {
+                    setAuthMode(AuthMode.LOGIN)
+                }}/>
+            </div>
         </div>
     );
 };

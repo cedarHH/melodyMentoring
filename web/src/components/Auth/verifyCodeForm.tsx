@@ -1,7 +1,6 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import '../../styles/Welcome.css';
 import Button from "../MISC/Button";
-import {AuthMode} from "./AuthModal";
 import LogoVertical from "../MISC/LogoVertical";
 import logo from "../../assets/img/logo/mygo.jpg";
 import {useValidCode} from "../../hooks/useAuthHooks";
@@ -9,12 +8,7 @@ import Notification from "../MISC/Notification";
 import {AuthContext} from "../../contexts/AuthContext";
 import {useNavigate} from "react-router-dom";
 
-interface VerifyCodeFormProps {
-    setAuthMode: React.Dispatch<React.SetStateAction<AuthMode>>;
-    onClose: () => void;
-}
-
-const VerifyCodeForm: React.FC<VerifyCodeFormProps> = ({setAuthMode, onClose}) => {
+const VerifyCodeForm: React.FC = () => {
     const {code, setCode, codeIsValid} = useValidCode('');
     const [error, setError] = useState('')
     const [showNotification, setShowNotification] = useState(false);
