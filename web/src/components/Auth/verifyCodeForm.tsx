@@ -16,7 +16,6 @@ interface VerifyCodeFormProps {
 
 const VerifyCodeForm: React.FC<VerifyCodeFormProps> = ({setAuthMode, onClose}) => {
     const {code, setCode, codeIsValid} = useValidCode('');
-    const [email, setEmail] = useState('');
     const [error, setError] = useState('')
     const [showNotification, setShowNotification] = useState(false);
     const authContext = useContext(AuthContext)

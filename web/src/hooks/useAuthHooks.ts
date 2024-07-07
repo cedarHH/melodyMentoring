@@ -1,6 +1,28 @@
 import { useState, useEffect } from 'react';
 import * as yup from 'yup';
 
+export const useValidNickname = (initialValue: string) => {
+    const [nickname, setNickname] = useState(initialValue);
+    const [nicknameIsValid, setNicknameIsValid] = useState(true);
+
+    useEffect(() => {
+        const nicknameSchema = yup.object().shape({
+            nickname: yup.string().min(4).required(),
+        })
+
+        if (nickname.length === 0) {
+            setNicknameIsValid(false)
+            return
+        }
+
+        const isValid = nicknameSchema.isValidSync({ nickname })
+
+        setNicknameIsValid(isValid)
+    }, [nickname])
+
+    return { nickname, setNickname, nicknameIsValid };
+};
+
 export const useValidEmail = (initialValue: string) => {
     const [email, setEmail] = useState(initialValue);
     const [emailIsValid, setEmailIsValid] = useState(true);
@@ -11,7 +33,7 @@ export const useValidEmail = (initialValue: string) => {
         });
 
         if (email.length === 0) {
-            setEmailIsValid(true);
+            setEmailIsValid(false);
             return;
         }
 
@@ -42,7 +64,7 @@ export const useValidPassword = (initialValue: string) => {
         })
 
         if (password.length === 0) {
-            setPasswordIsValid(true)
+            setPasswordIsValid(false)
             setFormatError(null)
             return
         }
@@ -69,7 +91,7 @@ export const useValidCode = (initialValue: string) => {
         })
 
         if (code.length === 0) {
-            setCodeIsValid(true)
+            setCodeIsValid(false)
             return
         }
 

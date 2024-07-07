@@ -35,13 +35,16 @@ export async function getSession() {
     })
 }
 
-export async function signUpUserWithEmail(username: string, email: string, password: string) {
+export async function signUpUserWithEmail(username: string, email: string, password: string, name: string) {
     return new Promise(function (resolve, reject) {
         const attributeList = [
             new CognitoUserAttribute({
                 Name: 'email',
                 Value: email,
-            }),
+            }),new CognitoUserAttribute({
+                Name: 'name',
+                Value: name,
+            })
         ]
 
         userPool.signUp(username, password, attributeList, [], function (err, res) {

@@ -3,10 +3,9 @@ import Button from "../MISC/Button";
 import {AuthMode} from "./AuthModal";
 import LogoVertical from "../MISC/LogoVertical";
 import {AuthContext} from "../../contexts/AuthContext";
-import {useNavigate} from "react-router-dom";
 import '../../styles/Welcome.css';
 import logo from "../../assets/img/logo/mygo.jpg";
-import {useValidCode, useValidEmail, useValidPassword} from "../../hooks/useAuthHooks";
+import {useValidEmail, useValidNickname, useValidPassword} from "../../hooks/useAuthHooks";
 import Notification from "../MISC/Notification";
 
 interface RegisterFormProps {
@@ -15,7 +14,7 @@ interface RegisterFormProps {
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
-    const [username, setUsername] = useState('');
+    const {nickname, setNickname, nicknameIsValid} = useValidNickname('');
     const {email, setEmail, emailIsValid} = useValidEmail('');
     const {password, setPassword, passwordIsValid, formatError} = useValidPassword('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -26,6 +25,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setShowNotification(false);
+
+        if (!nicknameIsValid) {
+            setError('Invalid nickname format.');
+            setShowNotification(true);
+            return;
+        }
 
         if (!emailIsValid) {
             setError('Invalid email format.');
@@ -47,7 +52,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
 
         try {
             if (authContext.signUpWithEmail) {
-                await authContext.signUpWithEmail(username, email, password);
+                await authContext.signUpWithEmail(email, email, password, nickname);
                 setAuthMode(AuthMode.VERIFY_CODE)
             } else {
                 setError('signUpWithEmail is not defined');
@@ -56,7 +61,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
         } catch (err: any) {
             switch (err.code) {
                 case 'UsernameExistsException':
-                    setError('An account with this username or email already exists.');
+                    setError('An account with this email already exists.');
                     break;
                 case 'InvalidPasswordException':
                     setError('Password does not meet the minimum requirements.');
@@ -90,9 +95,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({setAuthMode, onClose}) => {
             <form onSubmit={handleSubmit}>
                 <input className="inputStyle"
                        type="text"
-                       placeholder="Username"
-                       value={username}
-                       onChange={(e) => setUsername(e.target.value)}
+                       placeholder="Nickname"
+                       value={nickname}
+                       onChange={(e) => setNickname(e.target.value)}
                 />
                 <input className="inputStyle"
                        type="email"

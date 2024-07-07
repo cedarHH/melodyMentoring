@@ -1,9 +1,13 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import '../../styles/Welcome.css';
 import Button from "../MISC/Button";
 import {AuthMode} from "./AuthModal";
 import LogoVertical from "../MISC/LogoVertical";
 import logo from "../../assets/img/logo/mygo.jpg";
+import {AuthContext} from "../../contexts/AuthContext";
+import Notification from "../MISC/Notification";
+import {useValidCode, useValidPassword} from "../../hooks/useAuthHooks";
+import {useNavigate} from "react-router-dom";
 
 interface ResetPasswordFormProps {
     setAuthMode: React.Dispatch<React.SetStateAction<AuthMode>>;
@@ -12,14 +16,72 @@ interface ResetPasswordFormProps {
 
 const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({setAuthMode, onClose}) => {
     const [email, setEmail] = useState('');
-    const [verificationCode, setVerificationCode] = useState('');
-    const [password, setPassword] = useState('');
+    const {code, setCode, codeIsValid} = useValidCode('');
+    const {password, setPassword, passwordIsValid, formatError} = useValidPassword('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [showNotification, setShowNotification] = useState(false);
+    const authContext = useContext(AuthContext)
+    const [error, setError] = useState('')
+    const [stage, setStage] = useState('enterEmail');
+    const navigate = useNavigate();
 
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        onClose();
+    const sendVerificationCode = async () => {
+        try {
+            if (authContext.sendCode && email) {
+                await authContext.sendCode(email);
+                setStage('resetPassword');
+            } else {
+                setError('sendCode or email is not defined');
+                setShowNotification(true);
+            }
+        } catch (err: any) {
+            setError(err.code);
+            setShowNotification(true);
+        }
     };
+
+    const resetPassword = async () => {
+        if (!codeIsValid) {
+            setError('Invalid verification code format.');
+            setShowNotification(true);
+            return;
+        }
+
+        if (!passwordIsValid) {
+            setError(`${formatError}`);
+            setShowNotification(true);
+            return;
+        }
+        if (password !== confirmPassword) {
+            setError('The passwords do not match');
+            setShowNotification(true);
+            return;
+        }
+        try {
+            if(authContext.forgotPassword){
+                await authContext.forgotPassword(email, code, password)
+                if (authContext.signInWithEmail) {
+                    await authContext.signInWithEmail(email, password);
+                    navigate('/home');
+                } else {
+                    setError('signInWithEmail is not defined');
+                    setShowNotification(true);
+                }
+            }
+        } catch (err: any) {
+            switch (err.code) {
+                case 'CodeMismatchException':
+                    setError('Invalid verification code.');
+                    break;
+                case 'ExpiredCodeException':
+                    setError('The verification code has expired.');
+                    break;
+                default:
+                    setError(err.message);
+            }
+            setShowNotification(true);
+        }
+    }
 
     return (
         <div className="authContainer">
@@ -28,35 +90,55 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({setAuthMode, onClo
                 imageUrl={logo}
                 text="Reset Password" // Create a free account to discover your personalized learning path
             />
-            <form onSubmit={handleSubmit}>
-                <input className="inputStyle"
-                       type="email"
-                       placeholder="Email"
-                       value={email}
-                       onChange={(e) => setEmail(e.target.value)}
+            {showNotification && (
+                <Notification
+                    width="100%"
+                    message={error}
                 />
-                <input className="inputStyle"
-                       type="text"
-                       placeholder="Enter verification code sent to your email"
-                       value={verificationCode}
-                       onChange={(e) => setVerificationCode(e.target.value)}
-                />
-                <input className="inputStyle"
-                       type="password"
-                       placeholder="Password"
-                       value={password}
-                       onChange={(e) => setPassword(e.target.value)}
-                />
-                <input className="inputStyle"
-                       type="password"
-                       placeholder="Confirm Password"
-                       value={confirmPassword}
-                       onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-                <Button className="buttonStyle" type="submit" text="Reset"/>
-                <Button className="buttonStyle" type="button" text="Cancel" onClick={() => {
-                    onClose()
-                }}/>
+            )}
+            <form onSubmit={(e) => e.preventDefault()}>
+                {stage === 'enterEmail' && (
+                    <>
+                        <input className="inputStyle"
+                               type="email"
+                               placeholder="Email"
+                               value={email}
+                               onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <Button className="buttonStyle" type="button" text="Send Code" onClick={sendVerificationCode}/>
+                        <Button className="buttonStyle" type="button" text="Cancel" onClick={onClose}/>
+                    </>
+                )}
+                {stage === 'resetPassword' && (
+                    <>
+                        <input className="inputStyle"
+                               type="email"
+                               value={email}
+                               disabled
+                        />
+                        <input className="inputStyle"
+                               type="text"
+                               placeholder="Enter verification code"
+                               value={code}
+                               onChange={(e) => setCode(e.target.value)}
+                        />
+                        <input className="inputStyle"
+                               type="password"
+                               placeholder="Password"
+                               value={password}
+                               onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <input className="inputStyle"
+                               type="password"
+                               placeholder="Confirm Password"
+                               value={confirmPassword}
+                               onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                        <Button className="buttonStyle" type="button" text="Reset Password" onClick={resetPassword}/>
+                        <Button className="buttonStyle" type="button" text="Send Again" onClick={sendVerificationCode}/>
+                        <Button className="buttonStyle" type="button" text="Cancel" onClick={onClose}/>
+                    </>
+                )}
             </form>
         </div>
     );

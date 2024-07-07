@@ -14,7 +14,7 @@ export interface IAuth {
     authStatus?: AuthStatus
     currentUserEmail?: string;
     signInWithEmail?: (username: string, password: string) => Promise<void>
-    signUpWithEmail?: (username: string, email: string, password: string) => Promise<void>
+    signUpWithEmail?: (username: string, email: string, password: string, name: string) => Promise<void>
     signOut?: () => void
     verifyCode?: (username: string, code: string) => Promise<void>
     getSession?: () => Promise<any>
@@ -89,9 +89,9 @@ const AuthProvider = ({ children }: Props) => {
         }
     }
 
-    async function signUpWithEmail(username: string, email: string, password: string) {
+    async function signUpWithEmail(username: string, email: string, password: string, name: string) {
         try {
-            await cognito.signUpUserWithEmail(username, email, password)
+            await cognito.signUpUserWithEmail(username, email, password, name)
             setCurrentUserEmail(email)
         } catch (err) {
             throw err
