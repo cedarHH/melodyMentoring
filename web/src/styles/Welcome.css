@@ -79,10 +79,6 @@ body, html {
     padding: 3vw;
     z-index: 20;
 }
-.tagline {
-    font-size: 3vw;
-    margin-bottom: 5vh;
-}
 .new-user {
     background-color: #5bbce4;
     color: #fff;
