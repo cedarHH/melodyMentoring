@@ -32,7 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
     return (
         <Aside>
             <List>
-                {['Kid1', 'Kid2', 'Kid3'].map((kid) => (
+                {['Daniel', 'Amy', 'Tom'].map((kid) => (
                     <ListItem
                         key={kid}
                         isActive={activeKid === kid}
