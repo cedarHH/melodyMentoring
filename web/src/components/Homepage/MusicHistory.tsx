@@ -2,27 +2,28 @@ import React from 'react';
 import styled from 'styled-components';
 
 const MusicHistoryContainer = styled.div`
-    background-color: #2c2c2c;
-    padding: 30px;
-    border-radius: 10px;
-    overflow-y: auto;
+  background-color: #2c2c2c;
+  padding: 20px;
+  border-radius: 10px;
+  overflow-y: auto;
+  margin-top: 20px;
 `;
 
 const Table = styled.table`
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 `;
 
 const TableHeader = styled.th`
-    text-align: left;
-    padding: 8px;
-    border-bottom: 1px solid #3a3a3a;
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #3a3a3a;
 `;
 
 const TableData = styled.td`
-    text-align: left;
-    padding: 8px;
-    border-bottom: 1px solid #3a3a3a;
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #3a3a3a;
 `;
 
 const MusicHistory: React.FC = () => {

@@ -7,7 +7,7 @@ interface SidebarProps {
 }
 
 const Aside = styled.aside`
-    width: 200px;
+    width: 100%;
     background-color: #252525;
     padding: 20px;
 `;
