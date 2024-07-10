@@ -9,6 +9,7 @@ import { practiceData, accuracyData, options } from '../constants/chartData';
 import { childrenData } from '../constants/childrenData';
 import userAvatar from '../assets/img/home/kid-avatar.jpg';
 import '../styles/Home.css';
+import Button from "../components/MISC/Button";
 
 const Home: React.FC = () => {
     const authContext = useContext(AuthContext);
@@ -18,6 +19,7 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         setActiveKid(Object.keys(childrenData)[0]);
+        console.log(authContext.authStatus)
     }, []);
 
     const toggleChartType = () => {
@@ -82,11 +84,18 @@ const Home: React.FC = () => {
         }
     };
 
+    const debug_button = async () => {
+        if (authContext.signOut){
+            authContext.signOut();
+        }
+    }
+
     return (
         <div className="main-container">
             <header className="main-header">
                 <div className="main-logo">MyGO!!!</div>
-                <div className="user-avatar" onClick={() => {}}>
+                <Button text="Sign out" type="button" className="debug-button" onClick={debug_button} />
+                <div className="user-avatar" onClick={()=>{}}>
                     <img src={userAvatar} alt="User Avatar"/>
                 </div>
             </header>

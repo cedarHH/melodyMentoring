@@ -22,7 +22,6 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({setAuthMode}) => {
     const authContext = useContext(AuthContext)
     const [error, setError] = useState('')
     const [stage, setStage] = useState('enterEmail');
-    const navigate = useNavigate();
 
     const sendVerificationCode = async () => {
         try {
@@ -61,7 +60,6 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({setAuthMode}) => {
                 await authContext.forgotPassword(email, code, password)
                 if (authContext.signInWithEmail) {
                     await authContext.signInWithEmail(email, password);
-                    navigate('/home');
                 } else {
                     setError('signInWithEmail is not defined');
                     setShowNotification(true);
