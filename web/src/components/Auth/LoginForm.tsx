@@ -21,7 +21,6 @@ const LoginForm: React.FC< LoginFormProps > = ({ setAuthMode }) => {
     const [isConfirmed, setIsConfirmed] = useState(true)
     const [showNotification, setShowNotification] = useState(false);
     const authContext = useContext(AuthContext)
-    const navigate = useNavigate();
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -37,7 +36,6 @@ const LoginForm: React.FC< LoginFormProps > = ({ setAuthMode }) => {
         try {
             if (authContext.signInWithEmail) {
                 await authContext.signInWithEmail(email, password);
-                navigate('/home');
             } else {
                 setError('signInWithEmail is not defined');
                 setShowNotification(true);
@@ -74,7 +72,6 @@ const LoginForm: React.FC< LoginFormProps > = ({ setAuthMode }) => {
             if (authContext.verifyCode && authContext.signInWithEmail && email) {
                 await authContext.verifyCode(email, code);
                 await authContext.signInWithEmail(email, password);
-                navigate("/home");
             } else {
                 setError('verifyCode or email is not defined');
                 setShowNotification(true);

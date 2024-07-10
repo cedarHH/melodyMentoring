@@ -3,7 +3,6 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import ResetPasswordForm from "./ResetPasswordForm";
 import "../../styles/AuthModal.css"
-import VerifyCodeForm from "./verifyCodeForm";
 
 interface AuthModalProps {
     authMode: AuthMode;
@@ -14,8 +13,7 @@ interface AuthModalProps {
 export enum AuthMode {
     LOGIN = 'login',
     REGISTER = 'register',
-    RESET_PASSWORD = 'reset_password',
-    VERIFY_CODE = 'verify_code'
+    RESET_PASSWORD = 'reset_password'
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ authMode, setAuthMode, onClose }) => {
@@ -49,9 +47,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ authMode, setAuthMode, onClose })
                     <ResetPasswordForm
                         setAuthMode={setAuthMode}
                     />
-                )}
-                {authMode === AuthMode.VERIFY_CODE && (
-                    <VerifyCodeForm/>
                 )}
             </div>
         </div>

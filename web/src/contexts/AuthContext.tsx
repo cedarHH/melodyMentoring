@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import axios from 'axios'
 import * as cognito from '../libs/cognito'
 
@@ -9,7 +9,6 @@ export enum AuthStatus {
 }
 
 export interface IAuth {
-    sessionInfo?: { username?: string; email?: string; sub?: string; accessToken?: string; refreshToken?: string }
     attrInfo?: any
     authStatus?: AuthStatus
     currentUserEmail?: string;
@@ -27,7 +26,6 @@ export interface IAuth {
 }
 
 const defaultState: IAuth = {
-    sessionInfo: {},
     authStatus: AuthStatus.Loading,
     currentUserEmail: '',
 }
@@ -38,37 +36,52 @@ type Props = {
 
 export const AuthContext = React.createContext(defaultState)
 
-export const AuthIsSignedIn = ({ children }: Props) => {
-    const { authStatus }: IAuth = useContext(AuthContext)
+export const AuthIsSignedIn = ({children}: Props) => {
+    const {authStatus}: IAuth = useContext(AuthContext)
 
     return <>{authStatus === AuthStatus.SignedIn ? children : null}</>
 }
 
-export const AuthIsNotSignedIn = ({ children }: Props) => {
-    const { authStatus }: IAuth = useContext(AuthContext)
+export const AuthIsNotSignedIn = ({children}: Props) => {
+    const {authStatus}: IAuth = useContext(AuthContext)
 
     return <>{authStatus === AuthStatus.SignedOut ? children : null}</>
 }
 
-const AuthProvider = ({ children }: Props) => {
+const AuthProvider = ({children}: Props) => {
     const [authStatus, setAuthStatus] = useState(AuthStatus.Loading)
     const [sessionInfo, setSessionInfo] = useState({})
     const [attrInfo, setAttrInfo] = useState([])
     const [currentUserEmail, setCurrentUserEmail] = useState('');
 
     useEffect(() => {
-        async function getSessionInfo() {
+        async function getAttributesAndSetCookie() {
             try {
-                const session: any = await getSession()
-                setSessionInfo({
-                    accessToken: session.accessToken.jwtToken,
-                    refreshToken: session.refreshToken.token,
-                })
                 // Send tokens to backend to set cookies
-                await axios.post('/api/set-tokens', {
+                const session: any = await getSession()
+                const tokens = {
                     accessToken: session.accessToken.jwtToken,
                     refreshToken: session.refreshToken.token,
+                };
+
+                axios.post('/api/set-tokens', tokens, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    withCredentials: true,
                 })
+                    .then(() => {
+                        console.log('Tokens set successfully');
+                    })
+                    // todo
+                    //     return axios.get('/api/get-tokens', { withCredentials: true });
+                    // })
+                    // .then(response => {
+                    //     console.log('Tokens:', response.data);
+                    // })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
                 const attr: any = await getAttributes()
                 setAttrInfo(attr)
                 setAuthStatus(AuthStatus.SignedIn)
@@ -76,7 +89,9 @@ const AuthProvider = ({ children }: Props) => {
                 setAuthStatus(AuthStatus.SignedOut)
             }
         }
-        getSessionInfo().then(_ => {})
+
+        getAttributesAndSetCookie().then(_ => {
+        })
     }, [setAuthStatus, authStatus])
 
     if (authStatus === AuthStatus.Loading) {
@@ -105,7 +120,8 @@ const AuthProvider = ({ children }: Props) => {
     async function signOut() {
         cognito.signOut()
         setAuthStatus(AuthStatus.SignedOut)
-        await axios.post('/api/clear-tokens')
+        // todo
+        // await axios.post('/api/clear-tokens')
     }
 
     async function verifyCode(email: string, code: string) {
@@ -165,13 +181,12 @@ const AuthProvider = ({ children }: Props) => {
     }
 
     async function refreshToken() {
-    // todo
+        // todo
     }
 
 
     const state: IAuth = {
         authStatus,
-        sessionInfo,
         attrInfo,
         currentUserEmail,
         signUpWithEmail,

@@ -9,6 +9,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { practiceData, accuracyData, options } from '../constants/chartData';
 import { childrenData } from '../constants/childrenData';
 import userAvatar from '../assets/img/home/kid-avatar.jpg';
+import '../styles/Home.css';
 import { getCurrentUser } from "../libs/cognito";
 import Button from "../components/MISC/Button"
 
@@ -170,6 +171,7 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         setActiveKid(Object.keys(childrenData)[0]);
+        console.log(authContext.authStatus)
     }, []);
 
     const toggleChartType = () => {
@@ -197,11 +199,17 @@ const Home: React.FC = () => {
         return activeChartData === 'practice' ? 'Daily Music Practice Duration' : 'Daily Practice Accuracy Rate';
     };
 
+    const debug_button = async () => {
+        if (authContext.signOut){
+            authContext.signOut();
+        }
+    }
+
     return (
         <MainContainer>
             <Header>
                 <Logo>MyGO!!!</Logo>
-                {/* <Button text="click me" type="button" onClick={()=>{console.log(`Curruser${getCurrentUser().getUsername()}`)}} /> */}
+                <Button text="Sign out" type="button" className="debug-button" onClick={debug_button} />
                 <div className="user-avatar" onClick={() => { }}>
                     <img src={userAvatar} alt="User Avatar" style={{ width: "50px", height: "50px" }} />
                 </div>

@@ -84,7 +84,6 @@ export async function signInWithEmail(email: string, password: string) {
         const authenticationDetails = new AuthenticationDetails(authenticationData)
 
         currentUser = getCognitoUser(email)
-
         currentUser.authenticateUser(authenticationDetails, {
             onSuccess: function (res: any) {
                 resolve(res)

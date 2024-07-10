@@ -1,19 +1,17 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import axios from "axios";
-import Welcome from "./pages/Welcome";
-import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import AuthProvider from "./contexts/AuthContext";
+import Main from "./pages/Main";
 
-axios.defaults.baseURL = 'http://localhost:9838';
+axios.defaults.baseURL = 'http://localhost:8080';
 
 const App: React.FC = () =>(
     <AuthProvider>
         <Router>
             <Routes>
-                <Route path="/" element={<Welcome />} />
-                <Route path={"/home"} element={<Home />} />
+                <Route path="/" element={<Main />} />
                 <Route path="*" element={<NotFound />} />
             </Routes> .
         </Router>
