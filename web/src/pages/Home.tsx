@@ -9,71 +9,119 @@ import { AuthContext } from "../contexts/AuthContext";
 import { practiceData, accuracyData, options } from '../constants/chartData';
 import { childrenData } from '../constants/childrenData';
 import userAvatar from '../assets/img/home/kid-avatar.jpg';
+import { getCurrentUser } from "../libs/cognito";
+import Button from "../components/MISC/Button"
 
 const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
 `;
 
 const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #252525;
-  padding: 10px 20px;
-  color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #252525;
+    padding: 10px 20px;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+`;
+
+const Logo = styled.div`
+    font-family: 'Cambria', serif;
+    font-weight: bold;
+    font-size: 5vw;
+    
+    @media (min-width: 768px) {
+        font-size: 3vw;
+    }
+    
+    @media (min-width: 1200px) {
+        font-size: 30px;
+    }
 `;
 
 const Content = styled.div`
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-  gap: 10px;
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    gap: 10px;
+    
+    @media (max-width: 768px) {
+        flex-direction: column;
+        overflow-y: auto;
+    }
 `;
 
 const SidebarContainer = styled.div`
-  width: 10%;
-  background-color: #252525;
+    width: 10%;
+    background-color: #252525;
+    
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 `;
 
 const MainView = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 30%;
-  padding: 20px;
-  overflow-y: auto;
-`;
-
-const ChartTitleH3 = styled.h3`
-    font-family: 'Cambria', serif;
-    color: white;
-    margin-bottom: 6px;
-    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    padding: 20px;
+    
+    @media (max-width: 768px) {
+        width: 100%;
+        overflow: visible;
+    }
 `;
 
 const ChartsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 60%;
-  padding: 20px;
-  gap: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 55%;
+    padding: 1px;
+    gap: 10px;
+    
+    @media (max-width: 768px) {
+        width: 100%;
+        overflow: visible;
+    }
+    
+    @media (min-width: 768px) {
+        height: calc(100vh - 50px);
+        overflow: auto;
+    }
 `;
 
 const ChartWrapper = styled.div`
-  cursor: pointer;
+    cursor: pointer;
+    flex-grow: 1;
+    width: 100%;
+    min-height: 250px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    
+    @media (min-width: 768px) {
+        flex-grow: 0;
+        flex-shrink: 0;
+        height: 50%;
+    }
 `;
 
 const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const ModalContent = styled.div`
@@ -88,37 +136,29 @@ const ModalContent = styled.div`
     height: 50vh;
 `;
 
-const ChartTitle = styled.h2`
-    text-align: center;
-    color: white;
-    margin-bottom: 20px;
-    height: 10%;
-`;
-
 const ChartContainer = styled.div`
     flex-grow: 1;
     width: 100%;
-    height: 100%;
+    height: 70%;
 `;
 
 const ButtonsContainer = styled.div`
     display: flex;
     justify-content: center;
     gap: 50px;
-    margin-top: 40px;
-    height: 10%;
+    margin-top: 20px;
 `;
 
-const Button = styled.button`
-  padding: 10px 20px;
-  background-color: #555;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  &:hover {
-    background-color: #777;
-  }
+const Button1 = styled.button`
+    padding: 10px 20px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: #777;
+    }
 `;
 
 const Home: React.FC = () => {
@@ -138,14 +178,19 @@ const Home: React.FC = () => {
 
     const handleChartClick = (type: 'practice' | 'accuracy') => {
         setActiveChartData(type);
-        setChartType('line'); // 默认显示为折线图
+        setChartType('line');
         setIsModalOpen(true);
     };
 
     const renderChart = () => {
         const data = activeChartData === 'practice' ? practiceData : accuracyData;
-        const ChartComponent = chartType === 'line' ? MusicPracticeChart : AccuracyRateChart;
-        return <ChartComponent data={data} options={{...options, maintainAspectRatio: false}} />;
+        const ChartComponent = activeChartData === 'practice' ? MusicPracticeChart : AccuracyRateChart;
+        const chartOptions = {
+            ...options,
+            maintainAspectRatio: false,
+            responsive: true,
+        };
+        return <ChartComponent data={data} options={chartOptions} chartType={chartType} />;
     };
 
     const getChartTitle = () => {
@@ -155,8 +200,9 @@ const Home: React.FC = () => {
     return (
         <MainContainer>
             <Header>
-                <div className="main-logo">MyGO!!!</div>
-                <div className="user-avatar" onClick={() => {}}>
+                <Logo>MyGO!!!</Logo>
+                {/* <Button text="click me" type="button" onClick={()=>{console.log(`Curruser${getCurrentUser().getUsername()}`)}} /> */}
+                <div className="user-avatar" onClick={() => { }}>
                     <img src={userAvatar} alt="User Avatar" style={{ width: "50px", height: "50px" }} />
                 </div>
             </Header>
@@ -170,27 +216,24 @@ const Home: React.FC = () => {
                 </MainView>
                 <ChartsContainer>
                     <ChartWrapper onClick={() => handleChartClick('practice')}>
-                        <ChartTitleH3>Daily Music Practice Duration</ChartTitleH3>
-                        <MusicPracticeChart data={practiceData} options={options}/>
+                        <MusicPracticeChart data={practiceData} options={{ ...options, maintainAspectRatio: false, responsive: true, title: { display: true, text: 'Daily Music Practice Duration' } }} chartType="line" />
                     </ChartWrapper>
                     <ChartWrapper onClick={() => handleChartClick('accuracy')}>
-                        <ChartTitleH3>Daily Practice Accuracy Rate</ChartTitleH3>
-                        <AccuracyRateChart data={accuracyData} options={options}/>
+                        <AccuracyRateChart data={accuracyData} options={{ ...options, maintainAspectRatio: false, responsive: true, title: { display: true, text: 'Daily Practice Accuracy Rate' } }} chartType="bar" />
                     </ChartWrapper>
                 </ChartsContainer>
             </Content>
             {isModalOpen && (
                 <ModalOverlay>
-                    <ModalContent onClick={e => e.stopPropagation()}>
-                        <ChartTitle>{getChartTitle()}</ChartTitle>
+                    <ModalContent>
                         <ChartContainer>
                             {renderChart()}
                         </ChartContainer>
                         <ButtonsContainer>
-                            <Button onClick={toggleChartType}>
+                            <Button1 onClick={toggleChartType}>
                                 Toggle to {chartType === 'line' ? 'Bar' : 'Line'} Chart
-                            </Button>
-                            <Button onClick={() => setIsModalOpen(false)}>Close</Button>
+                            </Button1>
+                            <Button1 onClick={() => setIsModalOpen(false)}>Close</Button1>
                         </ButtonsContainer>
                     </ModalContent>
                 </ModalOverlay>
