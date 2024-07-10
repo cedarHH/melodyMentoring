@@ -1,14 +1,33 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView } from 'react-native';
-import { signInWithEmail, signUpUserWithEmail } from './cognito';
+import { signInWithEmail, signUpUserWithEmail,verifyCode } from './cognito';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function WelcomeScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');  // 新增用户名状态
-  const [confirmPassword, setConfirmPassword] = useState(''); // 确认密码
+  const [username, setUsername] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);  // 切换登录和注册
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [showVerification, setShowVerification] = useState(false);
+
+  const storeToken = async (accessToken) => {
+    try {
+      const accessTokenStr = JSON.stringify(accessToken);
+      await AsyncStorage.setItem('accessToken', accessTokenStr);
+      const accessTokenObj = JSON.parse(accessTokenStr);
+
+      // Access the jwtToken from the accessToken object
+      const jwtToken = accessTokenObj.jwtToken;
+    
+      console.log('JWT Token:', jwtToken);
+      console.log('Tokens are saved successfully!');
+    } catch (e) {
+      console.log('Failed to save the tokens.', e);
+    }
+  };
 
   const handleLogin = async () => {
     setLoading(true);
@@ -17,6 +36,7 @@ export default function WelcomeScreen({ navigation }) {
       console.log('Login successful:', session);
       setLoading(false);
       navigation.navigate('Home');
+      storeToken(session.accessToken);
     } catch (err) {
       setLoading(false);
       Alert.alert("Login Failed", err.message || "Failed to login");
@@ -31,13 +51,28 @@ export default function WelcomeScreen({ navigation }) {
       return;
     }
     try {
-      const response = await signUpUserWithEmail(username, email, password);
+      const response = await signUpUserWithEmail(email, email, password, username);
       console.log('Registration successful:', response);
       setLoading(false);
+      setShowVerification(true);
       Alert.alert("Registration Successful", "Please verify your email before logging in.");
     } catch (error) {
       setLoading(false);
       Alert.alert("Registration Failed", error.message);
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    setLoading(true);
+    try {
+      
+      await verifyCode(email, verificationCode);
+      setLoading(false);
+      Alert.alert("Verification Successful", "Your email has been verified.");
+      navigation.navigate('Home');
+    } catch (error) {
+      setLoading(false);
+      Alert.alert("Verification Failed", error.message);
     }
   };
 
@@ -53,6 +88,7 @@ export default function WelcomeScreen({ navigation }) {
         <TextInput
           style={styles.input}
           placeholder="Username"
+          type="text"
           value={username}
           onChangeText={setUsername}
           autoCapitalize="none"
@@ -88,10 +124,29 @@ export default function WelcomeScreen({ navigation }) {
         onPress={isSignUp ? handleSignUp : handleLogin}
         disabled={loading}
       />
+
       <Button
-        title={isSignUp ? "Already have an account? Login" : "Need an account? Register"}
+        title={isSignUp ? "Already have an account" : "New User"}
         onPress={toggleForm}
       />
+
+      {showVerification && (
+        <>
+          <TextInput
+            style={styles.input}
+            placeholder="Verification Code"
+            value={verificationCode}
+            onChangeText={setVerificationCode}
+            keyboardType="number-pad"
+          />
+          <Button
+            title="Verify Code"
+            onPress={handleVerifyCode}
+            disabled={loading}
+          />
+        </>
+      )}
+
     </ScrollView>
   );
 }
