@@ -11,9 +11,10 @@ const UserInfoContainer = styled.div`
   display: flex;
   align-items: center;
   background-color: #2c2c2c;
-  padding: 30px;
+  padding: 20px;
   border-radius: 10px;
   gap: 20px;
+  max-width: 100%;
 `;
 
 const Avatar = styled.img`
@@ -25,6 +26,7 @@ const Avatar = styled.img`
 const InfoBlock = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const InfoRow = styled.div`

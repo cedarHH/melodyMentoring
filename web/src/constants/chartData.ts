@@ -16,7 +16,7 @@ export const accuracyData = {
     datasets: [
         {
             label: 'Accuracy Rate (%)',
-            data: [70, 75, 80, 85, 90, 95],
+            data: [32, 35, 36, 43, 45, 47],
             backgroundColor: 'rgb(75, 192, 192)',
         },
     ],

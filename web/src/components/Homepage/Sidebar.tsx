@@ -7,25 +7,26 @@ interface SidebarProps {
 }
 
 const Aside = styled.aside`
-    width: 200px;
-    background-color: #252525;
-    padding: 20px;
+  width: 100%;
+  background-color: #252525;
+  padding: 20px;
+  box-sizing: border-box;
 `;
 
 const List = styled.ul`
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 `;
 
 const ListItem = styled.li<{ isActive: boolean }>`
-    padding: 10px;
-    cursor: pointer;
-    background-color: ${(props) => (props.isActive ? '#3a3a3a' : 'transparent')};
-    border-radius: ${(props) => (props.isActive ? '5px' : '0')};
+  padding: 10px;
+  cursor: pointer;
+  background-color: ${(props) => (props.isActive ? '#3a3a3a' : 'transparent')};
+  border-radius: ${(props) => (props.isActive ? '5px' : '0')};
 
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 `;
 
 const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {

@@ -1,30 +1,69 @@
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import React, { useState, useEffect, CSSProperties } from 'react';
+import { Line, Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
-Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
 interface ChartProps {
     data: any;
     options: any;
+    chartType: 'line' | 'bar';
 }
 
-const AccuracyRateChart: React.FC<ChartProps> = ({ data, options }) => {
-    const chartWrapperStyles = {
+const AccuracyRateChart: React.FC<ChartProps> = ({ data, options, chartType }) => {
+    const [chartHeight, setChartHeight] = useState('100%');
+
+    useEffect(() => {
+        const updateSize = () => {
+            const newHeight = window.innerHeight * 0.4 + 'px';
+            setChartHeight(newHeight);
+        };
+
+        window.addEventListener('resize', updateSize);
+        updateSize();
+
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
+
+    const chartWrapperStyles: CSSProperties = {
         backgroundColor: '#2c2c2c',
         padding: '20px',
         borderRadius: '10px',
         flex: 1,
-        maxHeight: '400px',
+        height: '100%',
+        width: '100%',
         cursor: 'pointer',
         opacity: 0.8,
         transition: 'opacity 0.3s',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    };
+
+    const titleStyles: CSSProperties = {
+        alignSelf: 'center',
+        color: '#fff',
+        fontFamily: 'Cambria',
+        fontSize: '24px',
+        fontWeight: 'bold',
+        marginBottom: '-1px',
+    };
+
+    const chartContainerStyles: CSSProperties = {
+        width: '100%',
+        height: chartHeight,
     };
 
     return (
         <div style={chartWrapperStyles}>
-            <h3>Daily Practice Accuracy Rate</h3>
-            <Bar data={data} options={options} />
+            <div style={titleStyles}>Practice Accuracy Rate</div>
+            <div style={chartContainerStyles}>
+                {chartType === 'line' ? (
+                    <Line data={data} options={options} />
+                ) : (
+                    <Bar data={data} options={options} />
+                )}
+            </div>
         </div>
     );
 };
