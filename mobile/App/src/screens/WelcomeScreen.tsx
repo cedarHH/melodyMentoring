@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, ScrollView,Modal, Image, Dimensions } from 'react-native';
 import CustomButton from '../components/MISC/Button';
 import { signInWithEmail, signUpUserWithEmail, verifyCode } from '../libs/cognito';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,16 +22,16 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   const [verificationCode, setVerificationCode] = useState('');
   const [showVerification, setShowVerification] = useState(false);
 
-  const storeToken = async (accessToken: any) => {
+  const storeToken = async (Token: any) => {
     try {
-      const accessTokenStr = JSON.stringify(accessToken);
-      await AsyncStorage.setItem('accessToken', accessTokenStr);
-      const accessTokenObj = JSON.parse(accessTokenStr);
+      const TokenStr = JSON.stringify(Token);
+      await AsyncStorage.setItem('Token', TokenStr);
+      const tokens = JSON.parse(TokenStr);
 
-      // Access the jwtToken from the accessToken object
-      const jwtToken = accessTokenObj.jwtToken;
-
-      console.log('JWT Token:', jwtToken);
+      const accessToken = tokens.accessToken.jwtToken;
+      const idToken = tokens.idToken.jwtToken;
+      console.log('access Token:', accessToken);
+      console.log('id Token:', idToken);
       console.log('Tokens are saved successfully!');
     } catch (e) {
       console.log('Failed to save the tokens.', e);
@@ -89,84 +89,144 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Text>{isSignUp ? "Sign Up" : "Login"}</Text>
+      <View style={styles.screen}>
+        <View style={styles.leftContainer}>
+          <View style={styles.imagesContainer}>
+              <Image style={styles.image1} source={require('../assets/img/welcome/1.jpg')} />
+              <Image style={styles.image1} source={require('../assets/img/welcome/2.png')} />
+              <Image style={styles.image2} source={require('../assets/img/welcome/3.jpg')} />
+              <Image style={styles.image2} source={require('../assets/img/welcome/4.png')} />
+              <Image style={styles.image1} source={require('../assets/img/welcome/8.jpg')} />
+              <Image style={styles.image1} source={require('../assets/img/welcome/5.jpg')} />
+              <Image style={styles.image2} source={require('../assets/img/welcome/6.jpg')} />
+              <Image style={styles.image2} source={require('../assets/img/welcome/7.jpg')} />
+              <Image style={styles.image1} source={require('../assets/img/welcome/7.jpg')} />
+          </View>
+        </View>
 
-        {isSignUp && (
-            <TextInput
-                style={styles.input}
-                placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
-                autoCapitalize="none"
-            />
-        )}
-        <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-        />
-        <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={true}
-        />
-        {isSignUp && (
-            <TextInput
-                style={styles.input}
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry={true}
-            />
-        )}
-
-        <CustomButton
-            text={loading ? (isSignUp ? "Registering..." : "Logging in...") : (isSignUp ? "Register" : "Login")}
-            onPress={isSignUp ? handleSignUp : handleLogin}
-            style={styles.button}
-        />
-
-        <CustomButton
-            text={isSignUp ? "Already have an account" : "New User"}
-            onPress={toggleForm}
-            style={styles.button}
-        />
-
-        {showVerification && (
-            <>
+        <View style={styles.rightContainer}>
+          <Text>{isSignUp ? "Sign Up" : "Login"}</Text>
+          {isSignUp && (
               <TextInput
                   style={styles.input}
-                  placeholder="Verification Code"
-                  value={verificationCode}
-                  onChangeText={setVerificationCode}
-                  keyboardType="number-pad"
+                  placeholder="Username"
+                  value={username}
+                  onChangeText={setUsername}
+                  autoCapitalize="none"
               />
-              <CustomButton
-                  text="Verify Code"
-                  onPress={handleVerifyCode}
-                  style={styles.button}
+          )}
+          <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+          />
+          <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={true}
+          />
+          {isSignUp && (
+              <TextInput
+                  style={styles.input}
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={true}
               />
-            </>
-        )}
+          )}
 
-      </ScrollView>
+          <CustomButton
+              text={loading ? (isSignUp ? "Registering..." : "Logging in...") : (isSignUp ? "Register" : "Login")}
+              onPress={isSignUp ? handleSignUp : handleLogin}
+              style={styles.button}
+          />
+
+          <CustomButton
+              text={isSignUp ? "Already have an account" : "New User"}
+              onPress={toggleForm}
+              style={styles.button}
+          />
+
+          {showVerification && (
+              <>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Verification Code"
+                    value={verificationCode}
+                    onChangeText={setVerificationCode}
+                    keyboardType="number-pad"
+                />
+                <CustomButton
+                    text="Verify Code"
+                    onPress={handleVerifyCode}
+                    style={styles.button}
+                />
+              </>
+          )}
+        </View>
+
+      </View>
   );
 };
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+  screen: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#2d2d2d',
+    width:Dimensions.get('window').width
   },
+
+  leftContainer:{
+    flex:1.3,
+  },
+  imagesContainer: {
+    flexWrap:'wrap',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderTopRightRadius: Dimensions.get('window').width/3.3,
+    borderBottomRightRadius: Dimensions.get('window').width/2.7,
+    backgroundColor:'#2d2d2d',
+    overflow: 'hidden',
+    transform:[{rotate:'350deg'}],
+    width:Dimensions.get('window').width/1.9,
+    height:Dimensions.get('window').height*1.5,
+    position: 'relative',
+    top: -Dimensions.get('window').height*0.2, 
+    left: -Dimensions.get('window').height*0.1
+  },
+  image1: {
+    width:180,
+    height: 120,
+    margin: 10,
+    borderRadius: 20,
+    position: 'relative',
+    left: 0, 
+  },
+
+  image2: {
+    width:180,
+    height: 120,
+    margin: 10,
+    borderRadius: 20,
+    position: 'relative',
+    left: 40, 
+  },
+  rightContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 30,
+    backgroundColor:'#2d2d2d',
+    alignItems:'center'
+    },
   input: {
     width: '60%',
+    color:'white',
     marginVertical: 10,
     padding: 10,
     borderWidth: 1,
