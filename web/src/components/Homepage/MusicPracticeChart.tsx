@@ -15,7 +15,7 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType }) 
 
     useEffect(() => {
         const updateSize = () => {
-            const newHeight = window.innerHeight * 0.4 + 'px';
+            const newHeight = window.innerHeight * 0.3 + 'px';
             setChartHeight(newHeight);
         };
 

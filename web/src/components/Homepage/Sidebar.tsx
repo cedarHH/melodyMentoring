@@ -18,11 +18,15 @@ const List = styled.ul`
   padding: 0;
 `;
 
-const ListItem = styled.li<{ isActive: boolean }>`
+interface ListItemProps {
+    $isActive: boolean;
+}
+
+const ListItem = styled.li<ListItemProps>`
   padding: 10px;
   cursor: pointer;
-  background-color: ${(props) => (props.isActive ? '#3a3a3a' : 'transparent')};
-  border-radius: ${(props) => (props.isActive ? '5px' : '0')};
+  background-color: ${(props) => (props.$isActive ? '#3a3a3a' : 'transparent')};
+  border-radius: ${(props) => (props.$isActive ? '5px' : '0')};
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
@@ -36,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
                 {['Daniel', 'Amy', 'Tom'].map((kid) => (
                     <ListItem
                         key={kid}
-                        isActive={activeKid === kid}
+                        $isActive={activeKid === kid}
                         onClick={() => setActiveKid(kid)}
                     >
                         {kid}
