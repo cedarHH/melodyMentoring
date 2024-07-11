@@ -10,7 +10,6 @@ import { practiceData, accuracyData, options } from '../constants/chartData';
 import { childrenData } from '../constants/childrenData';
 import userAvatar from '../assets/img/home/kid-avatar.jpg';
 import '../styles/Home.css';
-import { getCurrentUser } from "../libs/cognito";
 import Button from "../components/MISC/Button"
 
 const MainContainer = styled.div`
@@ -60,10 +59,12 @@ const Content = styled.div`
 
 const SidebarContainer = styled.div`
     width: 10%;
+    text-align: left;
     background-color: #252525;
     
     @media (max-width: 768px) {
         width: 100%;
+        text-align: center;
     }
 `;
 
@@ -83,7 +84,7 @@ const ChartsContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 55%;
-    padding: 1px;
+    padding: 10px;
     gap: 10px;
     
     @media (max-width: 768px) {
@@ -101,7 +102,8 @@ const ChartWrapper = styled.div`
     cursor: pointer;
     flex-grow: 1;
     width: 100%;
-    min-height: 250px;
+    min-height: 50px;
+    max-height: 380px;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -162,16 +164,28 @@ const Button1 = styled.button`
     }
 `;
 
-const Home: React.FC = () => {
+const Home = () => {
     const authContext = useContext(AuthContext);
     const [activeKid, setActiveKid] = useState(Object.keys(childrenData)[0]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeChartData, setActiveChartData] = useState<'practice' | 'accuracy'>('practice');
     const [chartType, setChartType] = useState<'line' | 'bar'>('line');
+    const [resizeKey, setResizeKey] = useState(0); // State to manage the resize key
 
     useEffect(() => {
-        setActiveKid(Object.keys(childrenData)[0]);
-        console.log(authContext.authStatus)
+        setActiveKid(Object.keys(childrenData)[0]); // Set the first child as active
+        console.log(authContext.authStatus); // Log the authentication status
+
+        const handleResize = () => {
+            setResizeKey(prevKey => prevKey + 1); // Increment key to force re-render
+            window.scrollTo(0, 0); // Scroll to the top on resize
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     const toggleChartType = () => {
@@ -195,10 +209,6 @@ const Home: React.FC = () => {
         return <ChartComponent data={data} options={chartOptions} chartType={chartType} />;
     };
 
-    const getChartTitle = () => {
-        return activeChartData === 'practice' ? 'Daily Music Practice Duration' : 'Daily Practice Accuracy Rate';
-    };
-
     const debug_button = async () => {
         if (authContext.signOut){
             authContext.signOut();
@@ -214,7 +224,7 @@ const Home: React.FC = () => {
                     <img src={userAvatar} alt="User Avatar" style={{ width: "50px", height: "50px" }} />
                 </div>
             </Header>
-            <Content>
+            <Content key={resizeKey}>
                 <SidebarContainer>
                     <Sidebar activeKid={activeKid} setActiveKid={setActiveKid} />
                 </SidebarContainer>

@@ -15,7 +15,7 @@ const AccuracyRateChart: React.FC<ChartProps> = ({ data, options, chartType }) =
 
     useEffect(() => {
         const updateSize = () => {
-            const newHeight = window.innerHeight * 0.3 + 'px';
+            const newHeight = window.innerHeight * 0.32 + 'px';
             setChartHeight(newHeight);
         };
 
