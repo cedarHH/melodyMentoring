@@ -1,13 +1,14 @@
 import React, {useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import WelcomeScreen from './components/WelcomeScreen.js';
+import WelcomeScreen from './components/WelcomeScreen';
 import HomeScreen from './components/HomeScreen';
 import UserScreen from './components/UserScreen';
 import UploadScreen from './components/UploadScreen';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { RootStackParamList } from '../types';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   useEffect(() => {

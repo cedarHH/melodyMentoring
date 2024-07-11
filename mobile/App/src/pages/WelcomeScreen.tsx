@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView } from 'react-native';
-import { signInWithEmail, signUpUserWithEmail,verifyCode } from './cognito';
+import { signInWithEmail, signUpUserWithEmail, verifyCode } from '../libs/cognito';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../types';
 
-export default function WelcomeScreen({ navigation }) {
+type WelcomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Welcome'>;
+
+type Props = {
+  navigation: WelcomeScreenNavigationProp;
+};
+
+const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -13,7 +21,7 @@ export default function WelcomeScreen({ navigation }) {
   const [verificationCode, setVerificationCode] = useState('');
   const [showVerification, setShowVerification] = useState(false);
 
-  const storeToken = async (accessToken) => {
+  const storeToken = async (accessToken: any) => {
     try {
       const accessTokenStr = JSON.stringify(accessToken);
       await AsyncStorage.setItem('accessToken', accessTokenStr);
@@ -21,7 +29,7 @@ export default function WelcomeScreen({ navigation }) {
 
       // Access the jwtToken from the accessToken object
       const jwtToken = accessTokenObj.jwtToken;
-    
+
       console.log('JWT Token:', jwtToken);
       console.log('Tokens are saved successfully!');
     } catch (e) {
@@ -37,7 +45,7 @@ export default function WelcomeScreen({ navigation }) {
       setLoading(false);
       navigation.navigate('Home');
       storeToken(session.accessToken);
-    } catch (err) {
+    } catch (err: any) {
       setLoading(false);
       Alert.alert("Login Failed", err.message || "Failed to login");
     }
@@ -56,7 +64,7 @@ export default function WelcomeScreen({ navigation }) {
       setLoading(false);
       setShowVerification(true);
       Alert.alert("Registration Successful", "Please verify your email before logging in.");
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
       Alert.alert("Registration Failed", error.message);
     }
@@ -65,12 +73,11 @@ export default function WelcomeScreen({ navigation }) {
   const handleVerifyCode = async () => {
     setLoading(true);
     try {
-      
       await verifyCode(email, verificationCode);
       setLoading(false);
       Alert.alert("Verification Successful", "Your email has been verified.");
       navigation.navigate('Home');
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
       Alert.alert("Verification Failed", error.message);
     }
@@ -81,75 +88,74 @@ export default function WelcomeScreen({ navigation }) {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.contentContainer}>
-      <Text>{isSignUp ? "Sign Up" : "Login"}</Text>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <Text>{isSignUp ? "Sign Up" : "Login"}</Text>
 
-      {isSignUp && (
+        {isSignUp && (
+            <TextInput
+                style={styles.input}
+                placeholder="Username"
+                value={username}
+                onChangeText={setUsername}
+                autoCapitalize="none"
+            />
+        )}
         <TextInput
-          style={styles.input}
-          placeholder="Username"
-          type="text"
-          value={username}
-          onChangeText={setUsername}
-          autoCapitalize="none"
-        />
-      )}
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-      />
-      {isSignUp && (
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry={true}
-        />
-      )}
-
-      <Button
-        title={loading ? (isSignUp ? "Registering..." : "Logging in...") : (isSignUp ? "Register" : "Login")}
-        onPress={isSignUp ? handleSignUp : handleLogin}
-        disabled={loading}
-      />
-
-      <Button
-        title={isSignUp ? "Already have an account" : "New User"}
-        onPress={toggleForm}
-      />
-
-      {showVerification && (
-        <>
-          <TextInput
             style={styles.input}
-            placeholder="Verification Code"
-            value={verificationCode}
-            onChangeText={setVerificationCode}
-            keyboardType="number-pad"
-          />
-          <Button
-            title="Verify Code"
-            onPress={handleVerifyCode}
-            disabled={loading}
-          />
-        </>
-      )}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={true}
+        />
+        {isSignUp && (
+            <TextInput
+                style={styles.input}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={true}
+            />
+        )}
 
-    </ScrollView>
+        <Button
+            title={loading ? (isSignUp ? "Registering..." : "Logging in...") : (isSignUp ? "Register" : "Login")}
+            onPress={isSignUp ? handleSignUp : handleLogin}
+            disabled={loading}
+        />
+
+        <Button
+            title={isSignUp ? "Already have an account" : "New User"}
+            onPress={toggleForm}
+        />
+
+        {showVerification && (
+            <>
+              <TextInput
+                  style={styles.input}
+                  placeholder="Verification Code"
+                  value={verificationCode}
+                  onChangeText={setVerificationCode}
+                  keyboardType="number-pad"
+              />
+              <Button
+                  title="Verify Code"
+                  onPress={handleVerifyCode}
+                  disabled={loading}
+              />
+            </>
+        )}
+
+      </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   contentContainer: {
@@ -166,3 +172,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+export default WelcomeScreen;
