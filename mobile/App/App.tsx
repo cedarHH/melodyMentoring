@@ -18,8 +18,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Welcome">
         <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="User" component={UserScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="User" component={UserScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Upload" component={UploadScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
