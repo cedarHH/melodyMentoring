@@ -1,8 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import CustomButton from '../components/MISC/Button';
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
+import Sidebar from '../components/Homescreen/Sidebar';
+import Content from '../components/Homescreen/Content';
+import ContentContext from '../components/Homescreen/Context';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -11,27 +13,32 @@ type Props = {
 };
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
+    const [activeContent, setActiveContent] = useState('home');
+
     return (
-        <View style={styles.container}>
-            <Text>Home Screen</Text>
-            <CustomButton
-                text="User Profile"
-                onPress={() => navigation.navigate('User')}
-            />
-            <CustomButton
-                text="Upload and Record"
-                onPress={() => navigation.navigate('Upload')}
-            />
-        </View>
+        <ContentContext.Provider value={{ activeContent, setActiveContent }}>
+            <View style={styles.container}>
+                <Sidebar 
+                    navigation={navigation} 
+                    setActiveContent={setActiveContent} 
+                    activeContent={activeContent}
+                />
+                <Content navigation={navigation} activeContent={activeContent}/>
+            </View>
+        </ContentContext.Provider>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
+        width:'100%',
         flex: 1,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-    }
+        backgroundColor: '#2d2d2d'
+    },
+
 });
 
 export default HomeScreen;
