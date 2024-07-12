@@ -105,7 +105,7 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
         </View>
 
         <View style={styles.rightContainer}>
-          <Text>{isSignUp ? "Sign Up" : "Login"}</Text>
+          <Text>{isSignUp ? "Welcome" : "Login"}</Text>
           {isSignUp && (
               <TextInput
                   style={styles.input}
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#2d2d2d',
     overflow: 'hidden',
     transform:[{rotate:'350deg'}],
-    width:Dimensions.get('window').width/1.9,
+    width:Dimensions.get('window').width/1.8,
     height:Dimensions.get('window').height*1.5,
     position: 'relative',
     top: -Dimensions.get('window').height*0.2, 
