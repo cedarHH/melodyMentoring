@@ -31,12 +31,14 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
+        width:'100%',
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#2d2d2d'
     },
+
 });
 
 export default HomeScreen;

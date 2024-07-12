@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity,Image } from 'react-native';
 import CustomButton from '../../components/MISC/Button';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../types';
 
@@ -17,25 +18,40 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent 
     return (
       <View style={styles.sidebar}>
         <TouchableOpacity style={styles.avatar} onPress={() => navigation.navigate('User')}>
-            <Image source={require('../../assets/img/welcome/8.jpg')} style={styles.Avatarimage}/>
+            <Image source={require('../../assets/img/welcome/anime7.png')} style={styles.Avatarimage}/>
         </TouchableOpacity>
         <TouchableOpacity 
             style={[styles.button, activeContent === 'home' && styles.activeButton]} 
             onPress={() => setActiveContent('home')}
         >
-          <Text style={styles.link}>Home</Text>
+          <Icon 
+            name={activeContent === 'home' ? 'home' : 'home-outline'} 
+            size={30} 
+            color={activeContent === 'home' ? '#05fdfd' : 'white'} 
+          />
+          <Text style={[styles.link, activeContent === 'home' && styles.activelink]}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity 
             style={[styles.button, activeContent === 'search' && styles.activeButton]} 
             onPress={() => setActiveContent('search')}
         >
-          <Text style={styles.link}>Search</Text>
+          <Icon 
+            name={activeContent === 'search' ? 'search' : 'search-outline'} 
+            size={30} 
+            color={activeContent === 'search' ? '#05fdfd' : 'white'} 
+          />
+          <Text style={[styles.link, activeContent === 'search' && styles.activelink]}>Search</Text>
         </TouchableOpacity>
         <TouchableOpacity 
             style={[styles.button, activeContent === 'history' && styles.activeButton]} 
             onPress={() => setActiveContent('history')}
         >
-          <Text style={styles.link}>History</Text>
+          <Icon 
+            name={activeContent === 'history' ? 'time' : 'time-outline'} 
+            size={30} 
+            color={activeContent === 'history' ? '#05fdfd' : 'white'} 
+          />
+          <Text style={[styles.link, activeContent === 'history' && styles.activelink]}>History</Text>
         </TouchableOpacity>
       </View>
     );
@@ -43,36 +59,38 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent 
   
   const styles = StyleSheet.create({
     sidebar: {
-      width: '12%',
+      width: '10%',
       height: '100%',
-      padding: 20,
-      paddingTop: 50,
-      alignItems:'center'
+      paddingTop: "4%",
+      alignItems:'center',
+      marginStart:"-4%",
     },
     link: {
       fontSize: 8,
+      color:'white'
+    },
+    activelink: {
+      fontSize: 8,
+      color:'#05fdfd'
     },
     avatar: {
-        width: '120%',
+        width: '70%',
         aspectRatio: 1, 
         borderRadius: 50, 
-        backgroundColor: '#007bff', 
         justifyContent: 'center', 
         alignItems: 'center',
-        marginTop:-10,
-        marginBottom: 30,
+        marginBottom: "30%",
     },
     button: {
-        width: '90%',
+        width: '60%',
         aspectRatio: 1, 
-        borderRadius: 50, 
-        backgroundColor: 'transparent', 
+        borderRadius:10,
         justifyContent: 'center', 
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: '20%',
     },
     activeButton: {
-        backgroundColor: 'white',
+        backgroundColor: 'white', 
     },
     Avatarimage: {
         width: '100%', 
