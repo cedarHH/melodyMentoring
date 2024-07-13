@@ -9,27 +9,23 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type LoginLogic struct {
+type VerifypinLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-// login
-func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic {
-	return &LoginLogic{
+// verify pin code
+func NewVerifypinLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VerifypinLogic {
+	return &VerifypinLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
+func (l *VerifypinLogic) Verifypin(req *types.VerifypinReq) (resp *types.VerifypinResp, err error) {
 	// todo: add your logic here and delete this line
 
-	return &types.LoginResp{
-		AccessToken:  "sEAc9EixrOvFxmMASFaZSAOinDXDnV13HWZg",
-		AccessExpire: 3600,
-		RefreshAfter: 1800,
-	}, nil
+	return
 }

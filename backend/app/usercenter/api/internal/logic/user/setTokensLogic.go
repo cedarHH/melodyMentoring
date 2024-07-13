@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
@@ -9,23 +10,26 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type RegisterLogic struct {
+type SetTokensLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-// register
-func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
-	return &RegisterLogic{
+// NewSetTokensLogic setTokens
+func NewSetTokensLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SetTokensLogic {
+	return &SetTokensLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
+func (l *SetTokensLogic) SetTokens(req *types.SetTokensReq) (resp *types.SetTokensResp, err error) {
 	// todo: add your logic here and delete this line
-
-	return
+	fmt.Printf("%s\n", req.IdToken)
+	return &types.SetTokensResp{
+		Code: 1,
+		Msg:  "123",
+	}, nil
 }
