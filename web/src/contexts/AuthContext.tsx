@@ -58,6 +58,7 @@ const AuthProvider = ({children}: Props) => {
                 // Send tokens to backend to set cookies
                 const session: any = await getSession()
                 const tokens = {
+                    idToken: session.idToken.jwtToken,
                     accessToken: session.accessToken.jwtToken,
                     refreshToken: session.refreshToken.token,
                 };
