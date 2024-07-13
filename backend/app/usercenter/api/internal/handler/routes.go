@@ -14,49 +14,66 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				// login
+				// setTokens
 				Method:  http.MethodPost,
-				Path:    "/user/login",
-				Handler: user.LoginHandler(serverCtx),
-			},
-			{
-				// register
-				Method:  http.MethodPost,
-				Path:    "/user/register",
-				Handler: user.RegisterHandler(serverCtx),
+				Path:    "/setTokens",
+				Handler: user.SetTokensHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/usercenter/v1"),
+		rest.WithPrefix("/api/user"),
 	)
 
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				// get user auth by user id
+				// create sub-user
 				Method:  http.MethodPost,
-				Path:    "/user/auth/id",
-				Handler: user.GetUserAuthByUserIdHandler(serverCtx),
+				Path:    "/createSubUser",
+				Handler: user.CreateSubUserHandler(serverCtx),
 			},
 			{
-				// get user auth by auth key
+				// delete sub-user by name
 				Method:  http.MethodPost,
-				Path:    "/user/auth/key",
-				Handler: user.GetUserAuthByAuthKeyHandler(serverCtx),
+				Path:    "/deleteSubUserByName",
+				Handler: user.DeleteSubUserByNameHandler(serverCtx),
 			},
 			{
-				// get user info
-				Method:  http.MethodPost,
-				Path:    "/user/info",
-				Handler: user.GetUserInfoHandler(serverCtx),
+				// get avatar uploda url
+				Method:  http.MethodGet,
+				Path:    "/getAvatarUploadUrl",
+				Handler: user.GetAvatarUploadUrlHandler(serverCtx),
 			},
 			{
-				// generate token
+				// get sub-user by name
+				Method:  http.MethodGet,
+				Path:    "/getSubUserByName",
+				Handler: user.GetSubUserByNameHandler(serverCtx),
+			},
+			{
+				// get the list of sub-users
+				Method:  http.MethodGet,
+				Path:    "/getSubUsers",
+				Handler: user.GetSubUsersHandler(serverCtx),
+			},
+			{
+				// update avatar
 				Method:  http.MethodPost,
-				Path:    "/user/token",
-				Handler: user.GenerateTokenHandler(serverCtx),
+				Path:    "/updateAvatar",
+				Handler: user.UpdateAvatarHandler(serverCtx),
+			},
+			{
+				// update sub-user attr
+				Method:  http.MethodPatch,
+				Path:    "/updateSubUserAttr",
+				Handler: user.UpdateSubUserAttrHandler(serverCtx),
+			},
+			{
+				// verify pin code
+				Method:  http.MethodPost,
+				Path:    "/verifypin",
+				Handler: user.VerifypinHandler(serverCtx),
 			},
 		},
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/usercenter/v1"),
+		rest.WithPrefix("/api/user"),
 	)
 }
