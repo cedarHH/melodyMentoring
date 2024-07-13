@@ -9,17 +9,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-// get user auth by auth key
-func GetUserAuthByAuthKeyHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// update sub-user attr
+func UpdateSubUserAttrHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GetUserAuthByAuthKeyReq
+		var req types.UpdateSubUserAttrReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := user.NewGetUserAuthByAuthKeyLogic(r.Context(), svcCtx)
-		resp, err := l.GetUserAuthByAuthKey(&req)
+		l := user.NewUpdateSubUserAttrLogic(r.Context(), svcCtx)
+		resp, err := l.UpdateSubUserAttr(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

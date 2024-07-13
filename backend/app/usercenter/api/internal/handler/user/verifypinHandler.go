@@ -9,17 +9,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-// generate token
-func GenerateTokenHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// verify pin code
+func VerifypinHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GenerateTokenReq
+		var req types.VerifypinReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := user.NewGenerateTokenLogic(r.Context(), svcCtx)
-		resp, err := l.GenerateToken(&req)
+		l := user.NewVerifypinLogic(r.Context(), svcCtx)
+		resp, err := l.Verifypin(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
