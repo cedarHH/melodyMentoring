@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { View, StyleSheet,Dimensions } from 'react-native';
+import { StackNavigationProp,createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
 import Sidebar from '../components/Homescreen/Sidebar';
 import Content from '../components/Homescreen/Content';
@@ -12,8 +12,9 @@ type Props = {
     navigation: HomeScreenNavigationProp;
 };
 
+
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
-    const [activeContent, setActiveContent] = useState('home');
+    const [activeContent, setActiveContent] = useState('main');
 
     return (
         <ContentContext.Provider value={{ activeContent, setActiveContent }}>
@@ -23,7 +24,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                     setActiveContent={setActiveContent} 
                     activeContent={activeContent}
                 />
-                <Content navigation={navigation} activeContent={activeContent}/>
+                <Content navigation={navigation}/>
             </View>
         </ContentContext.Provider>
     );
@@ -31,7 +32,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        width:'100%',
+        width:Dimensions.get('window').width,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',

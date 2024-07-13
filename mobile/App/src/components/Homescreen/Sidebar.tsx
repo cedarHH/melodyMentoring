@@ -15,26 +15,36 @@ interface Props {
 
 const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent }) => {
 
+  const handleMain = () =>  {
+    setActiveContent('main');
+    navigation.navigate('Main');
+  };
+  const handleSearch = () => {
+    setActiveContent('search');
+    navigation.navigate('Search');
+  };
+  const handleHistory = () => {
+    setActiveContent('history');
+    navigation.navigate('History');
+  };
+
     return (
-      <View style={styles.sidebar}>
-        <TouchableOpacity style={styles.avatar} onPress={() => navigation.navigate('User')}>
-            <Image source={require('../../assets/img/welcome/anime7.png')} style={styles.Avatarimage}/>
+      <View style={styles.sidebar} >
+        <TouchableOpacity onPress={() => navigation.navigate('User')} 
+          style={styles.avatar}>
+          <Image source={require('../../assets/img/welcome/anime7.png')} style={styles.Avatarimage}/>
         </TouchableOpacity>
-        <TouchableOpacity 
-            style={[styles.button, activeContent === 'home' && styles.activeButton]} 
-            onPress={() => setActiveContent('home')}
-        >
+        <TouchableOpacity onPress={handleMain} 
+          style={[styles.button, activeContent === 'main' && styles.activeButton]}>
           <Icon 
-            name={activeContent === 'home' ? 'home' : 'home-outline'} 
+            name={activeContent === 'main' ? 'home' : 'home-outline'} 
             size={30} 
-            color={activeContent === 'home' ? '#05fdfd' : 'white'} 
+            color={activeContent === 'main' ? '#05fdfd' : 'white'} 
           />
-          <Text style={[styles.link, activeContent === 'home' && styles.activelink]}>Home</Text>
+          <Text style={[styles.link, activeContent === 'main' && styles.activelink]}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
-            style={[styles.button, activeContent === 'search' && styles.activeButton]} 
-            onPress={() => setActiveContent('search')}
-        >
+        <TouchableOpacity onPress={handleSearch}
+            style={[styles.button, activeContent === 'search' && styles.activeButton]}>
           <Icon 
             name={activeContent === 'search' ? 'search' : 'search-outline'} 
             size={30} 
@@ -42,10 +52,8 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent 
           />
           <Text style={[styles.link, activeContent === 'search' && styles.activelink]}>Search</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
-            style={[styles.button, activeContent === 'history' && styles.activeButton]} 
-            onPress={() => setActiveContent('history')}
-        >
+        <TouchableOpacity onPress={handleHistory}
+            style={[styles.button, activeContent === 'history' && styles.activeButton]}>
           <Icon 
             name={activeContent === 'history' ? 'time' : 'time-outline'} 
             size={30} 
