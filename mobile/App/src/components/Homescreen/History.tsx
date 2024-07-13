@@ -14,7 +14,7 @@ type Props = {
 const History: React.FC<Props> = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <Text>History Screen</Text>
+            <Text style={styles.text}>History</Text>
         </View>
     );
 }
@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         color:'white'
     },
+    text: {
+        color:'white'    
+    }
 
 });
 
