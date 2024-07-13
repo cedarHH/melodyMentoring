@@ -22,7 +22,6 @@ export interface IAuth {
     changePassword?: (oldPassword: string, newPassword: string) => Promise<void>
     getAttributes?: () => Promise<any>
     setAttribute?: (attr: any) => Promise<any>
-    refreshToken?: () => void,
 }
 
 const defaultState: IAuth = {
@@ -50,7 +49,6 @@ export const AuthIsNotSignedIn = ({children}: Props) => {
 
 const AuthProvider = ({children}: Props) => {
     const [authStatus, setAuthStatus] = useState(AuthStatus.Loading)
-    const [sessionInfo, setSessionInfo] = useState({})
     const [attrInfo, setAttrInfo] = useState([])
     const [currentUserEmail, setCurrentUserEmail] = useState('');
 
@@ -60,28 +58,20 @@ const AuthProvider = ({children}: Props) => {
                 // Send tokens to backend to set cookies
                 const session: any = await getSession()
                 const tokens = {
+                    idToken: session.idToken.jwtToken,
                     accessToken: session.accessToken.jwtToken,
                     refreshToken: session.refreshToken.token,
                 };
-
-                axios.post('/api/set-tokens', tokens, {
+                // Remove `await` when the backend server doesn't start
+                // then add `.then().catch()` after this `promise`
+                // otherwise it won't log in successfully
+                await axios.post('/api/set-tokens', tokens, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     withCredentials: true,
                 })
-                    .then(() => {
-                        console.log('Tokens set successfully');
-                    })
-                    // todo
-                    //     return axios.get('/api/get-tokens', { withCredentials: true });
-                    // })
-                    // .then(response => {
-                    //     console.log('Tokens:', response.data);
-                    // })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+
                 const attr: any = await getAttributes()
                 setAttrInfo(attr)
                 setAuthStatus(AuthStatus.SignedIn)
@@ -101,7 +91,7 @@ const AuthProvider = ({children}: Props) => {
     async function signInWithEmail(email: string, password: string) {
         try {
             await cognito.signInWithEmail(email, password)
-            setAuthStatus(AuthStatus.SignedIn)
+            setAuthStatus(AuthStatus.Loading)
         } catch (err) {
             setAuthStatus(AuthStatus.SignedOut)
             throw err
@@ -121,7 +111,7 @@ const AuthProvider = ({children}: Props) => {
         cognito.signOut()
         setAuthStatus(AuthStatus.SignedOut)
         // todo
-        // await axios.post('/api/clear-tokens')
+        // clear tokens
     }
 
     async function verifyCode(email: string, code: string) {
@@ -180,11 +170,6 @@ const AuthProvider = ({children}: Props) => {
         }
     }
 
-    async function refreshToken() {
-        // todo
-    }
-
-
     const state: IAuth = {
         authStatus,
         attrInfo,
@@ -199,7 +184,6 @@ const AuthProvider = ({children}: Props) => {
         changePassword,
         getAttributes,
         setAttribute,
-        refreshToken,
     }
 
     return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>
