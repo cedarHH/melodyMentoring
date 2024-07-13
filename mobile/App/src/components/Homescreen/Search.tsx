@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { DrawerActions } from '@react-navigation/native';
 import { RootStackParamList } from '../../../types';
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Search'>;
 
 type Props = {
     navigation: HomeScreenNavigationProp;
@@ -14,7 +14,7 @@ type Props = {
 const Search: React.FC<Props> = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <Text>Search</Text>
+            <Text style={styles.text}>Search</Text>
             
         </View>
     );
@@ -26,7 +26,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
+    text: {
+        color:'white'    
+    }
 });
 
 export default Search;
