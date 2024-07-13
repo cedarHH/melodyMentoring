@@ -6,7 +6,7 @@ interface ContentContextType {
 }
 
 const ContentContext = React.createContext<ContentContextType>({
-    activeContent: 'home', 
+    activeContent: 'main', 
     setActiveContent: () => {}
 });
 
