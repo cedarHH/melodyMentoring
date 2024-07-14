@@ -19,7 +19,7 @@ func SetTokensHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := user.NewSetTokensLogic(r.Context(), svcCtx)
-		resp, err := l.SetTokens(&req)
+		resp, err := l.SetTokens(&req, w)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
