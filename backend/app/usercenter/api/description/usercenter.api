@@ -11,8 +11,9 @@ import (
 	"user/user.api"
 )
 
-//============================> usercenter v1 <============================
 // goctl api go -api *.api -dir ../  -style=goZero
+// goctl api plugin -plugin goctl-swagger="swagger -filename usercenter.json -host localhost:8888 -basepath /" -api usercenter.api -dir ./doc
+//============================> usercenter v1 <============================
 @server (
 	prefix: api/user
 	group:  user
@@ -24,8 +25,9 @@ service usercenter {
 }
 
 @server (
-	prefix: api/user
-	group:  user
+	prefix:     api/user
+	group:      user
+	middleware: UserAuthMiddleware
 )
 service usercenter {
 	@doc "get the list of sub-users"
@@ -54,7 +56,7 @@ service usercenter {
 
 	@doc "update sub-user attr"
 	@handler updateSubUserAttr
-	patch /updateSubUserAttr (UpdateSubUserAttrReq) returns (UpdateSubUserAttrResp)
+	post /updateSubUserAttr (UpdateSubUserAttrReq) returns (UpdateSubUserAttrResp)
 
 	@doc "verify pin code"
 	@handler verifypin

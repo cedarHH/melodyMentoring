@@ -74,17 +74,13 @@ type UpdateAvatarResp struct {
 }
 
 type UpdateSubUserAttrReq struct {
-	ProfileName     string  `json:"profileName"`
-	Avatar          *string `json:"avatar"`
-	Gender          *string `json:"gender"`
-	Dob             *string `json:"dob"`
-	Level           *int64  `json:"level"`
-	Instrument      *string `json:"instrument"`
-	TotalTime       *int64  `json:"totaltime"`
-	NotesPlayed     *int64  `json:"notesplayed"`
-	LastPlayDate    *string `json:"lastplaydate"`
-	ConsecutiveDays *int64  `json:"consecutivedays"`
-	Badge           *string `json:"badges"`
+	ProfileName string `json:"profileName"`
+	Avatar      string `json:"avatar,optional"`
+	Gender      string `json:"gender,optional"`
+	Dob         string `json:"dob,optional"`
+	Level       string `json:"level,optional"`
+	Instrument  string `json:"instrument,optional"`
+	Badge       string `json:"badge,optional"`
 }
 
 type UpdateSubUserAttrResp struct {
@@ -99,7 +95,7 @@ type User struct {
 	Avatar          string   `json:"avatar"`
 	Gender          string   `json:"gender"`
 	Dob             string   `json:"dob"`
-	Level           int64    `json:"level"`
+	Level           string   `json:"level"`
 	Instrument      string   `json:"instrument"`
 	TotalTime       int64    `json:"totaltime"`
 	NotesPlayed     int64    `json:"notesplayed"`
