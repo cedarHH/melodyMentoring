@@ -39,8 +39,8 @@ func (l *SetTokensLogic) SetTokens(req *types.SetTokensReq, w http.ResponseWrite
 		})
 	}
 
-	setCookie("id_token", req.IdToken, 15*time.Minute)
-	setCookie("access_token", req.AccessToken, 15*time.Minute)
+	setCookie("id_token", req.IdToken, 50*time.Minute)
+	setCookie("access_token", req.AccessToken, 50*time.Minute)
 	setCookie("refresh_token", req.RefreshToken, 24*time.Hour)
 
 	return &types.SetTokensResp{
