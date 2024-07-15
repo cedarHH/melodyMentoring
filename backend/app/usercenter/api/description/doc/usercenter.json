@@ -1,0 +1,640 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "usercenter",
+    "description": "usercenter",
+    "version": "v1"
+  },
+  "host": "localhost:8888",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/user/createSubUser": {
+      "post": {
+        "summary": "create sub-user",
+        "operationId": "createSubUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateSubUserResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateSubUserReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/api/user/deleteSubUserByName": {
+      "post": {
+        "summary": "delete sub-user by name",
+        "operationId": "deleteSubUserByName",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteSubUserByNameResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteSubUserByNameReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/api/user/getAvatarUploadUrl": {
+      "get": {
+        "summary": "get avatar uploda url",
+        "operationId": "getAvatarUploadUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAvatarUploadUrlResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "profileName",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/api/user/getSubUserByName": {
+      "get": {
+        "summary": "get sub-user by name",
+        "operationId": "getSubUserByName",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetSubUserByNameResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "profileName",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/api/user/getSubUsers": {
+      "get": {
+        "summary": "get the list of sub-users",
+        "operationId": "getSubUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetSubUsersResp"
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/api/user/setTokens": {
+      "post": {
+        "summary": "setTokens",
+        "operationId": "setTokens",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SetTokensResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetTokensReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/api/user/updateAvatar": {
+      "post": {
+        "summary": "update avatar",
+        "operationId": "updateAvatar",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateAvatarResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateAvatarReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/api/user/updateSubUserAttr": {
+      "post": {
+        "summary": "update sub-user attr",
+        "operationId": "updateSubUserAttr",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateSubUserAttrResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateSubUserAttrReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/api/user/verifypin": {
+      "post": {
+        "summary": "verify pin code",
+        "operationId": "verifypin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/VerifypinResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifypinReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CreateSubUserReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "CreateSubUserReq",
+      "required": [
+        "profileName",
+        "pin"
+      ]
+    },
+    "CreateSubUserResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "CreateSubUserResp",
+      "required": [
+        "code",
+        "msg"
+      ]
+    },
+    "DeleteSubUserByNameReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "DeleteSubUserByNameReq",
+      "required": [
+        "profileName",
+        "pin"
+      ]
+    },
+    "DeleteSubUserByNameResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "DeleteSubUserByNameResp",
+      "required": [
+        "code",
+        "msg"
+      ]
+    },
+    "GetAvatarUploadUrlReq": {
+      "type": "object",
+      "title": "GetAvatarUploadUrlReq"
+    },
+    "GetAvatarUploadUrlResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetAvatarUploadUrlResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetSubUserByNameReq": {
+      "type": "object",
+      "title": "GetSubUserByNameReq"
+    },
+    "GetSubUserByNameResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "$ref": "#/definitions/User"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetSubUserByNameResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
+    "GetSubUsersResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SubUser"
+          }
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetSubUsersResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
+    "SetTokensReq": {
+      "type": "object",
+      "properties": {
+        "idToken": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      },
+      "title": "SetTokensReq",
+      "required": [
+        "idToken",
+        "accessToken",
+        "refreshToken"
+      ]
+    },
+    "SetTokensResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "SetTokensResp",
+      "required": [
+        "code",
+        "msg"
+      ]
+    },
+    "SubUser": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        }
+      },
+      "title": "SubUser",
+      "required": [
+        "profileName",
+        "avatar"
+      ]
+    },
+    "UpdateAvatarReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "presignedurl": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateAvatarReq",
+      "required": [
+        "profileName",
+        "presignedurl"
+      ]
+    },
+    "UpdateAvatarResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateAvatarResp",
+      "required": [
+        "code",
+        "msg"
+      ]
+    },
+    "UpdateSubUserAttrReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string"
+        },
+        "instrument": {
+          "type": "string"
+        },
+        "badge": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateSubUserAttrReq",
+      "required": [
+        "profileName"
+      ]
+    },
+    "UpdateSubUserAttrResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateSubUserAttrResp",
+      "required": [
+        "code",
+        "msg"
+      ]
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string"
+        },
+        "profileName": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string"
+        },
+        "instrument": {
+          "type": "string"
+        },
+        "totaltime": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "notesplayed": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "lastplaydate": {
+          "type": "string"
+        },
+        "consecutivedays": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "badges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "User",
+      "required": [
+        "uuid",
+        "profileName",
+        "pin",
+        "avatar",
+        "gender",
+        "dob",
+        "level",
+        "instrument",
+        "totaltime",
+        "notesplayed",
+        "lastplaydate",
+        "consecutivedays",
+        "badges"
+      ]
+    },
+    "VerifypinReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "VerifypinReq",
+      "required": [
+        "profileName",
+        "pin"
+      ]
+    },
+    "VerifypinResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "VerifypinResp",
+      "required": [
+        "code",
+        "msg"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}
