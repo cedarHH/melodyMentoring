@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import CustomButton from '../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
 
@@ -9,16 +10,16 @@ type Props = {
     navigation: UploadScreenNavigationProp;
 };
 
-const UploadScreen: React.FC<Props> = ({ navigation }) => {
+const Upload: React.FC<Props> = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Upload Screen</Text>
-            <Button
-                title="upload"
+            <CustomButton
+                text="upload"
                 onPress={() => {}}
             />
-            <Button
-                title="record"
+            <CustomButton
+                text="record"
                 onPress={() => {}}
             />
         </View>
@@ -36,4 +37,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default UploadScreen;
+export default Upload;
