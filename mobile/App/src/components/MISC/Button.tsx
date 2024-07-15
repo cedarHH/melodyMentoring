@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
+import { responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions';
 
 interface ButtonProps {
     text: string;
-    onPress: () => void | Promise<void>;
+    onPress: () => void;
     style?: object;
 }
 
@@ -13,7 +13,7 @@ const StyledTouchableOpacity = styled.TouchableOpacity<{}>`
     border-radius: ${responsiveHeight(2.5)}px;
     margin-top: ${responsiveHeight(1)}px;
     margin-bottom: ${responsiveHeight(1)}px;
-    width: ${responsiveWidth(7)}%;
+    width: 80%;
     text-align: center;
     background-color: #007BFF;
     justify-content: center;
