@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import CustomButton from '../components/MISC/Button';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
+import Sidebar from '../components/Homescreen/Sidebar';
+import Content from '../components/Homescreen/Content';
+import ContentContext from '../components/Homescreen/Context';
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
 
@@ -10,16 +12,16 @@ type Props = {
     navigation: UploadScreenNavigationProp;
 };
 
-const Upload: React.FC<Props> = ({ navigation }) => {
+const UploadScreen: React.FC<Props> = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Upload Screen</Text>
-            <CustomButton
-                text="upload"
+            <Button
+                title="upload"
                 onPress={() => {}}
             />
-            <CustomButton
-                text="record"
+            <Button
+                title="record"
                 onPress={() => {}}
             />
         </View>
@@ -28,7 +30,9 @@ const Upload: React.FC<Props> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
+        width:Dimensions.get('window').width,
         flex: 1,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -37,4 +41,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Upload;
+export default UploadScreen;
