@@ -12,16 +12,15 @@ type Props = {
     navigation: HomeScreenNavigationProp;
 };
 
-
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
     const [activeContent, setActiveContent] = useState('main');
 
     return (
         <ContentContext.Provider value={{ activeContent, setActiveContent }}>
             <View style={styles.container}>
-                <Sidebar 
-                    navigation={navigation} 
-                    setActiveContent={setActiveContent} 
+                <Sidebar
+                    navigation={navigation}
+                    setActiveContent={setActiveContent}
                     activeContent={activeContent}
                 />
                 <Content navigation={navigation}/>
