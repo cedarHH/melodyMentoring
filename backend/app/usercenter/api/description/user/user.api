@@ -1,81 +1,130 @@
 syntax = "v1"
 
 info(
-	title: "user interface"
-	desc: "user interface"
-	author: "xuesong huang"
+    title: "usercenter"
+    desc: "usercenter"
+    author: "xuesong huang"
 )
 
-// Model definitions
 type User {
-    Id       int64  `json:"id"`
-    Mobile   string `json:"email"`
-    Nickname string `json:"nickname"`
-    Sex      int64  `json:"sex"`
-    Avatar   string `json:"avatar"`
-    Info     string `json:"info"`
+    Uuid            string  `json:"uuid"`
+    ProfileName     string  `json:"profileName"`
+    Pin             int64   `json:"pin"`
+    Avatar          string  `json:"avatar"`
+    Gender          string  `json:"gender"`
+    Dob             string  `json:"dob"`
+    Level           string  `json:"level"`
+    Instrument      string  `json:"instrument"`
+    TotalTime       int64   `json:"totaltime"`
+    NotesPlayed     int64   `json:"notesplayed"`
+    LastPlayDate    string  `json:"lastplaydate"`
+    ConsecutiveDays int64   `json:"consecutivedays"`
+    Badges          []string `json:"badges"`
 }
 
-type UserAuth {
-    Id       int64  `json:"id"`
-    UserId   int64  `json:"userId"`
-    AuthType string `json:"authType"`
-    AuthKey  string `json:"authKey"`
-}
+type (
+    SetTokensReq {
+        IdToken      string `json:"idToken"`
+        AccessToken  string `json:"accessToken"`
+        RefreshToken string `json:"refreshToken"`
+    }
+    SetTokensResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)
 
-// Request and response messages
-type RegisterReq {
-    Mobile   string `json:"mobile"`
-    Nickname string `json:"nickname"`
-    Password string `json:"password"`
-    AuthKey  string `json:"authKey"`
-    AuthType string `json:"authType"`
-}
-type RegisterResp {
-    AccessToken  string `json:"accessToken"`
-    AccessExpire int64  `json:"accessExpire"`
-    RefreshAfter int64  `json:"refreshAfter"`
-}
+type (
+    SubUser {
+        ProfileName     string  `json:"profileName"`
+        Avatar          string  `json:"avatar"`
+    }
 
-type LoginReq {
-    AuthType string `json:"authType"`
-    AuthKey  string `json:"authKey"`
-    Password string `json:"password"`
-}
-type LoginResp {
-    AccessToken  string `json:"accessToken"`
-    AccessExpire int64  `json:"accessExpire"`
-    RefreshAfter int64  `json:"refreshAfter"`
-}
+    GetSubUsersResp {
+        Code    int        `json:"code"`
+        Data    []SubUser  `json:"data"`
+        Msg     string     `json:"msg"`
+    }
+)
 
-type GetUserInfoReq {
-    Id int64 `json:"id"`
-}
-type GetUserInfoResp {
-    UserInfo User `json:"userInfo"`
-}
+type (
+    GetSubUserByNameReq {
+        ProfileName     string  `header:"profileName"`
+    }
+    GetSubUserByNameResp {
+        Code    int        `json:"code"`
+        Data    User       `json:"data"`
+        Msg     string     `json:"msg"`
+    }
+)
 
-type GetUserAuthByAuthKeyReq {
-    AuthKey  string `json:"authKey"`
-    AuthType string `json:"authType"`
-}
-type GetUserAuthByAuthKeyResp {
-    UserAuth UserAuth `json:"userAuth"`
-}
+type (
+    CreateSubUserReq {
+        ProfileName     string  `json:"profileName"`
+        Pin             int64   `json:"pin"`
+    }
+    CreateSubUserResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)
 
-type GetUserAuthByUserIdReq {
-    UserId   int64  `json:"userId"`
-    AuthType string `json:"authType"`
-}
-type GetUserAuthByUserIdResp {
-    UserAuth UserAuth `json:"userAuth"`
-}
+type (
+    DeleteSubUserByNameReq {
+        ProfileName     string  `json:"profileName"`
+        Pin             int64   `json:"pin"`
+    }
+    DeleteSubUserByNameResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)
 
-type GenerateTokenReq {
-    UserId int64 `json:"userId"`
-}
-type GenerateTokenResp {
-    AccessToken  string `json:"accessToken"`
-    AccessExpire int64  `json:"accessExpire"`
-    RefreshAfter int64  `json:"refreshAfter"`
-}
+type (
+    GetAvatarUploadUrlReq {
+        ProfileName     string  `header:"profileName"`
+    }
+    GetAvatarUploadUrlResp {
+        Code            int        `json:"code"`
+        PresignedURL    string     `json:"presignedurl"`
+        Msg             string     `json:"msg"`
+    }
+)
+
+type (
+    UpdateAvatarReq {
+        ProfileName     string      `json:"profileName"`
+        PresignedURL    string      `json:"presignedurl"`
+    }
+    UpdateAvatarResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    UpdateSubUserAttrReq {
+        ProfileName     string  `json:"profileName"`
+        Avatar          string  `json:"avatar,optional"`
+        Gender          string  `json:"gender,optional"`
+        Dob             string  `json:"dob,optional"`
+        Level           string  `json:"level,optional"`
+        Instrument      string  `json:"instrument,optional"`
+        Badge           string  `json:"badge,optional"`
+    }
+    UpdateSubUserAttrResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    VerifypinReq {
+        ProfileName     string      `json:"profileName"`
+        Pin             int64       `json:"pin"`
+    }
+    VerifypinResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)

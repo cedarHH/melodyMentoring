@@ -6,11 +6,13 @@ import (
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/config"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/handler"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
+	common "github.com/cedarHH/mygo/common/middleware"
+
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 )
 
-var configFile = flag.String("f", "./app/usercenter/api/etc/usercenter.yaml", "the config file")
+var configFile = flag.String("f", "etc/usercenter.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -18,9 +20,8 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
-	server := rest.MustNewServer(c.RestConf)
+	server := rest.MustNewServer(c.RestConf, common.CustomCors())
 	defer server.Stop()
-	// server.Use(middleware.CORS)
 
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)

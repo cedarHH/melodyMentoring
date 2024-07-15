@@ -1,8 +1,8 @@
 syntax = "v1"
 
 info (
-	title:   "user center service"
-	desc:    "user center service"
+	title:   "usercenter"
+	desc:    "usercenter"
 	author:  "xuesong huang"
 	version: "v1"
 )
@@ -11,44 +11,55 @@ import (
 	"user/user.api"
 )
 
-//============================> usercenter v1 <============================
-// No need login
-@server (
-	prefix: usercenter/v1
-	group:  user
-)
-service usercenter {
-	@doc "register"
-	@handler register
-	post /user/register (RegisterReq) returns (RegisterResp)
-
-	@doc "login"
-	@handler login
-	post /user/login (LoginReq) returns (LoginResp)
-}
-
-// Need login
-@server (
-	prefix: usercenter/v1
-	group:  user
-	jwt:    JwtAuth
-)
-service usercenter {
-	@doc "get user info"
-	@handler getUserInfo
-	post /user/info (GetUserInfoReq) returns (GetUserInfoResp)
-
-	@doc "get user auth by auth key"
-	@handler getUserAuthByAuthKey
-	post /user/auth/key (GetUserAuthByAuthKeyReq) returns (GetUserAuthByAuthKeyResp)
-
-	@doc "get user auth by user id"
-	@handler getUserAuthByUserId
-	post /user/auth/id (GetUserAuthByUserIdReq) returns (GetUserAuthByUserIdResp)
-
-	@doc "generate token"
-	@handler generateToken
-	post /user/token (GenerateTokenReq) returns (GenerateTokenResp)
-}
-
 // goctl api go -api *.api -dir ../  -style=goZero
+// goctl api plugin -plugin goctl-swagger="swagger -filename usercenter.json -host localhost:8888 -basepath /" -api usercenter.api -dir ./doc
+//============================> usercenter v1 <============================
+@server (
+	prefix: api/user
+	group:  user
+)
+service usercenter {
+	@doc "setTokens"
+	@handler setTokens
+	post /setTokens (SetTokensReq) returns (SetTokensResp)
+}
+
+@server (
+	prefix:     api/user
+	group:      user
+	middleware: UserAuthMiddleware
+)
+service usercenter {
+	@doc "get the list of sub-users"
+	@handler getSubUsers
+	get /getSubUsers returns (GetSubUsersResp)
+
+	@doc "get sub-user by name"
+	@handler getSubUserByName
+	get /getSubUserByName (GetSubUserByNameReq) returns (GetSubUserByNameResp)
+
+	@doc "create sub-user"
+	@handler createSubUser
+	post /createSubUser (CreateSubUserReq) returns (CreateSubUserResp)
+
+	@doc "delete sub-user by name"
+	@handler deleteSubUserByName
+	post /deleteSubUserByName (DeleteSubUserByNameReq) returns (DeleteSubUserByNameResp)
+
+	@doc "get avatar uploda url"
+	@handler getAvatarUploadUrl
+	get /getAvatarUploadUrl (GetAvatarUploadUrlReq) returns (GetAvatarUploadUrlResp)
+
+	@doc "update avatar"
+	@handler updateAvatar
+	post /updateAvatar (UpdateAvatarReq) returns (UpdateAvatarResp)
+
+	@doc "update sub-user attr"
+	@handler updateSubUserAttr
+	post /updateSubUserAttr (UpdateSubUserAttrReq) returns (UpdateSubUserAttrResp)
+
+	@doc "verify pin code"
+	@handler verifypin
+	post /verifypin (VerifypinReq) returns (VerifypinResp)
+}
+
