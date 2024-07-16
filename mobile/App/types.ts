@@ -1,4 +1,3 @@
-// types.ts
 export type RootStackParamList = {
     Home: undefined;
     User: undefined;
@@ -7,5 +6,9 @@ export type RootStackParamList = {
     Main: undefined;
     Search: undefined;
     History: undefined;
-    Music: undefined;
+    Music: {
+        title: string;
+        image: string| undefined;
+        // others
+    }
 };

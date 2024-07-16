@@ -29,7 +29,7 @@ COPY --from=0 /usercenter /usr/local/bin/usercenter
 COPY ./app/usercenter/api/etc/usercenter.yaml ./app/usercenter/api/etc/usercenter.yaml
 
 # Expose the port the service runs on
-EXPOSE 8080
+EXPOSE 8888
 
 # Command to run the executable
 CMD ["usercenter", "-f", "./app/usercenter/api/etc/usercenter.yaml"]

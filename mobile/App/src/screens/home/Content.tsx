@@ -1,13 +1,13 @@
 import React, { useState }from 'react';
 import { View, Text, StyleSheet} from 'react-native';
 import CustomButton from '../../components/MISC/Button';
-import { StackNavigationProp,createStackNavigator,CardStyleInterpolators } from '@react-navigation/stack';
+import { StackNavigationProp,createStackNavigator,CardStyleInterpolators, Header } from '@react-navigation/stack';
 import { DrawerActions } from '@react-navigation/native';
 import { RootStackParamList } from '../../../types';
-import Search from './Search';
-import Main from './Main';
-import History from './History';
-import Music from './MusicDetail';
+import Search from './search/Search';
+import Main from './main/Main';
+import History from './history/History';
+import Music from './music/MusicDetail';
 
 const ContentStack = createStackNavigator<RootStackParamList>();
 
@@ -22,25 +22,19 @@ const Content: React.FC<Props> = () => {
             <ContentStack.Navigator 
                 screenOptions={{
                     headerShown: false, 
+                    headerStyle: {
+                        height: 0,
+                      },
                     cardStyle: { backgroundColor: '#2d2d2d' },
                     cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
-
                     }} >
                 <ContentStack.Screen name="Main" component={Main}/>
                 <ContentStack.Screen name="Search" component={Search}/>
                 <ContentStack.Screen name="History" component={History} />
+                <ContentStack.Screen name="Music" component={Music} 
+                    initialParams={{ title: 'default', image: 'default' }}
+                    options={{ headerShown: true }}/>
             </ContentStack.Navigator>
-            {/* <ContentStack.Navigator screenOptions={{ headerShown: false }}>
-                {activeContent === 'main' && (
-                    <ContentStack.Screen name="Main" component={Main} />
-                )}
-                {activeContent === 'search' && (
-                    <ContentStack.Screen name="Search" component={Search} />
-                )}
-                {activeContent === 'history' && (
-                    <ContentStack.Screen name="History" component={History} />
-                )}
-            </ContentStack.Navigator> */}
         </View>
     );
 };

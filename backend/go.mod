@@ -3,6 +3,9 @@ module github.com/cedarHH/mygo
 go 1.22.2
 
 require (
+	github.com/MicahParks/keyfunc/v2 v2.1.0
+	github.com/aws/aws-sdk-go v1.54.19
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/stretchr/testify v1.9.0
 	github.com/zeromicro/go-zero v1.6.6
 	google.golang.org/grpc v1.64.0
@@ -33,6 +36,7 @@ require (
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.0 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
