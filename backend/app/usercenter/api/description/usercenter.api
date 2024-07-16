@@ -27,6 +27,17 @@ service usercenter {
 @server (
 	prefix:     api/user
 	group:      user
+	middleware: CookieMiddleware
+)
+service usercenter {
+	@doc "refreshTokens"
+	@handler refreshTokens
+	get /refreshTokens returns (RefreshTokensResp)
+}
+
+@server (
+	prefix:     api/user
+	group:      user
 	middleware: UserAuthMiddleware
 )
 service usercenter {

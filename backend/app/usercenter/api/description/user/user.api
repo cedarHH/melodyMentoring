@@ -35,6 +35,13 @@ type (
 )
 
 type (
+    RefreshTokensResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
     SubUser {
         ProfileName     string  `json:"profileName"`
         Avatar          string  `json:"avatar"`
