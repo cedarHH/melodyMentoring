@@ -47,6 +47,11 @@ type GetSubUsersResp struct {
 	Msg  string    `json:"msg"`
 }
 
+type RefreshTokensResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+}
+
 type SetTokensReq struct {
 	IdToken      string `json:"idToken"`
 	AccessToken  string `json:"accessToken"`

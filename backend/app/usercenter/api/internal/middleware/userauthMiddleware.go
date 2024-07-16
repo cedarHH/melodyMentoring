@@ -3,19 +3,19 @@ package middleware
 import (
 	"fmt"
 	"github.com/MicahParks/keyfunc/v2"
+	"github.com/cedarHH/mygo/app/usercenter/api/internal/config"
 	common "github.com/cedarHH/mygo/common/middleware"
 	"net/http"
-	"os"
 )
 
 type UserAuthMiddleware struct {
 	jwtMiddleware *common.JwtMiddleware
 }
 
-func NewUserAuthMiddleware() *UserAuthMiddleware {
-	awsDefaultRegion := os.Getenv("AWS_DEFAULT_REGION")
-	cognitoUserPoolId := os.Getenv("COGNITO_USER_POOL_ID")
-	cognitoAppClientId := os.Getenv("COGNITO_APP_CLIENT_ID")
+func NewUserAuthMiddleware(cognitoConf config.CognitoConf) *UserAuthMiddleware {
+	awsDefaultRegion := cognitoConf.AwsRegion
+	cognitoUserPoolId := cognitoConf.UserPoolId
+	cognitoAppClientId := cognitoConf.AppClientId
 	jwks, _ := GetJWKS(awsDefaultRegion, cognitoUserPoolId)
 
 	return &UserAuthMiddleware{

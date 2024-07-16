@@ -25,6 +25,21 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.CookieMiddleware},
+			[]rest.Route{
+				{
+					// refreshTokens
+					Method:  http.MethodGet,
+					Path:    "/refreshTokens",
+					Handler: user.RefreshTokensHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/api/user"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
 			[]rest.Middleware{serverCtx.UserAuthMiddleware},
 			[]rest.Route{
 				{

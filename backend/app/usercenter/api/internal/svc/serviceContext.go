@@ -9,11 +9,13 @@ import (
 type ServiceContext struct {
 	Config             config.Config
 	UserAuthMiddleware rest.Middleware
+	CookieMiddleware   rest.Middleware
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:             c,
-		UserAuthMiddleware: middleware.NewUserAuthMiddleware().Handle,
+		UserAuthMiddleware: middleware.NewUserAuthMiddleware(c.CognitoConf).Handle,
+		CookieMiddleware:   middleware.NewCookieMiddleware().Handle,
 	}
 }
