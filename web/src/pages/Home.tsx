@@ -7,10 +7,14 @@ import MusicPracticeChart from '../components/Homepage/MusicPracticeChart';
 import AccuracyRateChart from '../components/Homepage/AccuracyRateChart';
 import { AuthContext } from "../contexts/AuthContext";
 import { practiceData, accuracyData, options } from '../constants/chartData';
+import { musicData, MusicItem } from '../constants/musicData';
 import { childrenData } from '../constants/childrenData';
 import userAvatar from '../assets/img/home/kid-avatar.jpg';
 import '../styles/Home.css';
-import Button from "../components/MISC/Button"
+import Button from "../components/MISC/Button";
+import { Pie, Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 import axios from "axios";
 
 const MainContainer = styled.div`
@@ -126,6 +130,7 @@ const ModalOverlay = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 `;
 
 const ModalContent = styled.div`
@@ -165,12 +170,25 @@ const Button1 = styled.button`
     }
 `;
 
+const ModalTitle = styled.h2`
+    color: #fff;
+    font-family: 'Cambria', serif;
+    font-size: 24px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+`;
+
+interface LevelCounts {
+    [key: number]: number;
+}
+
 const Home = () => {
     const authContext = useContext(AuthContext);
     const [activeKid, setActiveKid] = useState(Object.keys(childrenData)[0]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [activeChartData, setActiveChartData] = useState<'practice' | 'accuracy'>('practice');
-    const [chartType, setChartType] = useState<'line' | 'bar'>('line');
+    const [activeChartData, setActiveChartData] = useState<'practice' | 'accuracy' | 'musicHistory'>('practice');
+    const [chartType, setChartType] = useState<'line' | 'bar' | 'pie'>('line');
     const [resizeKey, setResizeKey] = useState(0); // State to manage the resize key
 
     useEffect(() => {
@@ -189,24 +207,65 @@ const Home = () => {
     }, []);
 
     const toggleChartType = () => {
-        setChartType(prev => prev === 'line' ? 'bar' : 'line');
+        if (activeChartData === 'musicHistory') {
+            setChartType(prev => prev === 'pie' ? 'bar' : 'pie');
+        } else {
+            setChartType(prev => prev === 'line' ? 'bar' : 'line');
+        }
     };
 
-    const handleChartClick = (type: 'practice' | 'accuracy') => {
+    const handleChartClick = (type: 'practice' | 'accuracy' | 'musicHistory') => {
         setActiveChartData(type);
-        setChartType('line');
+        if (type === 'musicHistory') {
+            setChartType('pie');
+        } else {
+            setChartType('line');
+        }
         setIsModalOpen(true);
     };
 
     const renderChart = () => {
-        const data = activeChartData === 'practice' ? practiceData : accuracyData;
-        const ChartComponent = activeChartData === 'practice' ? MusicPracticeChart : AccuracyRateChart;
-        const chartOptions = {
-            ...options,
-            maintainAspectRatio: false,
-            responsive: true,
-        };
-        return <ChartComponent data={data} options={chartOptions} chartType={chartType} />;
+        if (activeChartData === 'musicHistory') {
+            const levelCounts: LevelCounts = musicData.reduce((acc: LevelCounts, curr: MusicItem) => {
+                acc[curr.level] = (acc[curr.level] || 0) + 1;
+                return acc;
+            }, {});
+            const chartData = {
+                labels: Object.keys(levelCounts).map(level => `Level ${level}`),
+                datasets: [
+                    {
+                        label: '',
+                        data: Object.values(levelCounts),
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                    }
+                ]
+            };
+            const options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            };
+            return chartType === 'pie' ? (
+                <Pie data={chartData} options={options} />
+            ) : (
+                <Bar data={chartData} options={options} />
+            );
+        } else {
+            const data = activeChartData === 'practice' ? practiceData : accuracyData;
+            const ChartComponent = activeChartData === 'practice' ? MusicPracticeChart : AccuracyRateChart;
+            const chartOptions = {
+                ...options,
+                maintainAspectRatio: false,
+                responsive: true,
+            };
+            const validChartType = chartType === 'line' || chartType === 'bar' ? chartType : 'line';
+            return <ChartComponent data={data} options={chartOptions} chartType={validChartType} />;
+        }
     };
 
     const sign_out_button = async () => {
@@ -247,7 +306,7 @@ const Home = () => {
                 </SidebarContainer>
                 <MainView>
                     <UserInfo activeKid={activeKid} />
-                    <MusicHistory />
+                    <MusicHistory onClick={() => handleChartClick('musicHistory')} />
                 </MainView>
                 <ChartsContainer>
                     <ChartWrapper onClick={() => handleChartClick('practice')}>
@@ -261,12 +320,13 @@ const Home = () => {
             {isModalOpen && (
                 <ModalOverlay>
                     <ModalContent>
+                        {activeChartData === 'musicHistory' && <ModalTitle>Levels of History</ModalTitle>}
                         <ChartContainer>
                             {renderChart()}
                         </ChartContainer>
                         <ButtonsContainer>
                             <Button1 onClick={toggleChartType}>
-                                Toggle to {chartType === 'line' ? 'Bar' : 'Line'} Chart
+                                Toggle to {chartType === 'pie' ? 'Bar' : 'Pie'} Chart
                             </Button1>
                             <Button1 onClick={() => setIsModalOpen(false)}>Close</Button1>
                         </ButtonsContainer>
