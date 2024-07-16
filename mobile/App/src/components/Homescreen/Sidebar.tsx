@@ -1,10 +1,10 @@
 import React,{useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity,Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity,Image,Alert } from 'react-native';
 import CustomButton from '../../components/MISC/Button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../types';
-
+import { signOut } from '../../libs/cognito';
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
 interface Props {
@@ -26,6 +26,16 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent 
   const handleHistory = () => {
     setActiveContent('history');
     navigation.navigate('History');
+  };
+
+  const handleLogout = async () => {
+    try {
+      const session = await signOut();
+      console.log('Log out:', session);
+      navigation.navigate('Welcome')
+    } catch (err: any) {
+      Alert.alert("Login Failed", err.message || "Failed to login");
+    }
   };
 
     return (
@@ -61,7 +71,17 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent 
           />
           <Text style={[styles.link, activeContent === 'history' && styles.activelink]}>History</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={handleLogout} 
+          style={styles.avatar}>
+          <Icon 
+            name={'log-out'} 
+            size={30} 
+            color={'white'}
+            style={styles.flippedIcon}
+          />
+        </TouchableOpacity>
       </View>
+      
     );
   };
   
@@ -104,6 +124,9 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent 
         width: '100%', 
         height: '100%', 
         borderRadius: 50,
+    },
+    flippedIcon: {
+      transform: [{ scaleX: -1 }] 
     }
   });
 
