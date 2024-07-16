@@ -1,12 +1,9 @@
-import React, { useState }from 'react';
+import React, { useState,useCallback }from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, FlatList, Image} from 'react-native';
-import CustomButton from '../MISC/Button';
-import { Video,ResizeMode } from 'expo-av';
+import CustomButton from '../../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../types';
-import Icon from 'react-native-vector-icons/Ionicons';
-import musicData from '../../data/MusicData';
-import MusicDetail from './MusicDetail';
+import { RootStackParamList } from '../../../../types';
+import musicData from '../../../data/MusicData';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 
@@ -18,28 +15,33 @@ type Props = {
 const Main: React.FC<Props> = ({ navigation }) => {
 
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-    
 
-    const renderItem = ({ item, index }: { item: typeof musicData[0], index: number }) => {
+    const onPressHandler = useCallback(({ item, index }: { item: typeof musicData[0], index: number }) => {
+        if (selectedIndex === index) {
+            navigation.navigate('Music', { title: item.title, image: item.image });
+        } else {
+            setSelectedIndex(index);
+        }
+    }, [selectedIndex, navigation]);
+
+    const renderItem = useCallback(({ item, index }: { item: typeof musicData[0], index: number }) => {
         const isSelected = selectedIndex === index;
-        
+
         return (
             <TouchableOpacity
-                style={[styles.card,
-                isSelected && styles.cardSelected]}
-                onPress={() => setSelectedIndex(isSelected ? null : index)}
+                style={[styles.card, isSelected && styles.cardSelected]}
+                onPress={() => onPressHandler({ item, index })}
                 activeOpacity={0.7}
             >
                 <Image source={item.image} style={styles.cardImage} />
                 <Text style={styles.cardTitle}>{item.title}</Text>
             </TouchableOpacity>
         );
-    };
+    }, [selectedIndex, onPressHandler]);
 
     return (
         
         <View style={styles.container}>
-            <Text>Main Screen</Text>
             <FlatList
                 data={musicData}
                 renderItem={renderItem}
@@ -49,7 +51,7 @@ const Main: React.FC<Props> = ({ navigation }) => {
                 contentContainerStyle={styles.listContent}
             />
             <CustomButton
-                text="Upload and Record"
+                text="Upload Reference"
                 onPress={() => navigation.navigate('Upload')}
             />
         </View>

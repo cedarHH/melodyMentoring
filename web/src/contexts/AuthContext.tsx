@@ -65,7 +65,7 @@ const AuthProvider = ({children}: Props) => {
                 // Remove `await` when the backend server doesn't start
                 // then add `.then().catch()` after this `promise`
                 // otherwise it won't log in successfully
-                await axios.post('/api/set-tokens', tokens, {
+                await axios.post('/api/user/setTokens', tokens, {
                     headers: {
                         'Content-Type': 'application/json',
                     },

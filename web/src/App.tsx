@@ -5,7 +5,7 @@ import NotFound from "./pages/NotFound";
 import AuthProvider from "./contexts/AuthContext";
 import Main from "./pages/Main";
 
-axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = 'http://localhost:8888';
 
 const App: React.FC = () =>(
     <AuthProvider>

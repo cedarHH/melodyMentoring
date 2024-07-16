@@ -14,8 +14,8 @@ import '../styles/Home.css';
 import Button from "../components/MISC/Button";
 import { Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-
 ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+import axios from "axios";
 
 const MainContainer = styled.div`
     display: flex;
@@ -193,7 +193,6 @@ const Home = () => {
 
     useEffect(() => {
         setActiveKid(Object.keys(childrenData)[0]); // Set the first child as active
-        console.log(authContext.authStatus); // Log the authentication status
 
         const handleResize = () => {
             setResizeKey(prevKey => prevKey + 1); // Increment key to force re-render
@@ -269,17 +268,34 @@ const Home = () => {
         }
     };
 
-    const debug_button = async () => {
+    const sign_out_button = async () => {
         if (authContext.signOut){
             authContext.signOut();
         }
+    }
+
+    const debug_button = async () => {
+        axios.post("api/user/verifypin", {
+            "profileName":"lbr",
+            "pin":123
+        },{
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+        }).then((response)=>{
+
+        }).catch((err)=>{
+            console.log(err)
+        })
     }
 
     return (
         <MainContainer>
             <Header>
                 <Logo>MyGO!!!</Logo>
-                <Button text="Sign out" type="button" className="debug-button" onClick={debug_button} />
+                <Button text="Sign out" type="button" className="debug-button" onClick={sign_out_button} />
+                <Button text="Debug" type="button" className="debug-button" onClick={debug_button} />
                 <div className="user-avatar" onClick={() => { }}>
                     <img src={userAvatar} alt="User Avatar" style={{ width: "50px", height: "50px" }} />
                 </div>

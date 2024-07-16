@@ -2,7 +2,8 @@ package user
 
 import (
 	"context"
-	"fmt"
+	"net/http"
+	"time"
 
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
@@ -16,7 +17,7 @@ type SetTokensLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// NewSetTokensLogic setTokens
+// setTokens
 func NewSetTokensLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SetTokensLogic {
 	return &SetTokensLogic{
 		Logger: logx.WithContext(ctx),
@@ -25,11 +26,25 @@ func NewSetTokensLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SetToke
 	}
 }
 
-func (l *SetTokensLogic) SetTokens(req *types.SetTokensReq) (resp *types.SetTokensResp, err error) {
-	// todo: add your logic here and delete this line
-	fmt.Printf("%s\n", req.IdToken)
+func (l *SetTokensLogic) SetTokens(req *types.SetTokensReq, w http.ResponseWriter) (resp *types.SetTokensResp, err error) {
+	setCookie := func(name, value string, duration time.Duration) {
+		http.SetCookie(w, &http.Cookie{
+			Name:     name,
+			Value:    value,
+			Path:     "/",
+			Domain:   "localhost",
+			Expires:  time.Now().Add(duration),
+			HttpOnly: true,
+			Secure:   true,
+		})
+	}
+
+	setCookie("id_token", req.IdToken, 50*time.Minute)
+	setCookie("access_token", req.AccessToken, 50*time.Minute)
+	setCookie("refresh_token", req.RefreshToken, 24*time.Hour)
+
 	return &types.SetTokensResp{
-		Code: 1,
-		Msg:  "123",
+		Code: 0,
+		Msg:  "Tokens set successfully",
 	}, nil
 }

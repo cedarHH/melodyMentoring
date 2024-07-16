@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
@@ -27,5 +28,8 @@ func NewVerifypinLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Verifyp
 func (l *VerifypinLogic) Verifypin(req *types.VerifypinReq) (resp *types.VerifypinResp, err error) {
 	// todo: add your logic here and delete this line
 
-	return
+	return &types.VerifypinResp{
+		Code: 0,
+		Msg:  fmt.Sprintf("sub: %s", l.ctx.Value("uuid").(string)),
+	}, nil
 }
