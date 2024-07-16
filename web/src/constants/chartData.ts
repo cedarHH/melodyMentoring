@@ -1,23 +1,20 @@
 export const practiceData = {
-    labels: ['02/01', '02/02', '02/03', '02/04', '02/05', '02/06'],
+    labels: ['01/31', '02/01', '02/02', '02/03', '02/04', '02/05', '02/06'],
     datasets: [
         {
             label: 'Practice Duration (min)',
-            data: [30, 45, 20, 60, 40, 55],
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            data: [30, 45, 20, 60, 40, 55, 36],
             tension: 0.1,
         },
     ],
 };
 
 export const accuracyData = {
-    labels: ['02/01', '02/02', '02/03', '02/04', '02/05', '02/06'],
+    labels: ['01/31', '02/01', '02/02', '02/03', '02/04', '02/05', '02/06'],
     datasets: [
         {
             label: 'Accuracy Rate (%)',
-            data: [32, 35, 36, 43, 45, 47],
-            backgroundColor: 'rgb(75, 192, 192)',
+            data: [32, 35, 36, 42, 45, 47, 48],
         },
     ],
 };

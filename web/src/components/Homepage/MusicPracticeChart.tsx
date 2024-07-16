@@ -1,6 +1,7 @@
 import React, { useState, useEffect, CSSProperties } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import styled from 'styled-components';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
@@ -8,9 +9,33 @@ interface ChartProps {
     data: any;
     options: any;
     chartType: 'line' | 'bar';
+    openModal: () => void;
+    markedPoints: number[];
+    setMarkedPoints: React.Dispatch<React.SetStateAction<number[]>>;
+    isModalOpen: boolean;
 }
 
-const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType }) => {
+const calculateAverage = (data: number[]) => {
+    const total = data.reduce((sum, value) => sum + value, 0);
+    return total / data.length;
+};
+
+const ChartButton = styled.button`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    &:hover {
+        background-color: #777;
+    }
+`;
+
+const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType, openModal, markedPoints, setMarkedPoints, isModalOpen }) => {
     const [chartHeight, setChartHeight] = useState('100%');
 
     useEffect(() => {
@@ -26,6 +51,7 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType }) 
     }, []);
 
     const chartWrapperStyles: CSSProperties = {
+        position: 'relative',
         backgroundColor: '#2c2c2c',
         padding: '20px',
         borderRadius: '10px',
@@ -54,14 +80,76 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType }) 
         height: chartHeight,
     };
 
+    const handlePointClick = (elems: any) => {
+        if (elems.length > 0) {
+            const datasetIndex = elems[0].datasetIndex;
+            const index = elems[0].index;
+
+            if (datasetIndex === 0) { // Only allow marking actual data points
+                setMarkedPoints((prev) => {
+                    const newMarkedPoints = [...prev];
+                    const pointIndex = newMarkedPoints.indexOf(index);
+                    if (pointIndex === -1) {
+                        newMarkedPoints.push(index);
+                    } else {
+                        newMarkedPoints.splice(pointIndex, 1);
+                    }
+                    return newMarkedPoints;
+                });
+            }
+        }
+    };
+
+    const newData = {
+        ...data,
+        datasets: [
+            {
+                ...data.datasets[0],
+                borderColor: 'rgba(255, 120, 120, 0.6)',
+                backgroundColor: 'rgba(255, 120, 120, 0.6)',
+            },
+            {
+                label: 'Average',
+                data: Array(data.datasets[0].data.length).fill(calculateAverage(data.datasets[0].data)),
+                borderColor: 'rgba(255, 148, 86, 0.2)',
+                backgroundColor: 'rgba(255, 148, 86, 0.2)',
+                borderDash: [10, 5],
+                pointRadius: 0,
+            },
+            {
+                label: 'Marked Points',
+                data: data.datasets[0].data.map((value: number, index: number) => markedPoints.includes(index) ? value : null),
+                borderColor: 'rgba(255, 206, 86, 1)',
+                backgroundColor: 'rgba(255, 206, 86, 1)',
+                pointRadius: 8,
+                pointBackgroundColor: 'rgba(255, 206, 86, 1)',
+                pointBorderColor: 'rgba(255, 206, 86, 1)',
+                showLine: false,
+            }
+        ]
+    };
+
     return (
         <div style={chartWrapperStyles}>
             <div style={titleStyles}>Music Practice Duration</div>
+            {!isModalOpen && <ChartButton onClick={openModal}>Open Modal</ChartButton>}
             <div style={chartContainerStyles}>
                 {chartType === 'line' ? (
-                    <Line data={data} options={options} />
+                    <Line
+                        data={newData}
+                        options={{
+                            ...options,
+                            onClick: (event, elems) => handlePointClick(elems)
+                        }}
+                    />
                 ) : (
-                    <Bar data={data} options={options} />
+                    <Bar
+                        data={newData}
+                        options={{
+                            ...options,
+                            onClick: (event, elems) => handlePointClick(elems)
+                        }}
+                    />
                 )}
             </div>
         </div>

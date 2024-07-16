@@ -190,6 +190,8 @@ const Home = () => {
     const [activeChartData, setActiveChartData] = useState<'practice' | 'accuracy' | 'musicHistory'>('practice');
     const [chartType, setChartType] = useState<'line' | 'bar' | 'pie'>('line');
     const [resizeKey, setResizeKey] = useState(0); // State to manage the resize key
+    const [markedPracticePoints, setMarkedPracticePoints] = useState<number[]>([]);
+    const [markedAccuracyPoints, setMarkedAccuracyPoints] = useState<number[]>([]);
 
     useEffect(() => {
         setActiveKid(Object.keys(childrenData)[0]); // Set the first child as active
@@ -265,7 +267,17 @@ const Home = () => {
                 responsive: true,
             };
             const validChartType = chartType === 'line' || chartType === 'bar' ? chartType : 'line';
-            return <ChartComponent data={data} options={chartOptions} chartType={validChartType} />;
+            return (
+                <ChartComponent
+                    data={data}
+                    options={chartOptions}
+                    chartType={validChartType}
+                    openModal={() => setIsModalOpen(true)}
+                    markedPoints={activeChartData === 'practice' ? markedPracticePoints : markedAccuracyPoints}
+                    setMarkedPoints={activeChartData === 'practice' ? setMarkedPracticePoints : setMarkedAccuracyPoints}
+                    isModalOpen={isModalOpen}
+                />
+            );
         }
     };
 
@@ -293,11 +305,37 @@ const Home = () => {
                     <MusicHistory onClick={() => handleChartClick('musicHistory')} />
                 </MainView>
                 <ChartsContainer>
-                    <ChartWrapper onClick={() => handleChartClick('practice')}>
-                        <MusicPracticeChart data={practiceData} options={{ ...options, maintainAspectRatio: false, responsive: true, title: { display: true, text: 'Daily Music Practice Duration' } }} chartType="line" />
+                    <ChartWrapper>
+                        <MusicPracticeChart
+                            data={practiceData}
+                            options={{
+                                ...options,
+                                maintainAspectRatio: false,
+                                responsive: true,
+                                title: { display: true, text: 'Daily Music Practice Duration' }
+                            }}
+                            chartType="line"
+                            openModal={() => handleChartClick('practice')}
+                            markedPoints={markedPracticePoints}
+                            setMarkedPoints={setMarkedPracticePoints}
+                            isModalOpen={isModalOpen}
+                        />
                     </ChartWrapper>
-                    <ChartWrapper onClick={() => handleChartClick('accuracy')}>
-                        <AccuracyRateChart data={accuracyData} options={{ ...options, maintainAspectRatio: false, responsive: true, title: { display: true, text: 'Daily Practice Accuracy Rate' } }} chartType="bar" />
+                    <ChartWrapper>
+                        <AccuracyRateChart
+                            data={accuracyData}
+                            options={{
+                                ...options,
+                                maintainAspectRatio: false,
+                                responsive: true,
+                                title: { display: true, text: 'Daily Practice Accuracy Rate' }
+                            }}
+                            chartType="line"
+                            openModal={() => handleChartClick('accuracy')}
+                            markedPoints={markedAccuracyPoints}
+                            setMarkedPoints={setMarkedAccuracyPoints}
+                            isModalOpen={isModalOpen}
+                        />
                     </ChartWrapper>
                 </ChartsContainer>
             </Content>
