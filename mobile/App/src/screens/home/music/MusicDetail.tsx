@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../types';
+import { RootStackParamList } from '../../../../types';
 import { RouteProp } from '@react-navigation/native';
-import CustomButton from '../../components/MISC/Button';
+import CustomButton from '../../../components/MISC/Button';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 type MusicDetailRouteProp = RouteProp<RootStackParamList, 'Music'>;

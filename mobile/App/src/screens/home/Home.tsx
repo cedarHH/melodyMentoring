@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet,Dimensions } from 'react-native';
 import { StackNavigationProp,createStackNavigator } from '@react-navigation/stack';
-import { RootStackParamList } from '../../types';
-import Sidebar from '../components/Homescreen/Sidebar';
-import Content from '../components/Homescreen/Content';
-import ContentContext from '../components/Homescreen/Context';
+import { RootStackParamList } from '../../../types';
+import Sidebar from './Sidebar';
+import Content from './Content';
+import ContentContext from './Context';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -32,7 +32,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        width:Dimensions.get('window').width,
+        width:'100%',
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
