@@ -12,6 +12,7 @@ type Props = {
     navigation: HomeScreenNavigationProp;
 };
 
+
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
     const [activeContent, setActiveContent] = useState('main');
 

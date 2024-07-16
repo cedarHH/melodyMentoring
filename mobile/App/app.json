@@ -23,6 +23,5 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "entryPoint": "./App.tsx"
   }
 }
