@@ -275,15 +275,12 @@ const Home = () => {
     }
 
     const debug_button = async () => {
-        axios.post("api/user/verifypin", {
-            "profileName":"lbr",
-            "pin":123
-        },{
+        axios.get("api/user/refreshTokens", {
             headers: {
                 'Content-Type': 'application/json',
             },
             withCredentials: true,
-        }).then((response)=>{
+        },).then((response)=>{
 
         }).catch((err)=>{
             console.log(err)
