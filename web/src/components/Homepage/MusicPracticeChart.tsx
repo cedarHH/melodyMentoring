@@ -38,8 +38,11 @@ const ChartButton = styled.button`
     &:hover {
         background-color: #777;
     }
-    
-    @media (max-width: 1082px) {
+
+    @media (max-height: 824px) {
+        font-size: 17px;
+    }
+    @media (max-width: 1380px) {
         top: 10px;
         right: 10px;
         font-size: 15px;
@@ -69,18 +72,17 @@ const Dropdown = styled.select`
     }
 
     @media (max-height: 824px) {
-        top: 55px;
-        left: 20px;
+        left: 75px;
         font-size: 15px;
     }
-    @media (max-width: 1082px) {
-        top: 50px;
+    @media (max-width: 1380px) {
+        top: 40px;
         left: 10px;
         font-size: 15px;
         padding: 4px 8px;
     }
     @media (max-width: 768px) {
-        top: 45px;
+        top: 37px;
         left: 10px;
         font-size: 13px;
         padding: 3px 7px;
@@ -105,7 +107,10 @@ const CompareButton = styled.button`
         background-color: #777;
     }
 
-    @media (max-width: 1082px) {
+    @media (max-height: 824px) {
+        font-size: 17px;
+    }
+    @media (max-width: 1380px) {
         top: 10px;
         left: 10px;
         font-size: 15px;
