@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, StyleSheet,Dimensions } from 'react-native';
 import { StackNavigationProp,createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
-import Sidebar from '../components/Homescreen/Sidebar';
-import Content from '../components/Homescreen/Content';
-import ContentContext from '../components/Homescreen/Context';
+import Sidebar from './Homescreen/Sidebar';
+import Content from './Homescreen/Content';
+import ContentContext from './Homescreen/Context';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
