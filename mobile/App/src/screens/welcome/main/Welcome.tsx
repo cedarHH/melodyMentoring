@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Alert} from 'react-native';
+import { View, Text, Image} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import CustomButton from '../../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -9,7 +9,6 @@ import {
   useAppSelector,
   AuthMode,
   setAuthMode,
-  setEmailForVerification,
   goBack,
   RootState,
   register, verifyEmailCode, login
@@ -21,6 +20,8 @@ import ResetPasswordForm from '../forms/ResetPasswordForm';
 import ImageGrid from '../../../components/ImageGrid';
 import welcomeStyles from '../ui';
 import styles from './ui';
+
+const logo = require('../../../assets/img/logo/mygo1.png');
 
 type WelcomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Welcome'>;
 
@@ -48,10 +49,10 @@ const Welcome: React.FC<Props> = ({ navigation }) => {
       <View style={welcomeStyles.screen}>
         <View style={welcomeStyles.leftContainer}>
           <LinearGradient
-              colors={['transparent', 'transparent', '#1B1C1E']}
+              colors={['#1B1C1E', 'transparent', 'transparent']}
               style={welcomeStyles.radialGradient}
-              start={{ x: 0.5, y: 0.5 }}
-              end={{ x: 1, y: 1 }}
+              start={{ x: 1, y: 0.5 }}
+              end={{ x: 0.5, y: 0.5 }}
           />
           <View style={styles.leanBox}>
             <ImageGrid />
@@ -59,46 +60,57 @@ const Welcome: React.FC<Props> = ({ navigation }) => {
         </View>
 
         <View style={welcomeStyles.rightContainer}>
-          {authMode === AuthMode.LOGIN && (
-              <LoginForm
-                  onLogin={handleLogin}
-                  onBack={() => dispatch(goBack())}
-                  navigation={navigation}
-              />
+          <View style={styles.topSection}>
+            <Image source={logo} style={styles.logo} />
+          </View>
+
+          {authMode === AuthMode.WELCOME && (
+              <View style={styles.middleSection}>
+                <Text style={styles.subtitle}>Discover Your Sound</Text>
+              </View>
           )}
-          {authMode === AuthMode.REGISTER && (
-              <RegisterForm
-                  onSignUp={handleSignUp}
-                  onBack={() => dispatch(goBack())}
-              />
-          )}
-          {authMode === AuthMode.VERIFY_CODE && (
-              <VerifyForm
-                  onVerify={handleVerifyCode}
-                  email={emailForVerification}
-                  onBack={() => dispatch(goBack())}
-              />
-          )}
-          {authMode === AuthMode.RESET_PASSWORD && (
-              <ResetPasswordForm
-                  onBack={() => dispatch(goBack())}
-              />
-          )}
-          {authMode === AuthMode.WELCOME &&(
-              <>
-                <Text style={styles.title}>Welcome</Text>
-                <CustomButton
-                    text="Login"
-                    onPress={() => dispatch(setAuthMode(AuthMode.LOGIN))}
-                    style={styles.button}
+
+          <View style={styles.bottomSection}>
+            {authMode === AuthMode.WELCOME && (
+                <>
+                  <CustomButton
+                      text="I am new here"
+                      onPress={() => dispatch(setAuthMode(AuthMode.REGISTER))}
+                      style={styles.button_1}
+                  />
+                  <CustomButton
+                      text="Sign In"
+                      onPress={() => dispatch(setAuthMode(AuthMode.LOGIN))}
+                      style={styles.button_2}
+                  />
+                </>
+            )}
+            {authMode === AuthMode.LOGIN && (
+                <LoginForm
+                    onLogin={handleLogin}
+                    onBack={() => dispatch(goBack())}
+                    navigation={navigation}
                 />
-                <CustomButton
-                    text="I am new here"
-                    onPress={() => dispatch(setAuthMode(AuthMode.REGISTER))}
-                    style={styles.button}
+            )}
+            {authMode === AuthMode.REGISTER && (
+                <RegisterForm
+                    onSignUp={handleSignUp}
+                    onBack={() => dispatch(goBack())}
                 />
-              </>
-          )}
+            )}
+            {authMode === AuthMode.VERIFY_CODE && (
+                <VerifyForm
+                    onVerify={handleVerifyCode}
+                    email={emailForVerification}
+                    onBack={() => dispatch(goBack())}
+                />
+            )}
+            {authMode === AuthMode.RESET_PASSWORD && (
+                <ResetPasswordForm
+                    onBack={() => dispatch(goBack())}
+                />
+            )}
+          </View>
         </View>
       </View>
   );

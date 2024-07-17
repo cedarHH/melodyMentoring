@@ -10,12 +10,13 @@ interface ButtonProps {
 
 const StyledTouchableOpacity = styled.TouchableOpacity<{}>`
     padding: ${responsiveHeight(2)}px;
-    border-radius: ${responsiveHeight(2.5)}px;
+    border-radius: 20px;
     margin-top: ${responsiveHeight(1)}px;
     margin-bottom: ${responsiveHeight(1)}px;
     width: 80%;
+    height: ${responsiveHeight(7)}px;
     text-align: center;
-    background-color: #007BFF;
+    background-color: #00BBFF;
     justify-content: center;
     align-items: center;
 `;

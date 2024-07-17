@@ -1,6 +1,8 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 
+const {width, height} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
@@ -8,7 +10,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#1B1C1E',
     },
     leftContainer: {
-        flex: 1.5,
+        flex: 1,
         position: 'relative',
         overflow: 'hidden',
         justifyContent: 'center',
@@ -20,14 +22,14 @@ const styles = StyleSheet.create({
         left: '-100%',
         width: '200%',
         height: '200%',
-        borderRadius: Dimensions.get('window').width / 2,
+        borderRadius: width / 2,
         zIndex: 10,
         pointerEvents: 'none',
     },
     rightContainer: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         padding: responsiveWidth(3),
         zIndex: 20,
     },
