@@ -139,6 +139,23 @@
         ]
       }
     },
+    "/api/user/refreshTokens": {
+      "get": {
+        "summary": "refreshTokens",
+        "operationId": "refreshTokens",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RefreshTokensResp"
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
     "/api/user/setTokens": {
       "post": {
         "summary": "setTokens",
@@ -217,9 +234,6 @@
         ],
         "tags": [
           "user"
-        ],
-        "consumes": [
-          "multipart/form-data"
         ]
       }
     },
@@ -391,6 +405,23 @@
       "required": [
         "code",
         "data",
+        "msg"
+      ]
+    },
+    "RefreshTokensResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "RefreshTokensResp",
+      "required": [
+        "code",
         "msg"
       ]
     },

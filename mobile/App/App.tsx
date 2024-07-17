@@ -6,7 +6,7 @@ import { store } from './src/store';
 import Welcome from './src/screens/welcome/main/Welcome';
 import Home from './src/screens/home/Home';
 import User from './src/screens/User';
-import Upload from './src/screens/Upload';
+import Upload from './src/screens/upload/Upload';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { RootStackParamList } from './types';
 

@@ -4,10 +4,10 @@ import CustomButton from '../../components/MISC/Button';
 import { StackNavigationProp,createStackNavigator,CardStyleInterpolators, Header } from '@react-navigation/stack';
 import { DrawerActions } from '@react-navigation/native';
 import { RootStackParamList } from '../../../types';
-import Search from './Search';
-import Main from './Main';
-import History from './History';
-import Music from './MusicDetail';
+import Search from './search/Search';
+import Main from './main/Main';
+import History from './history/History';
+import Music from './music/MusicDetail';
 
 const ContentStack = createStackNavigator<RootStackParamList>();
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { musicData } from '../../constants/musicData';
 
 const MusicHistoryContainer = styled.div`
   background-color: #2c2c2c;
@@ -7,6 +8,8 @@ const MusicHistoryContainer = styled.div`
   border-radius: 10px;
   overflow-y: auto;
   margin-top: 20px;
+  cursor: pointer;
+  font-family: 'Arial', serif;
 `;
 
 const Table = styled.table`
@@ -15,21 +18,32 @@ const Table = styled.table`
 `;
 
 const TableHeader = styled.th`
+  font-size: 18px;
   text-align: left;
-  padding: 8px;
+  padding: 5px 8px;
   border-bottom: 1px solid #3a3a3a;
+  line-height: 1.5;
 `;
 
 const TableData = styled.td`
   text-align: left;
-  padding: 8px;
+  padding: 4px 8px;
   border-bottom: 1px solid #3a3a3a;
+  line-height: 1.5;
 `;
 
-const MusicHistory: React.FC = () => {
+const Title = styled.h3`
+  margin-top: -5px;
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+  font-family: 'Cambria', serif;
+`;
+
+const MusicHistory: React.FC<{ onClick: () => void }> = ({ onClick }) => {
     return (
-        <MusicHistoryContainer>
-            <h3>Music History</h3>
+        <MusicHistoryContainer onClick={onClick}>
+            <Title>Music History</Title>
             <Table>
                 <thead>
                 <tr>
@@ -39,22 +53,7 @@ const MusicHistory: React.FC = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {[
-                    { name: "Für Elise", level: 1, date: "02/05" },
-                    { name: "Moonlight Sonata", level: 2, date: "02/06" },
-                    { name: "Clair de Lune", level: 2, date: "02/06" },
-                    { name: "Prelude in C Major", level: 1, date: "02/06" },
-                    { name: "Gymnopédie No.1", level: 1, date: "02/06" },
-                    { name: "Nocturne in E-flat Major", level: 2, date: "02/06" },
-                    { name: "The Entertainer", level: 1, date: "02/06" },
-                    { name: "Canon in D", level: 1, date: "02/06" },
-                    { name: "Minuet in G Major", level: 1, date: "02/05" },
-                    { name: "Ave Maria", level: 1, date: "02/05" },
-                    { name: "Arabesque No. 1", level: 1, date: "02/05" },
-                    { name: "River Flows in You", level: 1, date: "02/05" },
-                    { name: "Rondo Alla Turca", level: 3, date: "02/05" },
-                    { name: "Liebestraum No. 3", level: 2, date: "02/05" }
-                ].map((item, index) => (
+                {musicData.map((item, index) => (
                     <tr key={index}>
                         <TableData>{item.name}</TableData>
                         <TableData>{item.level}</TableData>

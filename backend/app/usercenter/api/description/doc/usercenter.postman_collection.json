@@ -126,6 +126,26 @@
       "response": []
     },
     {
+      "name": "/api/user/refreshTokens",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:8888/api/user/refreshTokens",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "refreshTokens"]
+        },
+        "description": "refreshTokens"
+      },
+      "response": []
+    },
+    {
       "name": "/api/user/updateAvatar",
       "request": {
         "method": "POST",

@@ -1,10 +1,9 @@
 import React, { useState,useCallback }from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, FlatList, Image} from 'react-native';
-import CustomButton from '../../components/MISC/Button';
+import CustomButton from '../../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../types';
-import musicData from '../../data/MusicData';
-import Music from './MusicDetail';
+import { RootStackParamList } from '../../../../types';
+import musicData from '../../../data/MusicData';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 
@@ -41,7 +40,7 @@ const Main: React.FC<Props> = ({ navigation }) => {
     }, [selectedIndex, onPressHandler]);
 
     return (
-        
+
         <View style={styles.container}>
             <FlatList
                 data={musicData}
@@ -88,7 +87,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.8,
         elevation: 12,
         transform: [{ scale: 1.2 }]
-      },
+    },
     cardImage: {
         width: '100%',
         height: '80%',

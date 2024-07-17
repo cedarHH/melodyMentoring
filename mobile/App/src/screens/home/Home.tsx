@@ -32,7 +32,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        width:Dimensions.get('window').width,
+        width:'100%',
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',

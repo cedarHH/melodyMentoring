@@ -1,10 +1,7 @@
 import React from 'react';
 import {View, Text, Button, StyleSheet, Dimensions} from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../types';
-import Sidebar from './home/Sidebar';
-import Content from './home/Content';
-import ContentContext from './home/Context';
+import { RootStackParamList } from '../../../types';
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
 
