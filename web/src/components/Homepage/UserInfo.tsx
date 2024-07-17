@@ -8,25 +8,43 @@ interface UserInfoProps {
 }
 
 const UserInfoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: #2c2c2c;
-  padding: 20px;
-  border-radius: 10px;
-  gap: 20px;
-  max-width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: #1B1C1E;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden; /* 确保没有纵向滚动条 */
+    border: 2px solid #4B4B4B;
 `;
 
 const Avatar = styled.img`
   width: 90px;
   height: 90px;
   border-radius: 50%;
+  flex-shrink: 0; /* 防止图像被缩小 */
 `;
 
 const InfoBlock = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-left: 25px;
+  flex-grow: 1;
+`;
+
+const ProgressBlock = styled.div`
+    font-weight: bold;
+    font-size: 19px;
+    font-family: 'Cambria', serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    flex-shrink: 0; /* 防止进度条被缩小 */
+    min-width: 150px;
 `;
 
 const InfoRow = styled.div`
@@ -36,17 +54,42 @@ const InfoRow = styled.div`
 `;
 
 const InfoLabel = styled.p`
-  font-weight: bold;
-  width: 80px; /* Adjust width as needed */
-  margin: 0;
+    font-weight: bold;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    width: 80px; /* Adjust width as needed */
+    margin: 0;
 `;
 
 const InfoValue = styled.p`
-  margin: 0;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    margin: 0;
+`;
+
+const ProgressBarContainer = styled.div`
+  width: 100px;
+  background-color: #C0C0C0;
+  border-radius: 5px;
+  margin-top: 10px;
+`;
+
+const ProgressBar = styled.div<{ progress: number }>`
+  width: ${props => props.progress}%;
+  height: 10px;
+  background-color: #08A52D;
+  border-radius: 5px;
+`;
+
+const ProgressLabel = styled.p`
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
 `;
 
 const UserInfo: React.FC<UserInfoProps> = ({ activeKid }) => {
     const childInfo: ChildInfo = childrenData[activeKid];
+    const progress = 70;
 
     return (
         <UserInfoContainer>
@@ -65,6 +108,12 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid }) => {
                     <InfoValue>{childInfo.level}</InfoValue>
                 </InfoRow>
             </InfoBlock>
+            <ProgressBlock>
+                <ProgressLabel>Progress</ProgressLabel>
+                <ProgressBarContainer>
+                    <ProgressBar progress={progress} />
+                </ProgressBarContainer>
+            </ProgressBlock>
         </UserInfoContainer>
     );
 };

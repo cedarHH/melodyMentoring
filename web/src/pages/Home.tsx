@@ -28,25 +28,36 @@ const Header = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #252525;
+    background-color: #222222;
     padding: 10px 20px;
     color: white;
     position: sticky;
     top: 0;
     z-index: 10;
+    height: 10vh;
+
+    @media (min-width: 768px) {
+        height: 10vh;
+    }
+
+    @media (min-width: 1200px) {
+        height: 7vh;
+    }
 `;
+
 
 const Logo = styled.div`
     font-family: 'Cambria', serif;
+    font-style: italic;
     font-weight: bold;
-    font-size: 5vw;
+    font-size: 8vw;
     
     @media (min-width: 768px) {
-        font-size: 3vw;
+        font-size: 5vw;
     }
     
     @media (min-width: 1200px) {
-        font-size: 30px;
+        font-size: 2.2vw;
     }
 `;
 
@@ -63,9 +74,9 @@ const Content = styled.div`
 `;
 
 const SidebarContainer = styled.div`
-    width: 10%;
-    text-align: left;
-    background-color: #252525;
+    width: 8%;
+    text-align: center;
+    background-color: #222222;
     
     @media (max-width: 768px) {
         width: 100%;
@@ -108,7 +119,7 @@ const ChartWrapper = styled.div`
     flex-grow: 1;
     width: 100%;
     min-height: 50px;
-    max-height: 380px;
+    max-height: 405px;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -171,7 +182,7 @@ const ModalContent = styled.div`
 `;
 
 const SignOutModal = styled.div`
-    background: #555;
+    background: #222222;
     padding: 20px;
     border-radius: 10px;
     display: flex;
@@ -181,6 +192,7 @@ const SignOutModal = styled.div`
     height: 60%;
     max-width: 600px;
     max-height: 180px;
+    border: 4px solid #555555;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     @media (min-width: 768px) {
         width: 30%;
@@ -203,6 +215,10 @@ const SignOutButtonContainer = styled.div`
     width: 100%;
     margin-top: 60px;
     gap: 20px;
+    
+    @media (max-width: 768px) {
+        margin-top: 30px;
+    }
 `;
 
 const SignOutButton1 = styled.button`
@@ -436,7 +452,7 @@ const Home = () => {
             {isModalOpen && (
                 <ModalOverlay>
                     <ModalContent>
-                        {activeChartData === 'musicHistory' && <ModalTitle>Levels of History</ModalTitle>}
+                        {activeChartData === 'musicHistory' && <ModalTitle>Levels of Music History</ModalTitle>}
                         <ChartContainer>
                             {renderChart()}
                         </ChartContainer>
