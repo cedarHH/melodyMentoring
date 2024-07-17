@@ -38,6 +38,53 @@ const ChartButton = styled.button`
     &:hover {
         background-color: #777;
     }
+    
+    @media (max-width: 1082px) {
+        top: 10px;
+        right: 10px;
+        font-size: 15px;
+        padding: 4px 8px;
+    }
+    @media (max-width: 768px) {
+        font-size: 13px;
+        padding: 3px 7px;
+    }
+`;
+
+const Dropdown = styled.select`
+    position: absolute;
+    top: 20px;
+    left: 90px;
+    background-color: #292A2C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    &:hover {
+        background-color: #777;
+    }
+
+    @media (max-height: 824px) {
+        top: 55px;
+        left: 20px;
+        font-size: 15px;
+    }
+    @media (max-width: 1082px) {
+        top: 50px;
+        left: 10px;
+        font-size: 15px;
+        padding: 4px 8px;
+    }
+    @media (max-width: 768px) {
+        top: 45px;
+        left: 10px;
+        font-size: 13px;
+        padding: 3px 7px;
+    }
 `;
 
 const CompareButton = styled.button`
@@ -57,6 +104,17 @@ const CompareButton = styled.button`
     &:hover {
         background-color: #777;
     }
+
+    @media (max-width: 1082px) {
+        top: 10px;
+        left: 10px;
+        font-size: 15px;
+        padding: 4px 8px;
+    }
+    @media (max-width: 768px) {
+        font-size: 13px;
+        padding: 3px 7px;
+    }
 `;
 
 const RemoveButton = styled.button`
@@ -70,24 +128,6 @@ const RemoveButton = styled.button`
     font-size: 12px;
     &:hover {
         background-color: rgba(0, 0, 0, 0.7);
-    }
-`;
-
-const Dropdown = styled.select`
-    position: absolute;
-    top: 60px;
-    left: 20px;
-    background-color: #292A2C;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-weight: bold;
-    font-style: italic;
-    font-size: 18px;
-    font-family: 'Cambria', serif;
-    &:hover {
-        background-color: #777;
     }
 `;
 
@@ -206,6 +246,16 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, compareDataSets, optio
         <div style={chartWrapperStyles}>
             <div style={titleStyles}>Music Practice Duration</div>
             {!isModalOpen && <ChartButton onClick={openModal}>Toggle Chart</ChartButton>}
+
+            {isComparing && (
+                <Dropdown onChange={(e) => setSelectedCompareData(e.target.value)} value={selectedCompareData || ''}>
+                    <option value="" disabled>Select data</option>
+                    {compareDataSets.map(dataSet => (
+                        <option key={dataSet.label} value={dataSet.label}>{dataSet.label}</option>
+                    ))}
+                </Dropdown>
+            )}
+
             <CompareButton onClick={() => {
                 if (isComparing) {
                     setSelectedCompareData(null); // Reset selection
@@ -214,14 +264,7 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, compareDataSets, optio
             }}>
                 {isComparing ? 'Back' : 'Compare'}
             </CompareButton>
-            {isComparing && (
-                <Dropdown onChange={(e) => setSelectedCompareData(e.target.value)} value={selectedCompareData || ''}>
-                    <option value="" disabled>Select data to compare</option>
-                    {compareDataSets.map(dataSet => (
-                        <option key={dataSet.label} value={dataSet.label}>{dataSet.label}</option>
-                    ))}
-                </Dropdown>
-            )}
+
             <div style={chartContainerStyles}>
                 {chartType === 'line' ? (
                     <Line
