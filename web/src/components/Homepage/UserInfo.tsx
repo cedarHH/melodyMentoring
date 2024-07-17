@@ -8,14 +8,15 @@ interface UserInfoProps {
 }
 
 const UserInfoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: #2c2c2c;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden; /* 确保没有纵向滚动条 */
+    display: flex;
+    align-items: center;
+    background-color: #1B1C1E;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden; /* 确保没有纵向滚动条 */
+    border: 2px solid #4B4B4B;
 `;
 
 const Avatar = styled.img`
@@ -34,13 +35,16 @@ const InfoBlock = styled.div`
 `;
 
 const ProgressBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-right: 15px;
-  flex-shrink: 0; /* 防止进度条被缩小 */
-  min-width: 150px;
+    font-weight: bold;
+    font-size: 19px;
+    font-family: 'Cambria', serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    flex-shrink: 0; /* 防止进度条被缩小 */
+    min-width: 150px;
 `;
 
 const InfoRow = styled.div`
@@ -50,13 +54,17 @@ const InfoRow = styled.div`
 `;
 
 const InfoLabel = styled.p`
-  font-weight: bold;
-  width: 80px; /* Adjust width as needed */
-  margin: 0;
+    font-weight: bold;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    width: 80px; /* Adjust width as needed */
+    margin: 0;
 `;
 
 const InfoValue = styled.p`
-  margin: 0;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    margin: 0;
 `;
 
 const ProgressBarContainer = styled.div`
@@ -74,13 +82,14 @@ const ProgressBar = styled.div<{ progress: number }>`
 `;
 
 const ProgressLabel = styled.p`
-  margin: 0;
-  text-align: center;
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
 `;
 
 const UserInfo: React.FC<UserInfoProps> = ({ activeKid }) => {
     const childInfo: ChildInfo = childrenData[activeKid];
-    const progress = 30;
+    const progress = 70;
 
     return (
         <UserInfoContainer>

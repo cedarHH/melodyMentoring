@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import { musicData } from '../../constants/musicData';
 
 const MusicHistoryContainer = styled.div`
-  background-color: #2c2c2c;
-  padding: 20px;
-  border-radius: 10px;
-  overflow-y: auto;
-  margin-top: 20px;
-  font-family: 'Arial', serif;
+    background-color: #1B1C1E;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-y: auto;
+    margin-top: 20px;
+    font-family: 'Arial', serif;
+    border: 2px solid #4B4B4B;
 `;
 
 const Table = styled.table`
@@ -47,15 +48,19 @@ const Title = styled.h3`
 `;
 
 const ChartButton = styled.button`
-    background-color: #555;
+    background-color: #292A2C;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     padding: 5px 10px;
-    position: absolute; 
-    top: 1px;
-    right: 20px;
+    position: absolute;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    top: -5px;
+    right: 5px;
     &:hover {
         background-color: #777;
     }
@@ -66,7 +71,7 @@ const MusicHistory: React.FC<{ onClick: () => void }> = ({ onClick }) => {
         <MusicHistoryContainer>
             <TitleContainer>
                 <Title>Music History</Title>
-                <ChartButton onClick={onClick}>Open Modal</ChartButton>
+                <ChartButton onClick={onClick}>Show Levels</ChartButton>
             </TitleContainer>
             <Table>
                 <thead>
