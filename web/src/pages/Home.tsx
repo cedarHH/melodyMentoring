@@ -34,19 +34,29 @@ const Header = styled.header`
     position: sticky;
     top: 0;
     z-index: 10;
+    height: 10vh;
+
+    @media (min-width: 768px) {
+        height: 10vh;
+    }
+
+    @media (min-width: 1200px) {
+        height: 7vh;
+    }
 `;
+
 
 const Logo = styled.div`
     font-family: 'Cambria', serif;
     font-weight: bold;
-    font-size: 5vw;
+    font-size: 8vw;
     
     @media (min-width: 768px) {
-        font-size: 3vw;
+        font-size: 5vw;
     }
     
     @media (min-width: 1200px) {
-        font-size: 30px;
+        font-size: 2.5vw;
     }
 `;
 
@@ -108,7 +118,7 @@ const ChartWrapper = styled.div`
     flex-grow: 1;
     width: 100%;
     min-height: 50px;
-    max-height: 380px;
+    max-height: 400px;
     padding: 10px;
     display: flex;
     flex-direction: column;
