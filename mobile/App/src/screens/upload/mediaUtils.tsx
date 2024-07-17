@@ -1,45 +1,85 @@
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
+import * as DocumentPicker from 'expo-document-picker';
 
 
-const [videoUri, setVideoUri] = useState<string | null>(null);
-export const SelectVideo = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+export const SelectVideo = async (): Promise<string | null> => {
+    const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
         quality: 1,
-    });4
+    });
 
     if (!result.canceled) {
-        setVideoUri(result.assets[0].uri);
-        console.log('Video selected:', result.assets[0].uri);
+        console.log('Video selected:', result);
+        return result.assets[0].uri;
+    } else {
+        return null;
     }
 };
 
-export const UploadVideo= async (title:string) => {
-    
-    if (videoUri) {
-        const formData = new FormData();
-        formData.append('video', {
-            uri: videoUri,
-            name: title + '.mp4',
-            type: 'video/mp4'
-        } as any);
+export const UploadVideo = async (videoUri: string, title: string): Promise<void> => {
+    const formData = new FormData();
+    formData.append('video', {
+        uri: videoUri,
+        name: `${title}.mp4`,
+        type: 'video/mp4',
+    } as any);
 
-        try {
-            const response = await fetch('SERVER', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Content-Type': 'title',
-                },
-            });
+    try {
+        const response = await fetch('serverUrl', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
 
-            const responseBody = await response.json();
-            console.log('Upload successful:', responseBody);
-        } catch (error) {
-            console.error('Upload failed:', error);
+        const responseBody = await response.json();
+        console.log('Upload successful:', responseBody);
+    } catch (error) {
+        console.error('Upload failed:', error);
+        throw error;
+    }
+};
+
+export const SelectAudio = async (): Promise<string | null> => {
+    try {
+        const result = await DocumentPicker.getDocumentAsync({
+            type: 'audio/*',
+        });
+        
+        if (!result.canceled) {
+            console.log('Audio selected:', result);
+            return result.assets[0].uri;
+        } else {
+            return null;
         }
-    } else {
-        console.log('No video to upload');
+    } catch (error) {
+        console.error('Error selecting audio:', error);
+        return null;
+    }
+};
+
+export const UploadAudio = async (audioUri: string, title: string): Promise<void> => {
+    const formData = new FormData();
+    formData.append('audio', {
+        uri: audioUri,
+        name: `${title}.mp3`,
+        type: 'audio/mp3', 
+    } as any);
+
+    try {
+        const response = await fetch('serverUrl', {
+            method: 'POST',
+            body: formData,
+            
+            headers: {
+            },
+        });
+
+        const responseBody = await response.json();
+        console.log('Upload successful:', responseBody);
+    } catch (error) {
+        console.error('Upload failed:', error);
+        throw error;
     }
 };
