@@ -52,7 +52,7 @@ const Main: React.FC<Props> = ({ navigation }) => {
             />
             <CustomButton
                 text="Upload Reference"
-                onPress={() => navigation.navigate('Upload')}
+                onPress={() => navigation.navigate('Upload',{title:'defalt'})}
             />
         </View>
     );

@@ -22,7 +22,7 @@ const MusicDetail: React.FC<Props> = ({ route, navigation }) => {
             <Text style={styles.title}>{title}</Text>
             <CustomButton
                 text="Practice"
-                onPress={() => navigation.navigate('Upload')}
+                onPress={() => navigation.navigate('Upload', { title})}
             />            
         </View>
 
