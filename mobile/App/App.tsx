@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Provider } from 'react-redux';
 import { store } from './src/store';
 import Welcome from './src/screens/welcome/main/Welcome';
-import Home from './src/screens/Home/Home';
+import Home from './src/screens/home/Home';
 import User from './src/screens/User';
 import Upload from './src/screens/Upload';
 import * as ScreenOrientation from 'expo-screen-orientation';
