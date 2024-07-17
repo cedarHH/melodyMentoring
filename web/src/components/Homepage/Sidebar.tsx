@@ -8,7 +8,7 @@ interface SidebarProps {
 
 const Aside = styled.aside`
   width: 100%;
-  background-color: #252525;
+  background-color: #222222;
   padding: 20px;
   box-sizing: border-box;
 `;
@@ -23,14 +23,18 @@ interface ListItemProps {
 }
 
 const ListItem = styled.li<ListItemProps>`
-  padding: 10px;
-  cursor: pointer;
-  background-color: ${(props) => (props.$isActive ? '#3a3a3a' : 'transparent')};
-  border-radius: ${(props) => (props.$isActive ? '5px' : '0')};
-
-  &:hover {
+    font-weight: bold;
+    font-family: 'Cambria', serif;
+    padding: 10px;
+    cursor: pointer;
+    background-color: ${(props) => (props.$isActive ? '#3a3a3a' : 'transparent')};
+    border-radius: ${(props) => (props.$isActive ? '5px' : '0')};
+    font-size: ${(props) => (props.$isActive ? '18px' : '16px')}; 
+    color: ${(props) => (props.$isActive ? '#ffffff' : '#aaaaaa')};
+    
+    &:hover {
     background-color: rgba(255, 255, 255, 0.1);
-  }
+    }
 `;
 
 const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
