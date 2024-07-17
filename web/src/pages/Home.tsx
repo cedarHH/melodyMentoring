@@ -7,7 +7,7 @@ import MusicHistory from '../components/Homepage/MusicHistory';
 import MusicPracticeChart from '../components/Homepage/MusicPracticeChart';
 import AccuracyRateChart from '../components/Homepage/AccuracyRateChart';
 import { AuthContext } from "../contexts/AuthContext";
-import { practiceData, accuracyData, options } from '../constants/chartData';
+import { practiceData, accuracyData, practiceData1, accuracyData1, practiceData2, accuracyData2, options } from '../constants/chartData';
 import { musicData, MusicItem } from '../constants/musicData';
 import { childrenData } from '../constants/childrenData';
 import userAvatar from '../assets/img/home/kid-avatar.jpg';
@@ -45,17 +45,16 @@ const Header = styled.header`
     }
 `;
 
-
 const Logo = styled.div`
     font-family: 'Cambria', serif;
     font-style: italic;
     font-weight: bold;
     font-size: 8vw;
-    
+
     @media (min-width: 768px) {
         font-size: 5vw;
     }
-    
+
     @media (min-width: 1200px) {
         font-size: 2.2vw;
     }
@@ -66,7 +65,7 @@ const Content = styled.div`
     flex: 1;
     overflow: hidden;
     gap: 10px;
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         overflow-y: auto;
@@ -77,7 +76,7 @@ const SidebarContainer = styled.div`
     width: 8%;
     text-align: center;
     background-color: #222222;
-    
+
     @media (max-width: 768px) {
         width: 100%;
         text-align: center;
@@ -89,7 +88,7 @@ const MainView = styled.div`
     flex-direction: column;
     width: 35%;
     padding: 20px;
-    
+
     @media (max-width: 768px) {
         width: 100%;
         overflow: visible;
@@ -102,12 +101,12 @@ const ChartsContainer = styled.div`
     width: 55%;
     padding: 10px;
     gap: 10px;
-    
+
     @media (max-width: 768px) {
         width: 100%;
         overflow: visible;
     }
-    
+
     @media (min-width: 768px) {
         height: calc(100vh - 50px);
         overflow: auto;
@@ -123,7 +122,7 @@ const ChartWrapper = styled.div`
     padding: 10px;
     display: flex;
     flex-direction: column;
-    
+
     @media (min-width: 768px) {
         flex-grow: 0;
         flex-shrink: 0;
@@ -215,7 +214,7 @@ const SignOutButtonContainer = styled.div`
     width: 100%;
     margin-top: 60px;
     gap: 20px;
-    
+
     @media (max-width: 768px) {
         margin-top: 30px;
     }
@@ -345,6 +344,13 @@ const Home = () => {
             );
         } else {
             const data = activeChartData === 'practice' ? practiceData : accuracyData;
+            const compareDataSets = activeChartData === 'practice' ? [
+                { label: 'Amy', data: practiceData1 },
+                { label: 'Tom', data: practiceData2 }
+            ] : [
+                { label: 'Amy', data: accuracyData1 },
+                { label: 'Tom', data: accuracyData2 }
+            ];
             const ChartComponent = activeChartData === 'practice' ? MusicPracticeChart : AccuracyRateChart;
             const chartOptions = {
                 ...options,
@@ -355,6 +361,7 @@ const Home = () => {
             return (
                 <ChartComponent
                     data={data}
+                    compareDataSets={compareDataSets} // Pass the compareDataSets to the component
                     options={chartOptions}
                     chartType={validChartType}
                     openModal={() => setIsModalOpen(true)}
@@ -418,6 +425,10 @@ const Home = () => {
                     <ChartWrapper>
                         <MusicPracticeChart
                             data={practiceData}
+                            compareDataSets={[
+                                { label: 'Amy', data: practiceData1 },
+                                { label: 'Tom', data: practiceData2 }
+                            ]} // Pass the compareDataSets to the component
                             options={{
                                 ...options,
                                 maintainAspectRatio: false,
@@ -434,6 +445,10 @@ const Home = () => {
                     <ChartWrapper>
                         <AccuracyRateChart
                             data={accuracyData}
+                            compareDataSets={[
+                                { label: 'Amy', data: accuracyData1 },
+                                { label: 'Tom', data: accuracyData2 }
+                            ]} // Pass the compareDataSets to the component
                             options={{
                                 ...options,
                                 maintainAspectRatio: false,
