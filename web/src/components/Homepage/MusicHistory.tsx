@@ -28,7 +28,7 @@ const TableData = styled.td`
   text-align: left;
   padding: 4px 8px;
   border-bottom: 1px solid #3a3a3a;
-  line-height: 1.5;
+  line-height: 1.6;
 `;
 
 const TitleContainer = styled.div`
