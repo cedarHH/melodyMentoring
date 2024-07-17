@@ -1,29 +1,48 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 
 const styles = StyleSheet.create({
     leanBox: {
         display: 'flex',
-        transform: [{ rotate: '-10deg' }, { translateX: -10 }],
+        height: '120%',
+        transform:
+            [{ rotate: '-5deg' },
+            { translateX: -responsiveWidth(10) }],
     },
 
-    title: {
-        color: 'white',
-        fontSize: responsiveFontSize(3),
-        marginBottom: responsiveHeight(2),
+    topSection: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: responsiveHeight(1),
     },
-    input: {
+    logo: {
+        width: responsiveWidth(20),
+        height: responsiveHeight(10),
+    },
+
+    middleSection: {
+        alignItems: 'center',
+        marginBottom: responsiveHeight(3),
+    },
+    subtitle: {
+        fontSize: responsiveFontSize(3.3),
+        fontWeight: '300',
+        color: '#fff',
+    },
+
+    bottomSection: {
+        alignItems: 'center',
+        marginBottom: responsiveHeight(10),
+    },
+    button_1: {
+        width: responsiveWidth(40),
+        fontSize: responsiveFontSize(2),
+    },
+    button_2: {
         width: responsiveWidth(30),
-        color: 'white',
-        marginVertical: responsiveHeight(1),
-        padding: responsiveHeight(1.5),
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 5,
-    },
-    button: {
-        marginVertical: responsiveHeight(5),
-        width: responsiveWidth(25),
+        fontSize: responsiveFontSize(2),
+
     },
 });
 

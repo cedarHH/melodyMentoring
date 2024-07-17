@@ -40,7 +40,7 @@ const Main: React.FC<Props> = ({ navigation }) => {
     }, [selectedIndex, onPressHandler]);
 
     return (
-        
+
         <View style={styles.container}>
             <FlatList
                 data={musicData}
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.8,
         elevation: 12,
         transform: [{ scale: 1.2 }]
-      },
+    },
     cardImage: {
         width: '100%',
         height: '80%',
