@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import axios from "axios";
 import styled from 'styled-components';
 import Sidebar from '../components/Homepage/Sidebar';
 import UserInfo from '../components/Homepage/UserInfo';
@@ -15,7 +16,6 @@ import Button from "../components/MISC/Button";
 import { Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-import axios from "axios";
 
 const MainContainer = styled.div`
     display: flex;
@@ -133,18 +133,6 @@ const ModalOverlay = styled.div`
     z-index: 1000;
 `;
 
-const ModalContent = styled.div`
-    background: #333;
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80%;
-    max-width: 800px;
-    height: 50vh;
-`;
-
 const ChartContainer = styled.div`
     flex-grow: 1;
     width: 100%;
@@ -170,6 +158,87 @@ const Button1 = styled.button`
     }
 `;
 
+const ModalContent = styled.div`
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    max-width: 800px;
+    height: 50vh;
+`;
+
+const SignOutModal = styled.div`
+    background: #555;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+    height: 60%;
+    max-width: 600px;
+    max-height: 180px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    @media (min-width: 768px) {
+        width: 30%;
+        height: 40%;
+    }
+`;
+
+const SignOutModalTitle = styled.h3`
+    font-family: Cambria, sans-serif;
+    font-weight: bold;
+    font-size: 4vw;
+    @media (min-width: 768px) {
+        font-size: 1.5vw;
+    }
+`;
+
+const SignOutButtonContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 60px;
+    gap: 20px;
+`;
+
+const SignOutButton1 = styled.button`
+    padding: 10px 5vw;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 3vw;
+    &:hover {
+        background-color: #777;
+    }
+    @media (min-width: 768px) {
+        padding: 10px 20px;
+        font-size: 1vw;
+    }
+`;
+
+const SignOutButton2 = styled.button`
+    padding: 10px 5vw;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 3vw;
+    &:hover {
+        background-color: #777;
+    }
+    @media (min-width: 768px) {
+        padding: 10px 20px;
+        font-size: 1vw;
+    }
+`;
+
 const ModalTitle = styled.h2`
     color: #fff;
     font-family: 'Cambria', serif;
@@ -187,8 +256,9 @@ const Home = () => {
     const authContext = useContext(AuthContext);
     const [activeKid, setActiveKid] = useState(Object.keys(childrenData)[0]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
     const [activeChartData, setActiveChartData] = useState<'practice' | 'accuracy' | 'musicHistory'>('practice');
-    const [chartType, setChartType] = useState<'line' | 'bar' | 'pie'>('line');
+    const [chartType, setChartType] = useState<'line' | 'bar' | 'pie'>('bar');
     const [resizeKey, setResizeKey] = useState(0); // State to manage the resize key
     const [markedPracticePoints, setMarkedPracticePoints] = useState<number[]>([]);
     const [markedAccuracyPoints, setMarkedAccuracyPoints] = useState<number[]>([]);
@@ -221,7 +291,7 @@ const Home = () => {
         if (type === 'musicHistory') {
             setChartType('pie');
         } else {
-            setChartType('line');
+            setChartType('bar');
         }
         setIsModalOpen(true);
     };
@@ -238,8 +308,8 @@ const Home = () => {
                     {
                         label: '',
                         data: Object.values(levelCounts),
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                        backgroundColor: ['rgb(255, 99, 132, 0.6)', 'rgb(54, 162, 235, 0.6)', 'rgb(255, 206, 86, 0.6)'],
+                        hoverBackgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)']
                     }
                 ]
             };
@@ -265,7 +335,7 @@ const Home = () => {
                 maintainAspectRatio: false,
                 responsive: true,
             };
-            const validChartType = chartType === 'line' || chartType === 'bar' ? chartType : 'line';
+            const validChartType = chartType === 'line' || chartType === 'bar' ? chartType : 'bar';
             return (
                 <ChartComponent
                     data={data}
@@ -299,13 +369,24 @@ const Home = () => {
         })
     }
 
+    const handleSignOutClick = () => {
+        setIsSignOutModalOpen(true);
+    };
+
+    const handleConfirmSignOut = () => {
+        setIsSignOutModalOpen(false);
+        sign_out_button();
+    };
+
+    const handleCancelSignOut = () => {
+        setIsSignOutModalOpen(false);
+    };
+
     return (
         <MainContainer>
             <Header>
                 <Logo>MyGO!!!</Logo>
-                <Button text="Sign out" type="button" className="debug-button" onClick={sign_out_button} />
-                <Button text="Debug" type="button" className="debug-button" onClick={debug_button} />
-                <div className="user-avatar" onClick={() => { }}>
+                <div className="user-avatar" onClick={handleSignOutClick}>
                     <img src={userAvatar} alt="User Avatar" style={{ width: "50px", height: "50px" }} />
                 </div>
             </Header>
@@ -366,6 +447,17 @@ const Home = () => {
                             <Button1 onClick={() => setIsModalOpen(false)}>Close</Button1>
                         </ButtonsContainer>
                     </ModalContent>
+                </ModalOverlay>
+            )}
+            {isSignOutModalOpen && (
+                <ModalOverlay>
+                    <SignOutModal>
+                        <SignOutModalTitle>Are you sure you want to sign out?</SignOutModalTitle>
+                        <SignOutButtonContainer>
+                            <SignOutButton1 onClick={handleConfirmSignOut}>Yes</SignOutButton1>
+                            <SignOutButton2 onClick={handleCancelSignOut}>No</SignOutButton2>
+                        </SignOutButtonContainer>
+                    </SignOutModal>
                 </ModalOverlay>
             )}
         </MainContainer>

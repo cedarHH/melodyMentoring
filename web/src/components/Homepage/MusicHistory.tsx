@@ -8,7 +8,6 @@ const MusicHistoryContainer = styled.div`
   border-radius: 10px;
   overflow-y: auto;
   margin-top: 20px;
-  cursor: pointer;
   font-family: 'Arial', serif;
 `;
 
@@ -32,18 +31,43 @@ const TableData = styled.td`
   line-height: 1.5;
 `;
 
+const TitleContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+`;
+
 const Title = styled.h3`
   margin-top: -5px;
   margin-bottom: 20px;
   font-size: 24px;
-  text-align: center;
+  text-align: left;
   font-family: 'Cambria', serif;
+`;
+
+const ChartButton = styled.button`
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    position: absolute; 
+    top: 1px;
+    right: 20px;
+    &:hover {
+        background-color: #777;
+    }
 `;
 
 const MusicHistory: React.FC<{ onClick: () => void }> = ({ onClick }) => {
     return (
-        <MusicHistoryContainer onClick={onClick}>
-            <Title>Music History</Title>
+        <MusicHistoryContainer>
+            <TitleContainer>
+                <Title>Music History</Title>
+                <ChartButton onClick={onClick}>Open Modal</ChartButton>
+            </TitleContainer>
             <Table>
                 <thead>
                 <tr>

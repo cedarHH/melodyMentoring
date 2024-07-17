@@ -35,6 +35,20 @@ const ChartButton = styled.button`
     }
 `;
 
+const RemoveButton = styled.button`
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 2px 6px;
+    margin-left: 5px;
+    font-size: 12px;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+`;
+
 const AccuracyRateChart: React.FC<ChartProps> = ({ data, options, chartType, openModal, markedPoints, setMarkedPoints, isModalOpen }) => {
     const [chartHeight, setChartHeight] = useState('100%');
 
@@ -100,6 +114,10 @@ const AccuracyRateChart: React.FC<ChartProps> = ({ data, options, chartType, ope
         }
     };
 
+    const removeMarkedPoint = (index: number) => {
+        setMarkedPoints((prev) => prev.filter((pointIndex) => pointIndex !== index));
+    };
+
     const newData = {
         ...data,
         datasets: [
@@ -139,7 +157,7 @@ const AccuracyRateChart: React.FC<ChartProps> = ({ data, options, chartType, ope
                         data={newData}
                         options={{
                             ...options,
-                            onClick: (event, elems) => handlePointClick(elems)
+                            onClick: (event, elems) => handlePointClick(elems),
                         }}
                     />
                 ) : (
@@ -147,11 +165,40 @@ const AccuracyRateChart: React.FC<ChartProps> = ({ data, options, chartType, ope
                         data={newData}
                         options={{
                             ...options,
-                            onClick: (event, elems) => handlePointClick(elems)
+                            onClick: (event, elems) => handlePointClick(elems),
                         }}
                     />
                 )}
             </div>
+            {!isModalOpen && markedPoints.map(index => {
+                const currentValue = newData.datasets[0].data[index];
+                const previousValue = index > 0 ? newData.datasets[0].data[index - 1] : null;
+                const averageValue = calculateAverage(newData.datasets[0].data);
+                const differenceFromPrevious = previousValue !== null ? (currentValue - previousValue).toFixed(2) : 'N/A';
+                const differenceFromAverage = (currentValue - averageValue).toFixed(2);
+                const top = (100 - currentValue) + '%'; // Adjust according to your data range
+                return (
+                    <div
+                        key={index}
+                        style={{
+                            position: 'absolute',
+                            top,
+                            left: `calc(${index * 100 / data.datasets[0].data.length}% - 10px)`,
+                            backgroundColor: 'rgba(92, 210, 78, 0.8)',
+                            padding: '5px',
+                            borderRadius: '5px',
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <div>
+                            <div>Diff from prev: {differenceFromPrevious}</div>
+                            <div>Diff from avg: {differenceFromAverage}</div>
+                        </div>
+                        <RemoveButton onClick={() => removeMarkedPoint(index)}>x</RemoveButton>
+                    </div>
+                );
+            })}
         </div>
     );
 };
