@@ -8,3 +8,8 @@ CognitoConf:
   UserPoolId: ap-southeast-2_kaM46A0bi
   AppClientId: 32a7ka2btgropvqe7u0lr7qr5k
   CognitoDomain: https://mygo.auth.ap-southeast-2.amazoncognito.com
+
+#DynamoDBConf
+DynamoDBConf:
+  Region: ap-southeast-2
+  TableName: User

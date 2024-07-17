@@ -9,7 +9,7 @@ info(
 type User {
     Uuid            string  `json:"uuid"`
     ProfileName     string  `json:"profileName"`
-    Pin             int64   `json:"pin"`
+    Pin             string  `json:"pin"`
     Avatar          string  `json:"avatar"`
     Gender          string  `json:"gender"`
     Dob             string  `json:"dob"`
@@ -68,7 +68,7 @@ type (
 type (
     CreateSubUserReq {
         ProfileName     string  `json:"profileName"`
-        Pin             int64   `json:"pin"`
+        Pin             string  `json:"pin"`
     }
     CreateSubUserResp {
         Code    int        `json:"code"`
@@ -79,7 +79,7 @@ type (
 type (
     DeleteSubUserByNameReq {
         ProfileName     string  `json:"profileName"`
-        Pin             int64   `json:"pin"`
+        Pin             string  `json:"pin"`
     }
     DeleteSubUserByNameResp {
         Code    int        `json:"code"`
@@ -128,7 +128,7 @@ type (
 type (
     VerifypinReq {
         ProfileName     string      `json:"profileName"`
-        Pin             int64       `json:"pin"`
+        Pin             string      `json:"pin"`
     }
     VerifypinResp {
         Code    int        `json:"code"`

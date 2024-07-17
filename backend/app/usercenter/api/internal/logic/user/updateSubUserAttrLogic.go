@@ -2,7 +2,7 @@ package user
 
 import (
 	"context"
-
+	"fmt"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
 
@@ -25,7 +25,36 @@ func NewUpdateSubUserAttrLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *UpdateSubUserAttrLogic) UpdateSubUserAttr(req *types.UpdateSubUserAttrReq) (resp *types.UpdateSubUserAttrResp, err error) {
-	// todo: add your logic here and delete this line
+	uuid := l.ctx.Value("uuid").(string)
+	profileName := req.ProfileName
 
-	return
+	updates := map[string]interface{}{}
+	if req.Avatar != "" {
+		updates["Avatar"] = req.Avatar
+	}
+	if req.Gender != "" {
+		updates["Gender"] = req.Gender
+	}
+	if req.Dob != "" {
+		updates["Dob"] = req.Dob
+	}
+	if req.Level != "" {
+		updates["Level"] = req.Level
+	}
+	if req.Instrument != "" {
+		updates["Instrument"] = req.Instrument
+	}
+	if req.Badge != "" {
+		updates["Badges"] = req.Badge
+	}
+
+	err = l.svcCtx.UserModel.UpdateAttributes(l.ctx, uuid, profileName, updates)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update user attributes: %v", err)
+	}
+
+	return &types.UpdateSubUserAttrResp{
+		Code: 0,
+		Msg:  "🍥😒😅🍥",
+	}, nil
 }

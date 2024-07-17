@@ -3,7 +3,7 @@ package types
 
 type CreateSubUserReq struct {
 	ProfileName string `json:"profileName"`
-	Pin         int64  `json:"pin"`
+	Pin         string `json:"pin"`
 }
 
 type CreateSubUserResp struct {
@@ -13,7 +13,7 @@ type CreateSubUserResp struct {
 
 type DeleteSubUserByNameReq struct {
 	ProfileName string `json:"profileName"`
-	Pin         int64  `json:"pin"`
+	Pin         string `json:"pin"`
 }
 
 type DeleteSubUserByNameResp struct {
@@ -96,7 +96,7 @@ type UpdateSubUserAttrResp struct {
 type User struct {
 	Uuid            string   `json:"uuid"`
 	ProfileName     string   `json:"profileName"`
-	Pin             int64    `json:"pin"`
+	Pin             string   `json:"pin"`
 	Avatar          string   `json:"avatar"`
 	Gender          string   `json:"gender"`
 	Dob             string   `json:"dob"`
@@ -111,7 +111,7 @@ type User struct {
 
 type VerifypinReq struct {
 	ProfileName string `json:"profileName"`
-	Pin         int64  `json:"pin"`
+	Pin         string `json:"pin"`
 }
 
 type VerifypinResp struct {
