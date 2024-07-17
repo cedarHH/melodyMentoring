@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
@@ -25,7 +26,25 @@ func NewDeleteSubUserByNameLogic(ctx context.Context, svcCtx *svc.ServiceContext
 }
 
 func (l *DeleteSubUserByNameLogic) DeleteSubUserByName(req *types.DeleteSubUserByNameReq) (resp *types.DeleteSubUserByNameResp, err error) {
-	// todo: add your logic here and delete this line
+	uuid := l.ctx.Value("uuid").(string)
+	profileName := req.ProfileName
 
-	return
+	user, err := l.svcCtx.UserModel.FindOne(l.ctx, uuid, profileName)
+	if err != nil {
+		return nil, fmt.Errorf("user not found: %v", err)
+	}
+
+	if user.Pin != req.Pin {
+		return nil, fmt.Errorf("incorrect PIN")
+	}
+
+	err = l.svcCtx.UserModel.Delete(l.ctx, uuid, profileName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to delete: %v", err)
+	}
+
+	return &types.DeleteSubUserByNameResp{
+		Code: 0,
+		Msg:  "Deleted successfully",
+	}, nil
 }

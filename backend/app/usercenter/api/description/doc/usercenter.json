@@ -273,8 +273,7 @@
           "type": "string"
         },
         "pin": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         }
       },
       "title": "CreateSubUserReq",
@@ -307,8 +306,7 @@
           "type": "string"
         },
         "pin": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         }
       },
       "title": "DeleteSubUserByNameReq",
@@ -568,8 +566,7 @@
           "type": "string"
         },
         "pin": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         },
         "avatar": {
           "type": "string"
@@ -632,8 +629,7 @@
           "type": "string"
         },
         "pin": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         }
       },
       "title": "VerifypinReq",
