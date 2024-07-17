@@ -22,14 +22,18 @@ const calculateAverage = (data: number[]) => {
 
 const ChartButton = styled.button`
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #555;
+    top: 20px;
+    right: 20px;
+    background-color: #292A2C;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     padding: 5px 10px;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
     &:hover {
         background-color: #777;
     }
@@ -66,7 +70,7 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType, op
 
     const chartWrapperStyles: CSSProperties = {
         position: 'relative',
-        backgroundColor: '#2c2c2c',
+        backgroundColor: '#1B1C1E',
         padding: '20px',
         borderRadius: '10px',
         flex: 1,
@@ -78,6 +82,7 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType, op
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        border: '2px solid #4B4B4B'
     };
 
     const titleStyles: CSSProperties = {
@@ -125,20 +130,23 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType, op
                 ...data.datasets[0],
                 borderColor: 'rgba(255, 120, 120, 0.6)',
                 backgroundColor: 'rgba(255, 120, 120, 0.6)',
+                hoverBackgroundColor: 'rgba(255, 120, 120)'
             },
             {
                 label: 'Average',
                 data: Array(data.datasets[0].data.length).fill(calculateAverage(data.datasets[0].data)),
                 borderColor: 'rgba(255, 148, 86, 0.2)',
                 backgroundColor: 'rgba(255, 148, 86, 0.2)',
+                hoverBackgroundColor: 'rgba(255, 148, 86)',
                 borderDash: [10, 5],
                 pointRadius: 0,
             },
             {
                 label: 'Marked Points',
                 data: data.datasets[0].data.map((value: number, index: number) => markedPoints.includes(index) ? value : null),
-                borderColor: 'rgba(255, 206, 86, 1)',
-                backgroundColor: 'rgba(255, 206, 86, 1)',
+                borderColor: 'rgba(255, 206, 86, 0.2)',
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                hoverBackgroundColor: 'rgba(255, 206, 86)',
                 pointRadius: 8,
                 pointBackgroundColor: 'rgba(255, 206, 86, 1)',
                 pointBorderColor: 'rgba(255, 206, 86, 1)',
@@ -150,7 +158,7 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType, op
     return (
         <div style={chartWrapperStyles}>
             <div style={titleStyles}>Music Practice Duration</div>
-            {!isModalOpen && <ChartButton onClick={openModal}>Open Modal</ChartButton>}
+            {!isModalOpen && <ChartButton onClick={openModal}>Toggle Chart</ChartButton>}
             <div style={chartContainerStyles}>
                 {chartType === 'line' ? (
                     <Line
