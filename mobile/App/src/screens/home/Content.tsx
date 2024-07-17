@@ -22,6 +22,7 @@ const Content: React.FC<Props> = () => {
             <ContentStack.Navigator 
                 screenOptions={{
                     headerShown: false, 
+                    headerTintColor:'white',
                     headerStyle: {
                         height: 0,
                       },

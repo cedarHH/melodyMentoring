@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     uploadButton: {
         height:'60%',
         aspectRatio:1,
-        alignSelf:'center'
+        alignSelf:'center',
     },
     buttonText: {
         color: 'white',
