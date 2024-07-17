@@ -7,6 +7,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarEleme
 
 interface ChartProps {
     data: any;
+    compareDataSets: { label: string, data: any }[];
     options: any;
     chartType: 'line' | 'bar';
     openModal: () => void;
@@ -39,6 +40,25 @@ const ChartButton = styled.button`
     }
 `;
 
+const CompareButton = styled.button`
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #292A2C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    &:hover {
+        background-color: #777;
+    }
+`;
+
 const RemoveButton = styled.button`
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
@@ -53,8 +73,28 @@ const RemoveButton = styled.button`
     }
 `;
 
-const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType, openModal, markedPoints, setMarkedPoints, isModalOpen }) => {
+const Dropdown = styled.select`
+    position: absolute;
+    top: 60px;
+    left: 20px;
+    background-color: #292A2C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    &:hover {
+        background-color: #777;
+    }
+`;
+
+const MusicPracticeChart: React.FC<ChartProps> = ({ data, compareDataSets, options, chartType, openModal, markedPoints, setMarkedPoints, isModalOpen }) => {
     const [chartHeight, setChartHeight] = useState('100%');
+    const [isComparing, setIsComparing] = useState(false);
+    const [selectedCompareData, setSelectedCompareData] = useState<string | null>(null);
 
     useEffect(() => {
         const updateSize = () => {
@@ -132,7 +172,7 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType, op
                 backgroundColor: 'rgba(255, 120, 120, 0.6)',
                 hoverBackgroundColor: 'rgba(255, 120, 120)'
             },
-            {
+            !isComparing && {
                 label: 'Average',
                 data: Array(data.datasets[0].data.length).fill(calculateAverage(data.datasets[0].data)),
                 borderColor: 'rgba(255, 148, 86, 0.2)',
@@ -151,14 +191,37 @@ const MusicPracticeChart: React.FC<ChartProps> = ({ data, options, chartType, op
                 pointBackgroundColor: 'rgba(255, 206, 86, 1)',
                 pointBorderColor: 'rgba(255, 206, 86, 1)',
                 showLine: false,
+            },
+            isComparing && selectedCompareData && {
+                ...compareDataSets.find(dataSet => dataSet.label === selectedCompareData)?.data.datasets[0],
+                label: 'Comparison Data',
+                borderColor: 'rgba(54, 162, 235, 0.6)',
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                hoverBackgroundColor: 'rgba(54, 162, 235)'
             }
-        ]
+        ].filter(Boolean) // Filter out false values
     };
 
     return (
         <div style={chartWrapperStyles}>
             <div style={titleStyles}>Music Practice Duration</div>
             {!isModalOpen && <ChartButton onClick={openModal}>Toggle Chart</ChartButton>}
+            <CompareButton onClick={() => {
+                if (isComparing) {
+                    setSelectedCompareData(null); // Reset selection
+                }
+                setIsComparing(!isComparing);
+            }}>
+                {isComparing ? 'Back' : 'Compare'}
+            </CompareButton>
+            {isComparing && (
+                <Dropdown onChange={(e) => setSelectedCompareData(e.target.value)} value={selectedCompareData || ''}>
+                    <option value="" disabled>Select data to compare</option>
+                    {compareDataSets.map(dataSet => (
+                        <option key={dataSet.label} value={dataSet.label}>{dataSet.label}</option>
+                    ))}
+                </Dropdown>
+            )}
             <div style={chartContainerStyles}>
                 {chartType === 'line' ? (
                     <Line
