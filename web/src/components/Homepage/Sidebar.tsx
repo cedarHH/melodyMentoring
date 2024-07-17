@@ -37,6 +37,20 @@ const ListItem = styled.li<ListItemProps>`
     }
 `;
 
+const AddButton = styled.button`
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+
+    margin-top: 10px;
+
+    &:hover {
+        color: #aaaaaa;
+    }
+`;
+
 const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
     return (
         <Aside>
@@ -51,6 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
                     </ListItem>
                 ))}
             </List>
+            <AddButton>+</AddButton>
         </Aside>
     );
 };
