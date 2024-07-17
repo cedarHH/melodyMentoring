@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Image, StyleSheet, Dimensions, Animated } from 'react-native';
+import { View, Image, StyleSheet, Dimensions, Animated, Easing } from 'react-native';
 
 const { width } = Dimensions.get('window');
-const imageWidth = width / 3;  // 每个窗口显示3个图片
-const imageHeight = imageWidth * 0.75;  // 图片的高度按比例调整
+const imageWidth = width / 3;  // show three pictures
+const imageHeight = imageWidth * 0.95;
 
 const images = [
     { src: require('../assets/img/welcome/2.png'), alt: "Image 2" },
@@ -23,32 +23,42 @@ const images = [
     { src: require('../assets/img/welcome/anime10.png'), alt: "Anime 10" },
 ];
 
-const groups = [
-    images.slice(0, 5).concat(images[0]),
-    images.slice(5, 10).concat(images[5]),
-    images.slice(10, 15).concat(images[10])
-];
+const groupedImages: { src: any; alt: string; }[][] = [];
+for (let i = 0; i < images.length; i += 3) {
+    groupedImages.push(images.slice(i, i + 3));
+}
 
 const ImageGrid = () => {
-    const scrollX = useRef(new Animated.Value(0)).current;
+    const scrollX = useRef(new Animated.Value(width * 1.5)).current;
 
     useEffect(() => {
         const animate = () => {
-            scrollX.setValue(0);  // 重置动画值
-            Animated.timing(scrollX, {
-                toValue: -width * 2,
-                duration: 15000,  // 30秒
-                useNativeDriver: true,
-            }).start(animate);  // 在动画结束时重新开始
+            Animated.loop(
+                Animated.timing(scrollX, {
+                    toValue: -width * 0.44,  // parameter for reset
+                    duration: 15000,
+                    useNativeDriver: true,
+                    easing: Easing.linear,  // Uniform speed
+                })
+            ).start();
         };
         animate();
     }, [scrollX]);
 
     return (
         <View style={styles.container}>
-            <Animated.View style={[styles.wrapper, { transform: [{ translateX: scrollX }] }]}>
-                {groups.map((group, groupIndex) => (
+            <Animated.View style={[styles.wrapper, { transform: [{ rotate: '-5deg' },{ translateX: scrollX }] }]}>
+                {groupedImages.map((group, groupIndex) => (
                     <View key={groupIndex} style={styles.column}>
+                        {group.map((image, imgIndex) => (
+                            <View key={imgIndex} style={styles.filmImage}>
+                                <Image source={image.src} style={styles.image} />
+                            </View>
+                        ))}
+                    </View>
+                ))}
+                {groupedImages.map((group, groupIndex) => (
+                    <View key={groupIndex + groupedImages.length} style={styles.column}>
                         {group.map((image, imgIndex) => (
                             <View key={imgIndex} style={styles.filmImage}>
                                 <Image source={image.src} style={styles.image} />
@@ -67,7 +77,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#1B1C1E',
         justifyContent: 'center',
         alignItems: 'center',
-
+        overflow: 'hidden',
     },
     wrapper: {
         flexDirection: 'row',
@@ -75,7 +85,6 @@ const styles = StyleSheet.create({
     },
     column: {
         flexDirection: 'column',
-        marginLeft: 10, // 防止图片间隙
     },
     filmImage: {
         width: imageWidth,
