@@ -76,7 +76,7 @@ const SidebarContainer = styled.div`
     width: 8%;
     text-align: center;
     background-color: #222222;
-
+    
     @media (max-width: 768px) {
         width: 100%;
         text-align: center;
