@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
+	"github.com/cedarHH/mygo/app/usercenter/model"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -23,22 +24,27 @@ func NewCreateSubUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cre
 	}
 }
 
-type testData struct {
-	Uuid        string // Hash key, a.k.a. partition key
-	ProfileName string // Range key, a.k.a. sort key
-	Pin         int
-}
-
 func (l *CreateSubUserLogic) CreateSubUser(req *types.CreateSubUserReq) (resp *types.CreateSubUserResp, err error) {
-	// todo: add your logic here and delete this line
+	user := &model.User{
+		Uuid:            l.ctx.Value("uuid").(string),
+		ProfileName:     req.ProfileName,
+		Pin:             req.Pin,
+		Avatar:          "",
+		Gender:          "",
+		Dob:             "",
+		Level:           "",
+		Instrument:      "",
+		TotalTime:       0,
+		NotesPlayed:     0,
+		LastPlayDate:    "",
+		ConsecutiveDays: 0,
+		Badges:          []string{},
+	}
 
-	errs := l.svcCtx.DynamoDBClient.Table(l.svcCtx.Config.DynamoDBConf.TableName).Put(&testData{
-		Uuid:        "qwe",
-		ProfileName: "qweww",
-		Pin:         1234,
-	}).Run(l.ctx)
-	if errs != nil {
-		fmt.Printf("%s", errs)
+	err = l.svcCtx.UserModel.Insert(l.ctx, user)
+	fmt.Printf("%s\n", err)
+	if err != nil {
+		return nil, err
 	}
 	return &types.CreateSubUserResp{
 		Code: 0,

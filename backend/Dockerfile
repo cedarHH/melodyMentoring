@@ -1,5 +1,5 @@
 # Use the official Golang image as the base image
-FROM golang:1.22-alpine
+FROM golang:1.22-alpine AS builder
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -19,6 +19,8 @@ RUN go build -o /usercenter ./app/usercenter/api
 # Use a minimal image for the runtime environment
 FROM alpine:latest
 
+RUN apk --no-cache add ca-certificates curl bash
+
 # Set the working directory inside the runtime container
 WORKDIR /app
 
@@ -27,6 +29,9 @@ COPY --from=0 /usercenter /usr/local/bin/usercenter
 
 # Copy the configuration file to the container
 COPY ./app/usercenter/api/etc/usercenter.yaml ./app/usercenter/api/etc/usercenter.yaml
+
+# Copy AWS credentials
+COPY .aws /root/.aws
 
 # Expose the port the service runs on
 EXPOSE 8888
