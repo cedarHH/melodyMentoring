@@ -6,6 +6,7 @@ import { store } from './src/store';
 import Welcome from './src/screens/welcome/main/Welcome';
 import Home from './src/screens/home/Home';
 import User from './src/screens/User';
+import SubUser from './src/screens/subUser/SubUser';
 import Upload from './src/screens/upload/Upload';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { RootStackParamList } from './types';
@@ -23,17 +24,17 @@ export default function App() {
             });
     }, []);
 
-  return (
-      <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Welcome">
-            <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
-            {/* <Stack.Screen name="Subuser" component={Subuser} options={{ headerShown: false }}/> */}
-            <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-            <Stack.Screen name="User" component={User} options={{ headerShown: false }}/>
-            <Stack.Screen name="Upload" component={Upload} options={{ headerShown: false }}/>
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="Welcome">
+                    <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
+                    <Stack.Screen name="SubUser" component={SubUser} options={{ headerShown: false }}/>
+                    <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+                    <Stack.Screen name="User" component={User} options={{ headerShown: false }}/>
+                    <Stack.Screen name="Upload" component={Upload} options={{ headerShown: false }}/>
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Provider>
+    );
 }
