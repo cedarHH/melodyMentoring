@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
 import { signInWithEmail, signUpUserWithEmail, verifyCode, sendCode, forgotPassword } from '../libs/cognito';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootState, AppDispatch } from './store';
-import { showNotification } from './notificationSlice';
+import { showNotification, showNotificationWithTimeout } from './notificationSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
 
@@ -43,11 +43,13 @@ const authSlice = createSlice({
     reducers: {
         authStart: (state) => {
             state.loading = true;
+            state.error = null;
         },
         authSuccess: (state, action: PayloadAction<{ email: string; username: string }>) => {
             state.loading = false;
             state.isAuthenticated = true;
             state.userInfo = action.payload;
+            state.error = null;
         },
         authFailure: (state, action: PayloadAction<string>) => {
             state.loading = false;
@@ -93,11 +95,11 @@ export const login = (
         console.log('Tokens are saved successfully!');
         await AsyncStorage.setItem('Token', tokenStr);
         dispatch(authSuccess({ email, username: 'N/A' }));
-        dispatch(showNotification("Login successful"));
-        navigation.navigate('Subuser');
+        dispatch(showNotificationWithTimeout("Login successful"));
+        navigation.navigate('SubUser');
     } catch (err: any) {
         dispatch(authFailure(err.message || 'Failed to login'));
-        dispatch(showNotification(err.message || 'Failed to login'));
+        dispatch(showNotificationWithTimeout(err.message || 'Failed to login'));
         throw err;
     }
 };
@@ -114,10 +116,8 @@ export const register = (email: string, username: string, password: string, conf
         dispatch(setEmailForVerification(email));
         dispatch(setAuthMode(AuthMode.VERIFY_CODE));
         dispatch(authSuccess({ email, username }));
-        dispatch(setAuthMode(AuthMode.WELCOME));
     } catch (error: any) {
         dispatch(authFailure(error.message));
-        dispatch(showNotification(error.message));
     }
 };
 
@@ -125,6 +125,7 @@ export const verifyEmailCode = (email: string, verificationCode: string): ThunkA
     dispatch(authStart());
     try {
         await verifyCode(email, verificationCode);
+        dispatch(setAuthMode(AuthMode.WELCOME));
         dispatch(authSuccess({ email, username: 'N/A' }));
     } catch (error: any) {
         dispatch(authFailure(error.message));

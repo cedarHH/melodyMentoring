@@ -1,13 +1,11 @@
 export type RootStackParamList = {
-    Home: {
-        profileName: string;
-    }
+    Home: undefined;
     User: undefined;
     Upload: {
         title: string;
     };
     Welcome: undefined;
-    Subuser: undefined;
+    SubUser: undefined;
     Main: undefined;
     Search: undefined;
     History: undefined;
