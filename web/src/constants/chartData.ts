@@ -2,8 +2,8 @@ export const practiceData = {
     labels: ['01/31', '02/01', '02/02', '02/03', '02/04', '02/05', '02/06'],
     datasets: [
         {
-            label: 'Practice Duration (min)',
-            data: [30, 45, 20, 60, 40, 55, 36],
+            label: 'Daniel (min)',
+            data: [30, 45, 20, 52, 40, 55, 36],
             tension: 0.1,
         },
     ],
@@ -13,8 +13,50 @@ export const accuracyData = {
     labels: ['01/31', '02/01', '02/02', '02/03', '02/04', '02/05', '02/06'],
     datasets: [
         {
-            label: 'Accuracy Rate (%)',
-            data: [32, 35, 36, 42, 45, 47, 48],
+            label: 'Daniel (%)',
+            data: [32, 35, 38, 42, 45, 47, 49],
+        },
+    ],
+};
+
+export const practiceData1 = {
+    labels: ['01/31', '02/01', '02/02', '02/03', '02/04', '02/05', '02/06'],
+    datasets: [
+        {
+            label: 'Amy (min)',
+            data: [57, 45, 59, 41, 52, 37, 55],
+            tension: 0.1,
+        },
+    ],
+};
+
+export const accuracyData1 = {
+    labels: ['01/31', '02/01', '02/02', '02/03', '02/04', '02/05', '02/06'],
+    datasets: [
+        {
+            label: 'Amy (%)',
+            data: [57, 59, 60, 61, 62, 62, 63],
+        },
+    ],
+};
+
+export const practiceData2 = {
+    labels: ['01/31', '02/01', '02/02', '02/03', '02/04', '02/05', '02/06'],
+    datasets: [
+        {
+            label: 'Amy (min)',
+            data: [69, 62, 71, 55, 56, 49, 68],
+            tension: 0.1,
+        },
+    ],
+};
+
+export const accuracyData2 = {
+    labels: ['01/31', '02/01', '02/02', '02/03', '02/04', '02/05', '02/06'],
+    datasets: [
+        {
+            label: 'Amy (%)',
+            data: [81, 81, 82, 82, 82, 83, 83],
         },
     ],
 };

@@ -1,4 +1,4 @@
-import React, { useState,useCallback }from 'react';
+import React, { useState,useCallback,useEffect }from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, FlatList, Image} from 'react-native';
 import CustomButton from '../../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -12,9 +12,17 @@ type Props = {
 };
 
 
-const Main: React.FC<Props> = ({ navigation }) => {
 
+const Main: React.FC<Props> = ({ navigation }) => {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
+
+    useEffect(() => {
+        const subscription = Dimensions.addEventListener('change', ({ window: { width } }) => {
+            setScreenWidth(width);
+        });
+        return () => subscription.remove();
+    }, []);
 
     const onPressHandler = useCallback(({ item, index }: { item: typeof musicData[0], index: number }) => {
         if (selectedIndex === index) {
@@ -29,7 +37,7 @@ const Main: React.FC<Props> = ({ navigation }) => {
 
         return (
             <TouchableOpacity
-                style={[styles.card, isSelected && styles.cardSelected]}
+                style={[styles.card, isSelected && styles.cardSelected,{ width: screenWidth * 0.2 }]}
                 onPress={() => onPressHandler({ item, index })}
                 activeOpacity={0.7}
             >
@@ -49,10 +57,11 @@ const Main: React.FC<Props> = ({ navigation }) => {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.listContent}
+                style={styles.list}
             />
             <CustomButton
                 text="Upload Reference"
-                onPress={() => navigation.navigate('Upload',{title:'defalt'})}
+                onPress={() => navigation.navigate('Upload',{title:'default'})}
             />
         </View>
     );
@@ -68,12 +77,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    list:{
+        width: '100%',
+    },
     card: {
-        width: Dimensions.get('window').width * 0.2,
         aspectRatio: 3 / 4,
         backgroundColor: '#1a1a1a',
         borderRadius: 10,
-        marginHorizontal: 10,
+        marginHorizontal: 15,
         alignItems: 'center',
         justifyContent: 'center',
         shadowColor: 'white',

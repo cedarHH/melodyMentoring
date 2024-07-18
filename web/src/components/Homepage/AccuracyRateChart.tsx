@@ -7,6 +7,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarEleme
 
 interface ChartProps {
     data: any;
+    compareDataSets: { label: string, data: any }[];
     options: any;
     chartType: 'line' | 'bar';
     openModal: () => void;
@@ -37,6 +38,88 @@ const ChartButton = styled.button`
     &:hover {
         background-color: #777;
     }
+
+    @media (max-height: 824px) {
+        font-size: 17px;
+    }
+    @media (max-width: 1380px) {
+        top: 10px;
+        right: 10px;
+        font-size: 15px;
+        padding: 4px 8px;
+    }
+    @media (max-width: 768px) {
+        font-size: 13px;
+        padding: 3px 7px;
+    }
+`;
+
+const Dropdown = styled.select`
+    position: absolute;
+    top: 20px;
+    left: 90px;
+    background-color: #292A2C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    &:hover {
+        background-color: #777;
+    }
+
+    @media (max-height: 824px) {
+        left: 75px;
+        font-size: 15px;
+    }
+    @media (max-width: 1380px) {
+        top: 40px;
+        left: 10px;
+        font-size: 15px;
+        padding: 4px 8px;
+    }
+    @media (max-width: 768px) {
+        top: 37px;
+        left: 10px;
+        font-size: 13px;
+        padding: 3px 7px;
+    }
+`;
+
+const CompareButton = styled.button`
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #292A2C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    &:hover {
+        background-color: #777;
+    }
+
+    @media (max-height: 824px) {
+        font-size: 17px;
+    }
+    @media (max-width: 1380px) {
+        top: 10px;
+        left: 10px;
+        font-size: 15px;
+        padding: 4px 8px;
+    }
+    @media (max-width: 768px) {
+        font-size: 13px;
+        padding: 3px 7px;
+    }
 `;
 
 const RemoveButton = styled.button`
@@ -53,8 +136,10 @@ const RemoveButton = styled.button`
     }
 `;
 
-const AccuracyRateChart: React.FC<ChartProps> = ({ data, options, chartType, openModal, markedPoints, setMarkedPoints, isModalOpen }) => {
+const AccuracyRateChart: React.FC<ChartProps> = ({ data, compareDataSets, options, chartType, openModal, markedPoints, setMarkedPoints, isModalOpen }) => {
     const [chartHeight, setChartHeight] = useState('100%');
+    const [isComparing, setIsComparing] = useState(false);
+    const [selectedCompareData, setSelectedCompareData] = useState<string | null>(null);
 
     useEffect(() => {
         const updateSize = () => {
@@ -132,7 +217,7 @@ const AccuracyRateChart: React.FC<ChartProps> = ({ data, options, chartType, ope
                 backgroundColor: 'rgba(158, 134, 253, 0.6)',
                 hoverBackgroundColor: 'rgba(158, 134, 253)'
             },
-            {
+            !isComparing && {
                 label: 'Average',
                 data: Array(data.datasets[0].data.length).fill(calculateAverage(data.datasets[0].data)),
                 borderColor: 'rgba(87, 250, 255, 0.2)',
@@ -151,14 +236,40 @@ const AccuracyRateChart: React.FC<ChartProps> = ({ data, options, chartType, ope
                 pointBackgroundColor: 'rgba(92, 210, 78, 1)',
                 pointBorderColor: 'rgba(92, 210, 78, 1)',
                 showLine: false,
+            },
+            isComparing && selectedCompareData && {
+                ...compareDataSets.find(dataSet => dataSet.label === selectedCompareData)?.data.datasets[0],
+                label: 'Comparison Data',
+                borderColor: 'rgba(54, 162, 235, 0.6)',
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                hoverBackgroundColor: 'rgba(54, 162, 235)'
             }
-        ]
+        ].filter(Boolean) // Filter out false values
     };
 
     return (
         <div style={chartWrapperStyles}>
             <div style={titleStyles}>Practice Accuracy Rate</div>
             {!isModalOpen && <ChartButton onClick={openModal}>Toggle Chart</ChartButton>}
+
+            {isComparing && (
+                <Dropdown onChange={(e) => setSelectedCompareData(e.target.value)} value={selectedCompareData || ''}>
+                    <option value="" disabled>Select data</option>
+                    {compareDataSets.map(dataSet => (
+                        <option key={dataSet.label} value={dataSet.label}>{dataSet.label}</option>
+                    ))}
+                </Dropdown>
+            )}
+
+            <CompareButton onClick={() => {
+                if (isComparing) {
+                    setSelectedCompareData(null); // Reset selection
+                }
+                setIsComparing(!isComparing);
+            }}>
+                {isComparing ? 'Back' : 'Compare'}
+            </CompareButton>
+
             <div style={chartContainerStyles}>
                 {chartType === 'line' ? (
                     <Line

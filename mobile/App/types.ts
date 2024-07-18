@@ -5,6 +5,7 @@ export type RootStackParamList = {
         title: string;
     };
     Welcome: undefined;
+    Subuser: undefined;
     Main: undefined;
     Search: undefined;
     History: undefined;

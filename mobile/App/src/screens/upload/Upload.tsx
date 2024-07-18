@@ -1,10 +1,12 @@
 import React from 'react';
-import {View, Text, Button, TouchableOpacity, StyleSheet, Dimensions,Image} from 'react-native';
+import {View, Text, Button, TouchableOpacity, StyleSheet, Dimensions,Image,Alert} from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { RootStackParamList } from '../../../types';
-
+import { styles } from './ui';
+import { useState } from 'react';
+import { SelectVideo, UploadVideo,SelectAudio,UploadAudio } from './mediaUtils'; 
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
 type UploadScreenRouteProp = RouteProp<RootStackParamList, 'Upload'>;
@@ -14,55 +16,91 @@ type Props = {
     route: UploadScreenRouteProp;
 };
 
+
 const UploadScreen: React.FC<Props> = ({ navigation,route }) => {
-    const { title} = route.params;
+    const {title} = route.params;
+    const [videoUri, setVideoUri] = useState<string | null>(null);
+    const [audioUri, setAudioUri] = useState<string | null>(null);
+    const [aov, setaov] = useState<string | null>(null);
 
-    const handleUpdateVideo = () => {
-        console.log('Update Video');
-        // Add your logic for updating video
+    const handleSelectVideo = async () => {
+        const uri = await SelectVideo();
+        if (uri) {
+            setVideoUri(uri);
+            setaov('video');
+            Alert.alert(
+                "Video Selected",
+                "A video has been selected: " + uri,
+                [
+                    { text: "OK"}
+                ]
+            );
+        }
     };
 
-    const handleExtractAudio = () => {
-        console.log('Extract Audio');
-        // Add your logic for extracting audio from video
+    const handleUpload = async () => {
+        if (aov=='video' && videoUri) {
+            await UploadVideo(videoUri, title);
+            Alert.alert('Video uploaded successfully');
+        } 
+
+        if (aov=='audio' && audioUri) {
+            await UploadAudio(audioUri, title);
+            Alert.alert('Audio uploaded successfully');
+        }
+
+        else {
+            Alert.alert('No video to upload');
+        }
     };
 
-    const handleUpdateAudio = () => {
-        console.log('Update Audio');
-        // Add your logic for updating audio
+    const handleSelectAudeo = async () => {
+        const uri = await SelectAudio();
+        if (uri) {
+            setAudioUri(uri);
+            setaov('audio');
+            Alert.alert(
+                "Audio Selected",
+                "A audio has been selected: " + uri,
+                [
+                    { text: "OK"}
+                ]
+            );
+        }
     };
 
-    const handleRecord = () => {
-        console.log('Record');
-        // Add your logic for recording
-    };
-
+    
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <Icon name='chevron-back-outline' size={30} color={'white'} onPress={navigation.goBack}/>
             </View>
             <View style={styles.uploadSection}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleSelectVideo}>
                     <Image source={require('../../assets/icon/gallery.png')}
                         style={styles.uploadButton}
                         />
-                    <Text style={styles.buttonText}>Update Video</Text>
+                    <Text style={styles.buttonText}>Select Video</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <Image source={require('../../assets/icon/trans.png')}
+
+                <TouchableOpacity onPress={handleUpload}>
+                    <Image source={videoUri || audioUri ? require('../../assets/img/logo/mygo1.png') : require('../../assets/icon/music-playlist.png')}
                     style={styles.uploadButton}
                     />
-                    <Text style={styles.buttonText}>Extract Audio From Video</Text>
+                    <Text style={styles.buttonText}>Upload Practice</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+
+                <TouchableOpacity onPress={handleSelectAudeo}>
                     <Image source={require('../../assets/icon/music-playlist.png')}
                         style={styles.uploadButton}
                     />
-                    <Text style={styles.buttonText}>Update Audio</Text>
+                    <Text style={styles.buttonText}>Select Audio</Text>
                 </TouchableOpacity>
+
+
+                
             </View>
-            <TouchableOpacity style={styles.recordSection}>
+            <TouchableOpacity style={styles.recordSection} >
                 <Image source={require('../../assets/icon/music-circle.png')} style={styles.recordButton}/>
                 <Text style={styles.recordButtonText}>Record Now!</Text>
             </TouchableOpacity>
@@ -71,49 +109,6 @@ const UploadScreen: React.FC<Props> = ({ navigation,route }) => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        width:Dimensions.get('window').width,
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#2d2d2d'
-    },
-    header: {
-        width:Dimensions.get('window').width,
-        height: Dimensions.get('window').height * 0.1,
-    },
-    uploadSection: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: Dimensions.get('window').width * 0.7,
-        height: Dimensions.get('window').height * 0.25,
-    },
-    uploadButton: {
-        height:'60%',
-        aspectRatio:1,
-        alignSelf:'center'
-    },
-    buttonText: {
-        color: 'white',
-        marginTop: 2,
-    },
-    recordSection: {
-        
-        alignItems: 'center',
-        width: Dimensions.get('window').width * 0.25,
-        height: Dimensions.get('window').height * 0.5,
-    },
-    recordButton: {
-        marginTop:'10%',
-        height:'60%',
-        aspectRatio:1
-    },
-    recordButtonText: {
-        color: 'white',
-        marginTop: 5,
-        fontSize: 18,
-    }
-});
+
 
 export default UploadScreen;

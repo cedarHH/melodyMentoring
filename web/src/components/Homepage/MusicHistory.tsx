@@ -26,10 +26,23 @@ const TableHeader = styled.th`
 `;
 
 const TableData = styled.td`
-  text-align: left;
-  padding: 4px 8px;
-  border-bottom: 1px solid #3a3a3a;
-  line-height: 1.6;
+    font-size: 16px;
+    text-align: left;
+    padding: 4px 8px;
+    border-bottom: 1px solid #3a3a3a;
+    line-height: 1.6;
+
+    @media (max-width: 1736px) {
+        line-height: 1.5;
+    }
+    @media (max-width: 1228px) {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+    @media (max-width: 768px) {
+        font-size: 15px;
+        line-height: 1.4;
+    }
 `;
 
 const TitleContainer = styled.div`
@@ -40,11 +53,21 @@ const TitleContainer = styled.div`
 `;
 
 const Title = styled.h3`
-  margin-top: -5px;
-  margin-bottom: 20px;
-  font-size: 24px;
-  text-align: left;
-  font-family: 'Cambria', serif;
+    margin-top: -5px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: left;
+    font-family: 'Cambria', serif;
+
+    @media (max-height: 824px) {
+        font-size: 20px;
+    }
+    @media (max-width: 1380px) {
+        font-size: 18px;
+    }
+    @media (max-width: 768px) {
+        font-size: 24px;
+    }
 `;
 
 const ChartButton = styled.button`
@@ -63,6 +86,18 @@ const ChartButton = styled.button`
     right: 5px;
     &:hover {
         background-color: #777;
+    }
+
+    @media (max-height: 824px) {
+        font-size: 17px;
+    }
+    @media (max-width: 1380px) {
+        font-size: 15px;
+        padding: 4px 8px;
+    }
+    @media (max-width: 768px) {
+        font-size: 17px;
+        padding: 5px 10px;
     }
 `;
 
