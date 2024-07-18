@@ -16,13 +16,13 @@ type Props = {
 const User: React.FC<Props> = ({ navigation }) => {
     const handleLogout = async () => {
         try {
-          const session = await signOut();
-          console.log('Log out:', session);
-          navigation.navigate('Welcome')
+            const session = await signOut();
+            console.log('Log out:', session);
+            navigation.navigate('Welcome')
         } catch (err: any) {
-          Alert.alert("Login Failed", err.message || "Failed to login");
+            Alert.alert("Login Failed", err.message || "Failed to login");
         }
-      };
+    };
     return (
         <View style={styles.container}>
             <Text>User Screen</Text>
@@ -32,11 +32,11 @@ const User: React.FC<Props> = ({ navigation }) => {
                 onPress={() => navigation.navigate('Home')}
                 style={styles.button}
             />
-            <TouchableOpacity onPress={handleLogout} 
-                style={styles.avatar}>
-                <Icon 
-                    name={'log-out'} 
-                    size={40} 
+            <TouchableOpacity onPress={handleLogout}
+                              style={styles.avatar}>
+                <Icon
+                    name={'log-out'}
+                    size={40}
                     color={'blue'}
                     style={styles.flippedIcon}
                 />
@@ -55,15 +55,15 @@ const styles = StyleSheet.create({
         marginVertical: responsiveHeight(1),
     },
     avatar: {
-        aspectRatio: 1, 
-        borderRadius: 50, 
-        justifyContent: 'center', 
+        aspectRatio: 1,
+        borderRadius: 50,
+        justifyContent: 'center',
         alignItems: 'center',
     },
     flippedIcon: {
-      transform: [{ scaleX: -1 }] 
+        transform: [{ scaleX: -1 }]
     }
-    
+
 });
 
 export default User;
