@@ -28,13 +28,10 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent 
     navigation.navigate('History');
   };
 
-  const handleLogout = async () => {
+  const changeUser = async () => {
     try {
-      const session = await signOut();
-      console.log('Log out:', session);
-      navigation.navigate('Welcome')
+      navigation.navigate('Subuser')
     } catch (err: any) {
-      Alert.alert("Login Failed", err.message || "Failed to login");
     }
   };
 
@@ -71,7 +68,7 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent 
           />
           <Text style={[styles.link, activeContent === 'history' && styles.activelink]}>History</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleLogout} 
+        <TouchableOpacity onPress={changeUser} 
           style={styles.avatar}>
           <Icon 
             name={'log-out'} 

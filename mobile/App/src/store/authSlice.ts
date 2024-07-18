@@ -94,7 +94,7 @@ export const login = (
         await AsyncStorage.setItem('Token', tokenStr);
         dispatch(authSuccess({ email, username: 'N/A' }));
         dispatch(showNotification("Login successful"));
-        navigation.navigate('Home');
+        navigation.navigate('Subuser');
     } catch (err: any) {
         dispatch(authFailure(err.message || 'Failed to login'));
         dispatch(showNotification(err.message || 'Failed to login'));

@@ -7,6 +7,7 @@ import Welcome from './src/screens/welcome/main/Welcome';
 import Home from './src/screens/home/Home';
 import User from './src/screens/User';
 import Upload from './src/screens/upload/Upload';
+import Subuser from './src/screens/subuser/Subuser';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { RootStackParamList } from './types';
 
@@ -28,7 +29,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Welcome">
             <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
-            {/* <Stack.Screen name="Subuser" component={Subuser} options={{ headerShown: false }}/> */}
+            <Stack.Screen name="Subuser" component={Subuser} options={{ headerShown: false }}/>
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
             <Stack.Screen name="User" component={User} options={{ headerShown: false }}/>
             <Stack.Screen name="Upload" component={Upload} options={{ headerShown: false }}/>
