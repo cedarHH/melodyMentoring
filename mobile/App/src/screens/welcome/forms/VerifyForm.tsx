@@ -22,6 +22,7 @@ const VerifyForm: React.FC<VerifyFormProps> = ({ onVerify, email, onBack }) => {
             <TextInput
                 style={styles.input}
                 placeholder="Verification Code"
+                placeholderTextColor={'white'}
                 value={verificationCode}
                 onChangeText={setVerificationCode}
                 keyboardType="number-pad"

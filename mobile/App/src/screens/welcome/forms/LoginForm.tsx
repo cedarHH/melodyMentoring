@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import CustomButton from '../../../components/MISC/Button';
-import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-import { useAppDispatch, useAppSelector, RootState, setAuthMode, AuthMode } from '../../../store';
+import { responsiveHeight, responsiveWidth, responsiveFontSize,  } from 'react-native-responsive-dimensions';
+import { useAppDispatch, useAppSelector, RootState, setAuthMode, AuthMode, showNotificationWithTimeout } from '../../../store';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../../types';
+import Notification from '../../../components/MISC/Notification';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Welcome'>;
 
@@ -21,6 +22,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onBack, onLogin, navigation }) =>
     const loading = useAppSelector((state: RootState) => state.auth.loading);
 
     const handleLogin = () => {
+        if (!email || !password) {
+            dispatch(showNotificationWithTimeout("Email and Password are required"));
+            return;
+        }
         onLogin(email, password, navigation);
     };
 
@@ -30,46 +35,66 @@ const LoginForm: React.FC<LoginFormProps> = ({ onBack, onLogin, navigation }) =>
 
     return (
         <View style={styles.container}>
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-            <CustomButton
-                text={loading ? "Logging in..." : "Login"}
-                onPress={handleLogin}
-                style={styles.button}
-            />
-            <CustomButton
-                text="Back"
-                onPress={onBack}
-                style={styles.button}
-            />
-            <TouchableOpacity onPress={handleForgotPassword}>
-                <Text style={styles.forgotPassword}>Forgot Password?</Text>
-            </TouchableOpacity>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    placeholderTextColor="#AAAAAA"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    placeholderTextColor="#AAAAAA"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                />
+            </View>
+
+            <Notification width="60%" />
+
+            <View style={styles.forgetContainer}>
+                <TouchableOpacity onPress={handleForgotPassword}>
+                    <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.buttonContainer}>
+                <CustomButton
+                    text={loading ? "Logging in..." : "Login"}
+                    onPress={handleLogin}
+                    style={styles.button_1}
+                />
+                <CustomButton
+                    text="Back"
+                    onPress={onBack}
+                    style={styles.button_2}
+                />
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: - responsiveHeight(30),
         width: '100%',
         padding: 20,
     },
+
+    inputContainer: {
+        display: 'flex',
+        marginBottom: - responsiveHeight(1),
+    },
     input: {
-        width: '100%',
-        height: '16%',
+        width: responsiveWidth(45),
+        height: responsiveHeight(6),
         padding: 10,
         marginVertical: 5,
         borderWidth: 1,
@@ -77,15 +102,31 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         color: 'white'
     },
-    button: {
-        marginVertical: responsiveHeight(5),
-        width: responsiveWidth(25),
+
+    forgetContainer: {
+        marginBottom: responsiveHeight(1),
     },
     forgotPassword: {
-        color: '#0000EE',
+        color: '#DDDDDD',
         marginTop: 10,
         textAlign: 'center',
     },
+
+    buttonContainer: {
+        display: 'flex',
+    },
+    button_1: {
+        width: responsiveWidth(45),
+        height: responsiveHeight(5),
+        padding: 0,
+    },
+    button_2: {
+        width: responsiveWidth(45),
+        height:responsiveHeight(5),
+        padding: 0,
+        backgroundColor: '#666666',
+    },
+
 });
 
 export default LoginForm;

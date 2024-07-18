@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { ApiContext } from '../../contexts/ApiContext';
 
 interface SidebarProps {
     activeKid: string;
@@ -51,11 +52,208 @@ const AddButton = styled.button`
     }
 `;
 
+const ModalOverlay = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+`;
+
+const AddKidModal = styled.div`
+    background: #222222;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 430px;
+    max-height: 260px;
+    border: 4px solid #555555;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    
+    @media (min-width: 768px) {
+        width: 30%;
+        height: 40%;
+    }
+`;
+
+const AddKidModalTitle = styled.h3`
+    margin-top: -5px;
+    padding: 5px;
+    font-family: Cambria, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    color: #ffffff;
+    
+    @media (min-width: 768px) {
+        font-size: 25px;
+    }
+`;
+
+const Input = styled.input`
+    width: 80%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    margin: 10px 0;  // 确保两者的margin一致
+
+    &::placeholder {
+        color: #aaa;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: #777;
+    }
+
+    @media (max-width: 768px) {
+        padding: 5px;
+    }
+`;
+
+const ModalActions = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+    gap: 30px;
+
+    @media (min-width: 768px) {
+        gap: 70px;
+    }
+`;
+
+const ModalButton = styled.button`
+    padding: 10px 20px;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    &:hover {
+        background-color: #777;
+    }
+    
+    @media (max-width: 768px) {
+        padding: 8px 12px;
+        font-size: 15px;
+    }
+`;
+
+const PinInputWrapper = styled.div`
+    position: relative;
+    width: 80%;
+`;
+
+const EyeButton = styled.button`
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 16px;    
+    &:hover {
+        color: #fff;
+    }
+`;
+
+const Select = styled.select`
+    width: 80%;
+    padding: 8px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+
+    &:focus {
+        outline: none;
+        border-color: #777;
+    }
+
+    @media (max-width: 768px) {
+        width: 90%;
+        padding: 5px;
+    }
+`;
+
 const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
+    const { subUsers, addSubUser, deleteSubUser } = useContext(ApiContext);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [newKidName, setNewKidName] = useState('');
+    const [newKidPin, setNewKidPin] = useState('');
+    const [selectedKid, setSelectedKid] = useState('');
+    const [deleteKidPin, setDeleteKidPin] = useState('');
+    const [showPin, setShowPin] = useState(false);
+
+    useEffect(() => {
+        if (isAddModalOpen || isDeleteModalOpen) {
+            setNewKidName('');
+            setNewKidPin('');
+            setSelectedKid('');
+            setDeleteKidPin('');
+        }
+    }, [isAddModalOpen, isDeleteModalOpen]);
+
+    const handleAddKid = async (event: React.FormEvent) => {
+        event.preventDefault();
+        if (newKidName && newKidPin) {
+            await addSubUser(newKidName, newKidPin);
+            setNewKidName('');
+            setNewKidPin('');
+            setIsAddModalOpen(false);
+        }
+    };
+
+    const handleDeleteKid = async (event: React.FormEvent) => {
+        event.preventDefault();
+        if (selectedKid && deleteKidPin) {
+            await deleteSubUser(selectedKid, deleteKidPin);
+            setSelectedKid('');
+            setDeleteKidPin('');
+            setIsDeleteModalOpen(false);
+        }
+    };
+
+    const openAddModal = () => {
+        setIsAddModalOpen(true);
+    };
+
+    const closeAddModal = () => {
+        setIsAddModalOpen(false);
+    };
+
+    const openDeleteModal = () => {
+        setIsDeleteModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+        setIsDeleteModalOpen(false);
+    };
+
+    const toggleShowPin = () => {
+        setShowPin((prev) => !prev);
+    };
+
     return (
-        <Aside>
+        <>
             <List>
-                {['Daniel', 'Amy', 'Tom'].map((kid) => (
+                {subUsers.map((kid: string) => (
                     <ListItem
                         key={kid}
                         $isActive={activeKid === kid}
@@ -65,8 +263,74 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
                     </ListItem>
                 ))}
             </List>
-            <AddButton>+</AddButton>
-        </Aside>
+            <AddButton onClick={openAddModal}>+</AddButton>
+            <br />
+            <AddButton onClick={openDeleteModal}>-</AddButton>
+            {isAddModalOpen && (
+                <ModalOverlay>
+                    <AddKidModal>
+                        <AddKidModalTitle>Create a new kid account</AddKidModalTitle>
+                        <form onSubmit={handleAddKid}>
+                            <Input
+                                type="text"
+                                placeholder="Name"
+                                value={newKidName}
+                                onChange={(e) => setNewKidName(e.target.value)}
+                                autoComplete="off"
+                            />
+                            <Input
+                                type={showPin ? "text" : "password"}
+                                placeholder="PIN"
+                                value={newKidPin}
+                                onChange={(e) => setNewKidPin(e.target.value)}
+                                autoComplete="new-password"
+                            />
+                            {/* <EyeButton onMouseDown={toggleShowPin} onMouseUp={toggleShowPin}>
+                                {showPin ? '🙈' : '👀️'}
+                            </EyeButton> */}
+                            <ModalActions>
+                                <ModalButton type="submit">Confirm</ModalButton>
+                                <ModalButton type="button" onClick={closeAddModal}>Cancel</ModalButton>
+                            </ModalActions>
+                        </form>
+                    </AddKidModal>
+                </ModalOverlay>
+            )}
+            {isDeleteModalOpen && (
+                <ModalOverlay>
+                    <AddKidModal>
+                        <AddKidModalTitle>Delete a kid account</AddKidModalTitle>
+                        <form onSubmit={handleDeleteKid}>
+                            <Select
+                                value={selectedKid}
+                                onChange={(e) => setSelectedKid(e.target.value)}
+                            >
+                                <option value="">Select a kid</option>
+                                {subUsers.map((kid: string) => (
+                                    <option key={kid} value={kid}>
+                                        {kid}
+                                    </option>
+                                ))}
+                            </Select>
+                            <Input
+                                type={showPin ? "text" : "password"}
+                                placeholder="PIN"
+                                value={deleteKidPin}
+                                onChange={(e) => setDeleteKidPin(e.target.value)}
+                                autoComplete="new-password"
+                            />
+                            {/* <EyeButton onMouseDown={toggleShowPin} onMouseUp={toggleShowPin}>
+                                    {showPin ? '🙈' : '👀️'}
+                                </EyeButton> */}
+                            <ModalActions>
+                                <ModalButton type="submit">Confirm</ModalButton>
+                                <ModalButton type="button" onClick={closeDeleteModal}>Cancel</ModalButton>
+                            </ModalActions>
+                        </form>
+                    </AddKidModal>
+                </ModalOverlay>
+            )}
+        </>
     );
 };
 
