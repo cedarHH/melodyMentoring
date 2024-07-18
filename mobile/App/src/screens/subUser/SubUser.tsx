@@ -5,6 +5,7 @@ import { RootStackParamList } from '../../../types';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AddForm from './AddForm';
 
 type SubuserNavigationProp = StackNavigationProp<RootStackParamList, 'SubUser'>;
 
@@ -19,6 +20,7 @@ interface Item {
 const Subuser: React.FC<Props> = ({ navigation }) => {
     const [data, setData] = useState<Item[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -74,6 +76,13 @@ const Subuser: React.FC<Props> = ({ navigation }) => {
         );
     }, [selectedIndex, onPressHandler]);
 
+    const handleAddUserPress = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+    };
 
     return (
         <View style={styles.container}>
@@ -89,8 +98,9 @@ const Subuser: React.FC<Props> = ({ navigation }) => {
                 />
             </View>
             <View style={styles.adduser}>
-                <Icon name='add' size={40} color={'#05fdfd'} onPress={()=>{}}/>
+                <Icon name='add' size={40} color={'#05fdfd'} onPress={handleAddUserPress}/>
             </View>
+            <AddForm visible={isModalVisible} onClose={handleCloseModal} />
         </View>
 
 

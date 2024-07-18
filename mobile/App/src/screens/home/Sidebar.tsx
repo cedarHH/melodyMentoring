@@ -30,7 +30,7 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent 
 
     const changeUser = async () => {
         try {
-            navigation.navigate('Subuser')
+            navigation.navigate('SubUser')
         } catch (err: any) {
         }
     };
