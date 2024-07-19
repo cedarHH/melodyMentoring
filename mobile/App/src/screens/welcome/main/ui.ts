@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+ import { StyleSheet } from 'react-native';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 
 const styles = StyleSheet.create({
@@ -35,14 +35,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: responsiveHeight(10),
     },
+    buttonText: {
+        fontSize: responsiveFontSize(2),
+    },
     button_1: {
         width: responsiveWidth(40),
-        fontSize: responsiveFontSize(2),
     },
     button_2: {
         width: responsiveWidth(30),
-        fontSize: responsiveFontSize(2),
-
+        backgroundColor: '#666666',
     },
 });
 
