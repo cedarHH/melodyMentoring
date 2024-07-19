@@ -77,40 +77,43 @@ const Welcome: React.FC<Props> = ({ navigation }) => {
                       text="I am new here"
                       onPress={() => dispatch(setAuthMode(AuthMode.REGISTER))}
                       style={styles.button_1}
+                      textStyle={styles.buttonText}
                   />
                   <CustomButton
                       text="Sign In"
                       onPress={() => dispatch(setAuthMode(AuthMode.LOGIN))}
                       style={styles.button_2}
+                      textStyle={styles.buttonText}
                   />
                 </>
             )}
-            {authMode === AuthMode.LOGIN && (
-                <LoginForm
-                    onLogin={handleLogin}
-                    onBack={() => dispatch(goBack())}
-                    navigation={navigation}
-                />
-            )}
-            {authMode === AuthMode.REGISTER && (
-                <RegisterForm
-                    onSignUp={handleSignUp}
-                    onBack={() => dispatch(goBack())}
-                />
-            )}
-            {authMode === AuthMode.VERIFY_CODE && (
-                <VerifyForm
-                    onVerify={handleVerifyCode}
-                    email={emailForVerification}
-                    onBack={() => dispatch(goBack())}
-                />
-            )}
-            {authMode === AuthMode.RESET_PASSWORD && (
-                <ResetPasswordForm
-                    onBack={() => dispatch(goBack())}
-                />
-            )}
           </View>
+
+          {authMode === AuthMode.LOGIN && (
+              <LoginForm
+                  onLogin={handleLogin}
+                  onBack={() => dispatch(goBack())}
+                  navigation={navigation}
+              />
+          )}
+          {authMode === AuthMode.REGISTER && (
+              <RegisterForm
+                  onSignUp={handleSignUp}
+                  onBack={() => dispatch(goBack())}
+              />
+          )}
+          {authMode === AuthMode.VERIFY_CODE && (
+              <VerifyForm
+                  onVerify={handleVerifyCode}
+                  email={emailForVerification}
+                  onBack={() => dispatch(goBack())}
+              />
+          )}
+          {authMode === AuthMode.RESET_PASSWORD && (
+              <ResetPasswordForm
+                  onBack={() => dispatch(goBack())}
+              />
+          )}
         </View>
       </View>
   );

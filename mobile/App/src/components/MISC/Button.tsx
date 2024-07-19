@@ -1,15 +1,17 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions';
+import { TextStyle } from 'react-native';
 
 interface ButtonProps {
     text: string;
     onPress: () => void;
     style?: object;
+    textStyle?: TextStyle;
 }
 
 const StyledTouchableOpacity = styled.TouchableOpacity<{}>`
-    padding: ${responsiveHeight(2)}px;
+    padding: ${(props: { style: { padding: undefined; }; }) => props.style?.padding !== undefined ? props.style.padding : responsiveHeight(2)}px;
     border-radius: 20px;
     margin-top: ${responsiveHeight(1)}px;
     margin-bottom: ${responsiveHeight(1)}px;
@@ -21,14 +23,15 @@ const StyledTouchableOpacity = styled.TouchableOpacity<{}>`
     align-items: center;
 `;
 
-const StyledText = styled.Text`
+const StyledText = styled.Text<{ textStyle?: TextStyle }>`
     color: white;
-    font-size: ${responsiveFontSize(2)}px;
+    font-size: ${responsiveFontSize(1.5)}px;
+    ${(props: { textStyle: any; }) => props.textStyle && { ...props.textStyle }}
 `;
 
-const Button: React.FC<ButtonProps> = ({ text, onPress, style }) => (
+const Button: React.FC<ButtonProps> = ({ text, textStyle, onPress, style }) => (
     <StyledTouchableOpacity onPress={onPress} style={style}>
-        <StyledText>{text}</StyledText>
+        <StyledText textStyle={textStyle}>{text}</StyledText>
     </StyledTouchableOpacity>
 );
 

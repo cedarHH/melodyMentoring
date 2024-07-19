@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import CustomButton from '../../../components/MISC/Button';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { useAppDispatch, useAppSelector, sendResetCode, resetPassword } from '../../../store';
-import { RootState, showNotification } from '../../../store';
+import { RootState, showNotification, hideNotification } from '../../../store';
 import Notification from '../../../components/MISC/Notification';
 
 interface ResetPasswordFormProps {
@@ -16,6 +16,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onBack }) => {
     const [newPassword, setNewPassword] = useState('');
     const dispatch = useAppDispatch();
     const loading = useAppSelector((state: RootState) => state.auth.loading);
+    const notification = useAppSelector((state: RootState) => state.notification.message);
 
     const handleReset = async () => {
         try {
@@ -35,62 +36,84 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onBack }) => {
         }
     };
 
+    useEffect(() => {
+        if (notification) {
+            const timer = setTimeout(() => {
+                dispatch(hideNotification());
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [notification, dispatch]);
+
     return (
-        <View style={styles.authContainer}>
-            <Notification width="100%" />
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-            />
-            <View style={styles.verificationContainer}>
+        <View style={styles.container}>
+            {notification && <Notification width="100%" />}
+            <View style={styles.inputContainer}>
                 <TextInput
-                    style={styles.verificationInput}
-                    placeholder="Verification Code"
-                    value={verificationCode}
-                    onChangeText={setVerificationCode}
-                    keyboardType="number-pad"
+                    style={styles.input}
+                    placeholder="Email"
+                    placeholderTextColor="#AAAAAA"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
                 />
-                <CustomButton
-                    text="Send"
-                    onPress={handleSendCode}
-                    style={styles.sendButton}
+                <View style={styles.verificationContainer}>
+                    <TextInput
+                        style={styles.verificationInput}
+                        placeholder="Verification Code"
+                        placeholderTextColor="#AAAAAA"
+                        value={verificationCode}
+                        onChangeText={setVerificationCode}
+                        keyboardType="number-pad"
+                    />
+                    <CustomButton
+                        text="Send"
+                        onPress={handleSendCode}
+                        style={styles.sendButton}
+                    />
+                </View>
+                <TextInput
+                    style={styles.input}
+                    placeholder="New Password"
+                    placeholderTextColor="#AAAAAA"
+                    value={newPassword}
+                    onChangeText={setNewPassword}
+                    secureTextEntry
                 />
             </View>
-            <TextInput
-                style={styles.input}
-                placeholder="New Password"
-                value={newPassword}
-                onChangeText={setNewPassword}
-                secureTextEntry
-            />
-            <CustomButton
-                text={loading ? "Resetting..." : "Reset Password"}
-                onPress={handleReset}
-                style={styles.button}
-            />
-            <CustomButton
-                text="Back"
-                onPress={onBack}
-                style={styles.button}
-            />
+            <View style={styles.buttonContainer}>
+                <CustomButton
+                    text={loading ? "Resetting..." : "Reset Password"}
+                    onPress={handleReset}
+                    style={styles.button_1}
+                />
+                <CustomButton
+                    text="Back"
+                    onPress={onBack}
+                    style={styles.button_2}
+                />
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    authContainer: {
-        flex: 1,
-        justifyContent: 'center',
+    container: {
+        display: 'flex',
         alignItems: 'center',
-        padding: 20,
+        marginTop: -responsiveHeight(25),
+        width: '100%',
+    },
+    inputContainer: {
+        display: 'flex',
+
     },
     input: {
-        width: '100%',
-        height: '15%',
+        width: responsiveWidth(45),
+        height: responsiveHeight(6),
+        margin: 20,
         padding: 10,
         marginVertical: 5,
         borderWidth: 1,
@@ -101,12 +124,13 @@ const styles = StyleSheet.create({
     verificationContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: '100%',
+        width: responsiveWidth(45),
         marginVertical: 5,
     },
     verificationInput: {
         flex: 1,
-        height: '40%',
+        width: responsiveWidth(50),
+        height: responsiveHeight(6),
         padding: 10,
         borderWidth: 1,
         borderColor: '#ccc',
@@ -115,12 +139,23 @@ const styles = StyleSheet.create({
     },
     sendButton: {
         marginLeft: 10,
-        width: '30%',
-        height: '50%',
+        width: responsiveWidth(20),
+        height: responsiveHeight(6),
+        padding: 0,
     },
-    button: {
-        marginVertical: responsiveHeight(5),
-        width: responsiveWidth(25),
+    buttonContainer: {
+        display: 'flex',
+    },
+    button_1: {
+        width: responsiveWidth(45),
+        height: responsiveHeight(5),
+        padding: 0,
+    },
+    button_2: {
+        width: responsiveWidth(45),
+        height: responsiveHeight(5),
+        padding: 0,
+        backgroundColor: '#666666',
     },
 });
 
