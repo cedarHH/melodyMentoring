@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, StyleSheet,Text,FlatList,ScrollView,TouchableOpacity,Button } from 'react-native';
+import { View, StyleSheet,Text,FlatList,TouchableOpacity } from 'react-native';
 import { StackNavigationProp} from '@react-navigation/stack';
 import { RootStackParamList } from '../../../types';
 import axios from 'axios';
@@ -7,17 +7,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AddForm from './AddForm';
 
-type SubuserNavigationProp = StackNavigationProp<RootStackParamList, 'SubUser'>;
+type SubUserNavigationProp = StackNavigationProp<RootStackParamList, 'SubUser'>;
 
 type Props = {
-    navigation: SubuserNavigationProp;
+    navigation: SubUserNavigationProp;
 };
 
 interface Item {
     profileName: string;
 }
 
-const Subuser: React.FC<Props> = ({ navigation }) => {
+const SubUser: React.FC<Props> = ({ navigation }) => {
     const [data, setData] = useState<Item[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -50,7 +50,7 @@ const Subuser: React.FC<Props> = ({ navigation }) => {
             }
         };
 
-        fetchData();
+        fetchData().catch(console.error);
     }, []);
 
     const onPressHandler = useCallback(({ item, index }: { item: typeof data[0], index: number }) => {
@@ -86,7 +86,7 @@ const Subuser: React.FC<Props> = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.usercontainer}>
+            <View style={styles.userContainer}>
                 <FlatList
                     data={data}
                     renderItem={renderItem}
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#2d2d2d'
     },
-    usercontainer:{
+    userContainer:{
         flexDirection:'row',
         flex:0.8,
         alignItems: 'center',
@@ -158,4 +158,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Subuser;
+export default SubUser;
