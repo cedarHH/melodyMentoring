@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
-import { signInWithEmail, signUpUserWithEmail, verifyCode, sendCode, forgotPassword } from '../libs/cognito';
+import {signInWithEmail, signUpUserWithEmail, verifyCode, sendCode, forgotPassword, signOut} from '../libs/cognito';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootState, AppDispatch } from './store';
 import { showNotification, showNotificationWithTimeout } from './notificationSlice';
@@ -156,5 +156,19 @@ export const resetPassword = (email: string, verificationCode: string, newPasswo
         dispatch(showNotification(error.message));
     }
 };
+
+export const userLogout = (
+    navigateToWelcome: () => void
+): ThunkAction<void, RootState, undefined, PayloadAction<any>> => async (dispatch: AppDispatch) => {
+    try {
+        await signOut();
+        dispatch(logout());
+        dispatch(showNotificationWithTimeout("Logout successful"));
+        navigateToWelcome();
+    } catch (err: any) {
+        dispatch(showNotificationWithTimeout(err.message || 'Failed to logout'));
+    }
+};
+
 
 export default authSlice.reducer;
