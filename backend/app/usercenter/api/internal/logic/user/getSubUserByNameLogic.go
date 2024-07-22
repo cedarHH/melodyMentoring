@@ -24,7 +24,9 @@ func NewGetSubUserByNameLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *GetSubUserByNameLogic) GetSubUserByName(req *types.GetSubUserByNameReq) (resp *types.GetSubUserByNameResp, err error) {
+func (l *GetSubUserByNameLogic) GetSubUserByName(
+	req *types.GetSubUserByNameReq) (resp *types.GetSubUserByNameResp, err error) {
+
 	uuid := l.ctx.Value("uuid").(string)
 	profileName := req.ProfileName
 
@@ -52,4 +54,5 @@ func (l *GetSubUserByNameLogic) GetSubUserByName(req *types.GetSubUserByNameReq)
 		},
 		Msg: "Ciallo～(∠・ω< )⌒☆",
 	}, nil
+	return
 }

@@ -24,14 +24,17 @@ func NewUpdateSubUserAttrLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 	}
 }
 
-func (l *UpdateSubUserAttrLogic) UpdateSubUserAttr(req *types.UpdateSubUserAttrReq) (resp *types.UpdateSubUserAttrResp, err error) {
+func (l *UpdateSubUserAttrLogic) UpdateSubUserAttr(
+	req *types.UpdateSubUserAttrReq) (resp *types.UpdateSubUserAttrResp, err error) {
+
+	if req.Gender == "" && req.Dob == "" && req.Level == "" && req.Instrument == "" && req.Badge == "" {
+		return nil, fmt.Errorf("no attributes to update")
+	}
+
 	uuid := l.ctx.Value("uuid").(string)
 	profileName := req.ProfileName
 
 	updates := map[string]interface{}{}
-	if req.Avatar != "" {
-		updates["Avatar"] = req.Avatar
-	}
 	if req.Gender != "" {
 		updates["Gender"] = req.Gender
 	}
@@ -57,4 +60,5 @@ func (l *UpdateSubUserAttrLogic) UpdateSubUserAttr(req *types.UpdateSubUserAttrR
 		Code: 0,
 		Msg:  "🍥😒😅🍥",
 	}, nil
+	return
 }

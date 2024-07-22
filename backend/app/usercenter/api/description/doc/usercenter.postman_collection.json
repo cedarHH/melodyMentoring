@@ -29,10 +29,16 @@
       "name": "/api/user/deleteSubUserByName",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": ""
+          "raw": "{\n  \"profileName\": \"\",\n  \"pin\": \"\"\n}"
         },
         "url": {
           "raw": "http://localhost:8888/api/user/deleteSubUserByName",
@@ -146,7 +152,7 @@
       "response": []
     },
     {
-      "name": "/api/user/updateAvatar",
+      "name": "/api/user/updateAvatarSuccess",
       "request": {
         "method": "POST",
         "header": [],
@@ -155,11 +161,11 @@
           "raw": ""
         },
         "url": {
-          "raw": "http://localhost:8888/api/user/updateAvatar",
+          "raw": "http://localhost:8888/api/user/updateAvatarSuccess",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8888",
-          "path": ["api", "user", "updateAvatar"]
+          "path": ["api", "user", "updateAvatarSuccess"]
         },
         "description": "update avatar"
       },
