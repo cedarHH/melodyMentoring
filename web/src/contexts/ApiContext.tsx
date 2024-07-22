@@ -6,6 +6,7 @@ export interface IApiContext {
     fetchSubUsers: () => void;
     addSubUser: (profileName: string, pin: string) => Promise<void>;
     deleteSubUser: (profileName: string, pin: string) => Promise<void>;
+    updateSubUserAttr: (profileName: string, updatedInfo: any) => Promise<void>;
 }
 
 const defaultState: IApiContext = {
@@ -13,6 +14,7 @@ const defaultState: IApiContext = {
     fetchSubUsers: () => {},
     addSubUser: async () => {},
     deleteSubUser: async () => {},
+    updateSubUserAttr: async () => {},
 };
 
 type Props = {
@@ -68,11 +70,26 @@ const ApiProvider = ({ children }: Props) => {
         }
     };
 
+    const updateSubUserAttr = async (profileName: string, updatedInfo: any) => {
+        try {
+            await axios.post('/api/user/updateSubUserAttr', { profileName, ...updatedInfo }, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            await fetchSubUsers(); // Refresh the sub-users list
+        } catch (error) {
+            console.error('Error updating sub user attributes:', error);
+        }
+    };
+
     const state: IApiContext = {
         subUsers,
         fetchSubUsers,
         addSubUser,
         deleteSubUser,
+        updateSubUserAttr,
     };
 
     return <ApiContext.Provider value={state}>{children}</ApiContext.Provider>;

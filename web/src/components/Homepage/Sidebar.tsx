@@ -104,7 +104,7 @@ const Input = styled.input`
     background-color: #333;
     color: #fff;
     font-size: 16px;
-    margin: 10px 0;  // 确保两者的margin一致
+    margin: 10px 0;
 
     &::placeholder {
         color: #aaa;
@@ -147,26 +147,6 @@ const ModalButton = styled.button`
     @media (max-width: 768px) {
         padding: 8px 12px;
         font-size: 15px;
-    }
-`;
-
-const PinInputWrapper = styled.div`
-    position: relative;
-    width: 80%;
-`;
-
-const EyeButton = styled.button`
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #aaa;
-    font-size: 16px;    
-    &:hover {
-        color: #fff;
     }
 `;
 
@@ -285,9 +265,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
                                 onChange={(e) => setNewKidPin(e.target.value)}
                                 autoComplete="new-password"
                             />
-                            {/* <EyeButton onMouseDown={toggleShowPin} onMouseUp={toggleShowPin}>
-                                {showPin ? '🙈' : '👀️'}
-                            </EyeButton> */}
                             <ModalActions>
                                 <ModalButton type="submit">Confirm</ModalButton>
                                 <ModalButton type="button" onClick={closeAddModal}>Cancel</ModalButton>
@@ -319,9 +296,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
                                 onChange={(e) => setDeleteKidPin(e.target.value)}
                                 autoComplete="new-password"
                             />
-                            {/* <EyeButton onMouseDown={toggleShowPin} onMouseUp={toggleShowPin}>
-                                    {showPin ? '🙈' : '👀️'}
-                                </EyeButton> */}
                             <ModalActions>
                                 <ModalButton type="submit">Confirm</ModalButton>
                                 <ModalButton type="button" onClick={closeDeleteModal}>Cancel</ModalButton>
