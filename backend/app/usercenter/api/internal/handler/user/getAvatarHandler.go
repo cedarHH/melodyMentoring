@@ -9,17 +9,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-// update avatar
-func UpdateAvatarHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// get avatar url
+func GetAvatarHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.UpdateAvatarReq
+		var req types.GetAvatarReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := user.NewUpdateAvatarLogic(r.Context(), svcCtx)
-		resp, err := l.UpdateAvatar(&req)
+		l := user.NewGetAvatarLogic(r.Context(), svcCtx)
+		resp, err := l.GetAvatar(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

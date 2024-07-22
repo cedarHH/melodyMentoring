@@ -88,10 +88,36 @@ type (
 )
 
 type (
+    AvatarFile {
+        PresignedURL  string    `json:"presignedurl"`
+        FileName      string    `json:"fileName"`
+    }
     GetAvatarUploadUrlReq {
         ProfileName     string  `header:"profileName"`
     }
     GetAvatarUploadUrlResp {
+        Code            int        `json:"code"`
+        Data            AvatarFile `json:"data"`
+        Msg             string     `json:"msg"`
+    }
+)
+
+type (
+    UpdateAvatarSuccessReq {
+        ProfileName     string      `json:"profileName"`
+        FileName        string      `json:"fileName"`
+    }
+    UpdateAvatarSuccessResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetAvatarReq {
+        ProfileName     string      `header:"profileName"`
+    }
+    GetAvatarResp {
         Code            int        `json:"code"`
         PresignedURL    string     `json:"presignedurl"`
         Msg             string     `json:"msg"`
@@ -99,20 +125,8 @@ type (
 )
 
 type (
-    UpdateAvatarReq {
-        ProfileName     string      `json:"profileName"`
-        PresignedURL    string      `json:"presignedurl"`
-    }
-    UpdateAvatarResp {
-        Code    int        `json:"code"`
-        Msg     string     `json:"msg"`
-    }
-)
-
-type (
     UpdateSubUserAttrReq {
         ProfileName     string  `json:"profileName"`
-        Avatar          string  `json:"avatar,optional"`
         Gender          string  `json:"gender,optional"`
         Dob             string  `json:"dob,optional"`
         Level           string  `json:"level,optional"`
