@@ -26,7 +26,9 @@ func NewSetTokensLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SetToke
 	}
 }
 
-func (l *SetTokensLogic) SetTokens(req *types.SetTokensReq, w http.ResponseWriter) (resp *types.SetTokensResp, err error) {
+func (l *SetTokensLogic) SetTokens(
+	req *types.SetTokensReq, w http.ResponseWriter) (resp *types.SetTokensResp, err error) {
+
 	setCookie := func(name, value string, duration time.Duration) {
 		http.SetCookie(w, &http.Cookie{
 			Name:     name,

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
-	"github.com/cedarHH/mygo/app/usercenter/model"
+	"github.com/cedarHH/mygo/app/usercenter/model/dynamodb"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -24,8 +24,10 @@ func NewCreateSubUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cre
 	}
 }
 
-func (l *CreateSubUserLogic) CreateSubUser(req *types.CreateSubUserReq) (resp *types.CreateSubUserResp, err error) {
-	user := &model.User{
+func (l *CreateSubUserLogic) CreateSubUser(
+	req *types.CreateSubUserReq) (resp *types.CreateSubUserResp, err error) {
+
+	user := &dynamodb.User{
 		Uuid:            l.ctx.Value("uuid").(string),
 		ProfileName:     req.ProfileName,
 		Pin:             req.Pin,

@@ -62,8 +62,12 @@ service usercenter {
 	get /getAvatarUploadUrl (GetAvatarUploadUrlReq) returns (GetAvatarUploadUrlResp)
 
 	@doc "update avatar"
-	@handler updateAvatar
-	post /updateAvatar (UpdateAvatarReq) returns (UpdateAvatarResp)
+	@handler updateAvatarSuccess
+	post /updateAvatarSuccess (UpdateAvatarSuccessReq) returns (UpdateAvatarSuccessResp)
+
+	@doc "get avatar url"
+	@handler getAvatar
+	get /getAvatar (GetAvatarReq) returns (GetAvatarResp)
 
 	@doc "update sub-user attr"
 	@handler updateSubUserAttr
