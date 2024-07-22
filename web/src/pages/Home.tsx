@@ -418,7 +418,7 @@ const Home = () => {
                     <Sidebar activeKid={activeKid} setActiveKid={setActiveKid} />
                 </SidebarContainer>
                 <MainView>
-                    <UserInfo activeKid={activeKid} />
+                    <UserInfo activeKid={activeKid} setActiveKid={setActiveKid} />
                     <MusicHistory onClick={() => handleChartClick('musicHistory')} />
                 </MainView>
                 <ChartsContainer>
