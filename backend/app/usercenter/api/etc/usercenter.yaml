@@ -9,7 +9,14 @@ CognitoConf:
   AppClientId: 32a7ka2btgropvqe7u0lr7qr5k
   CognitoDomain: https://mygo.auth.ap-southeast-2.amazoncognito.com
 
-#DynamoDBConf
+# DynamoDBConf
 DynamoDBConf:
-  Region: ap-southeast-2
-  TableName: User
+  UserTable:
+    Region: ap-southeast-2
+    TableName: User
+
+# S3Conf
+S3Conf:
+  AvatarBucket:
+    Region: ap-southeast-2
+    Bucket: mygo-avatars
