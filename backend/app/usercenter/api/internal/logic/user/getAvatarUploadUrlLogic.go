@@ -24,8 +24,31 @@ func NewGetAvatarUploadUrlLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 	}
 }
 
-func (l *GetAvatarUploadUrlLogic) GetAvatarUploadUrl(req *types.GetAvatarUploadUrlReq) (resp *types.GetAvatarUploadUrlResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *GetAvatarUploadUrlLogic) GetAvatarUploadUrl(
+	req *types.GetAvatarUploadUrlReq) (resp *types.GetAvatarUploadUrlResp, err error) {
 
-	return
+	uuid := l.ctx.Value("uuid").(string)
+	profileName := req.ProfileName
+
+	fileType := ".png"
+	fileName := uuid + "_" + profileName + fileType
+
+	presignedURL, err := l.svcCtx.AvatarModel.GetPresignedUploadURL(l.ctx, fileName, 3600)
+	if err != nil {
+		return &types.GetAvatarUploadUrlResp{
+			Code: 500,
+			Msg:  "Failed to get presigned URL",
+		}, err
+	}
+
+	respData := types.AvatarFile{
+		PresignedURL: presignedURL,
+		FileName:     fileName,
+	}
+
+	return &types.GetAvatarUploadUrlResp{
+		Code: 200,
+		Data: respData,
+		Msg:  "😪😶‍🌫️",
+	}, nil
 }

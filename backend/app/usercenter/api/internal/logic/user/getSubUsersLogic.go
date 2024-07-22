@@ -3,7 +3,6 @@ package user
 import (
 	"context"
 	"fmt"
-
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
 
@@ -46,4 +45,5 @@ func (l *GetSubUsersLogic) GetSubUsers() (resp *types.GetSubUsersResp, err error
 		Data: userList,
 		Msg:  "😋🤮",
 	}, nil
+	return
 }

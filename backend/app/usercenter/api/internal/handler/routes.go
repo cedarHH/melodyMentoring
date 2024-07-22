@@ -55,6 +55,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: user.DeleteSubUserByNameHandler(serverCtx),
 				},
 				{
+					// get avatar url
+					Method:  http.MethodGet,
+					Path:    "/getAvatar",
+					Handler: user.GetAvatarHandler(serverCtx),
+				},
+				{
 					// get avatar uploda url
 					Method:  http.MethodGet,
 					Path:    "/getAvatarUploadUrl",
@@ -75,8 +81,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					// update avatar
 					Method:  http.MethodPost,
-					Path:    "/updateAvatar",
-					Handler: user.UpdateAvatarHandler(serverCtx),
+					Path:    "/updateAvatarSuccess",
+					Handler: user.UpdateAvatarSuccessHandler(serverCtx),
 				},
 				{
 					// update sub-user attr

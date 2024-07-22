@@ -3,7 +3,6 @@ package user
 import (
 	"context"
 	"fmt"
-
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
 
@@ -25,7 +24,9 @@ func NewDeleteSubUserByNameLogic(ctx context.Context, svcCtx *svc.ServiceContext
 	}
 }
 
-func (l *DeleteSubUserByNameLogic) DeleteSubUserByName(req *types.DeleteSubUserByNameReq) (resp *types.DeleteSubUserByNameResp, err error) {
+func (l *DeleteSubUserByNameLogic) DeleteSubUserByName(
+	req *types.DeleteSubUserByNameReq) (resp *types.DeleteSubUserByNameResp, err error) {
+
 	uuid := l.ctx.Value("uuid").(string)
 	profileName := req.ProfileName
 

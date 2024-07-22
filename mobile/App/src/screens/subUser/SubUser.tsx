@@ -21,35 +21,34 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
     const [data, setData] = useState<Item[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const fetchData = async () => {
+        try {
+            const tokenStr = await AsyncStorage.getItem('Token');
+            if (tokenStr) {
+                const tokenData = JSON.parse(tokenStr);
+                const idToken = tokenData.idToken;
+                const response = await axios.get('https://mygo.bar/api/user/getSubUsers', {
+                    headers: {
+                        Authorization: `Bearer ${idToken}`,
+                    },
+                });
+
+                if (response.data.code === 0) {
+                    setData(response.data.data);
+                } else {
+                    console.error('Error fetching data:', response.data.msg);
+                }
+            } else {
+                console.error('No token found');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const tokenStr = await AsyncStorage.getItem('Token');
-                if (tokenStr) {
-                    const tokenData = JSON.parse(tokenStr);
-                    const idToken = tokenData.idToken;
-                    const response = await axios.get('https://mygo.bar/api/user/getSubUsers', {
-                        headers: {
-                            Authorization: `Bearer ${idToken}`,
-                        },
-                    });
-
-                    if (response.data.code === 0) {
-                        setData(response.data.data);
-                    } else {
-                        console.error('Error fetching data:', response.data.msg);
-                    }
-                } else {
-                    console.error('No token found');
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            } finally {
-
-            }
-        };
-
         fetchData().catch(console.error);
     }, []);
 
@@ -78,10 +77,12 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
 
     const handleAddUserPress = () => {
         setIsModalVisible(true);
+        fetchData()
     };
 
     const handleCloseModal = () => {
         setIsModalVisible(false);
+        fetchData()
     };
 
     return (
