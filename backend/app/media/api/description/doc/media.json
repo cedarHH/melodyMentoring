@@ -1,0 +1,1107 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "media",
+    "description": "media",
+    "version": "v1"
+  },
+  "host": "localhost:8889",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/media/record/createRecord": {
+      "post": {
+        "summary": "create new performance record",
+        "operationId": "createRecord",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateRecordResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRecordReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/deleteRecord": {
+      "post": {
+        "summary": "delete performance record",
+        "operationId": "deleteRecord",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteRecordResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteRecordReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/getAudioUrl": {
+      "post": {
+        "summary": "get audio presigned url",
+        "operationId": "getAudioUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAudioUrlResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetAudioUrlReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/getPerformanceAudio": {
+      "post": {
+        "summary": "get performance audio",
+        "operationId": "getPerformanceAudio",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceAudioResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceAudioReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/getPerformanceImg": {
+      "post": {
+        "summary": "get performance thumbnail",
+        "operationId": "getPerformanceImg",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceImgResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceImgReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/getPerformanceMidi": {
+      "post": {
+        "summary": "get performance midi",
+        "operationId": "getPerformanceMidi",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceMidiResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceMidiReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/getPerformanceReport": {
+      "post": {
+        "summary": "get performance report",
+        "operationId": "getPerformanceReport",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceReportResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceReportReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/getPerformanceSheet": {
+      "post": {
+        "summary": "get performance sheet",
+        "operationId": "getPerformanceSheet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceSheetResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceSheetReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/getPerformanceVedio": {
+      "post": {
+        "summary": "get performance vedio",
+        "operationId": "getPerformanceVedio",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceVedioResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceVedioReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/getPerformanceWaterfall": {
+      "post": {
+        "summary": "get performance waterfall",
+        "operationId": "getPerformanceWaterfall",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceWaterfallResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetPerformanceWaterfallReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/getRecord": {
+      "post": {
+        "summary": "get performance record",
+        "operationId": "getRecord",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRecordResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetRecordReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/getVedioUrl": {
+      "post": {
+        "summary": "get vedio presigned url",
+        "operationId": "getVedioUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetVedioUrlResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetVedioUrlReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/setAsReference": {
+      "post": {
+        "summary": "set a performance record as reference",
+        "operationId": "setAsReference",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SetAsReferenceResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetAsReferenceReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/uploadAudioSuccess": {
+      "post": {
+        "summary": "upload audio success",
+        "operationId": "uploadAudioSuccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UploadAudioSuccessResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UploadAudioSuccessReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
+    "/api/media/record/uploadVideoSuccess": {
+      "post": {
+        "summary": "upload video success",
+        "operationId": "uploadVideoSuccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UploadVideoSuccessResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UploadVideoSuccessReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CreateRecordReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        }
+      },
+      "title": "CreateRecordReq",
+      "required": [
+        "profileName",
+        "reference"
+      ]
+    },
+    "CreateRecordResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "recordId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "CreateRecordResp",
+      "required": [
+        "code",
+        "recordId",
+        "msg"
+      ]
+    },
+    "DeleteRecordReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "DeleteRecordReq",
+      "required": [
+        "profileName",
+        "recordId"
+      ]
+    },
+    "DeleteRecordResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "DeleteRecordResp",
+      "required": [
+        "code",
+        "msg"
+      ]
+    },
+    "FileDetails": {
+      "type": "object",
+      "properties": {
+        "presignedurl": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string"
+        }
+      },
+      "title": "FileDetails",
+      "required": [
+        "presignedurl",
+        "fileName"
+      ]
+    },
+    "GetAudioUrlReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetAudioUrlReq",
+      "required": [
+        "profileName",
+        "recordId"
+      ]
+    },
+    "GetAudioUrlResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "$ref": "#/definitions/FileDetails"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetAudioUrlResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
+    "GetPerformanceAudioReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceAudioReq",
+      "required": [
+        "profileName",
+        "pin"
+      ]
+    },
+    "GetPerformanceAudioResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceAudioResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetPerformanceImgReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetPerformanceImgReq",
+      "required": [
+        "profileName",
+        "recordId"
+      ]
+    },
+    "GetPerformanceImgResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceImgResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetPerformanceMidiReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceMidiReq",
+      "required": [
+        "profileName",
+        "pin"
+      ]
+    },
+    "GetPerformanceMidiResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceMidiResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetPerformanceReportReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceReportReq",
+      "required": [
+        "profileName",
+        "pin"
+      ]
+    },
+    "GetPerformanceReportResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceReportResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetPerformanceSheetReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceSheetReq",
+      "required": [
+        "profileName",
+        "pin"
+      ]
+    },
+    "GetPerformanceSheetResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceSheetResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetPerformanceVedioReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetPerformanceVedioReq",
+      "required": [
+        "profileName",
+        "recordId"
+      ]
+    },
+    "GetPerformanceVedioResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceVedioResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetPerformanceWaterfallReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceWaterfallReq",
+      "required": [
+        "profileName",
+        "pin"
+      ]
+    },
+    "GetPerformanceWaterfallResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetPerformanceWaterfallResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetRecordReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "start": {
+          "type": "string"
+        },
+        "end": {
+          "type": "string"
+        }
+      },
+      "title": "GetRecordReq",
+      "required": [
+        "profileName"
+      ]
+    },
+    "GetRecordResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RecordInfo"
+          }
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetRecordResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
+    "GetVedioUrlReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetVedioUrlReq",
+      "required": [
+        "profileName",
+        "recordId"
+      ]
+    },
+    "GetVedioUrlResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "$ref": "#/definitions/FileDetails"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetVedioUrlResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
+    "Record": {
+      "type": "object",
+      "properties": {
+        "subUserId": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "composition": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "video": {
+          "type": "string"
+        },
+        "audio": {
+          "type": "string"
+        },
+        "midi": {
+          "type": "string"
+        },
+        "sheet": {
+          "type": "string"
+        },
+        "diff": {
+          "type": "string"
+        },
+        "waterfall": {
+          "type": "string"
+        },
+        "report": {
+          "type": "string"
+        },
+        "isRef": {
+          "type": "string"
+        }
+      },
+      "title": "Record",
+      "required": [
+        "subUserId",
+        "timestamp",
+        "composition",
+        "reference",
+        "image",
+        "video",
+        "audio",
+        "midi",
+        "sheet",
+        "diff",
+        "waterfall",
+        "report",
+        "isRef"
+      ]
+    },
+    "RecordInfo": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "composition": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        }
+      },
+      "title": "RecordInfo",
+      "required": [
+        "profileName",
+        "composition",
+        "reference"
+      ]
+    },
+    "SetAsReferenceReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "SetAsReferenceReq",
+      "required": [
+        "profileName",
+        "recordId"
+      ]
+    },
+    "SetAsReferenceResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "SetAsReferenceResp",
+      "required": [
+        "code",
+        "msg"
+      ]
+    },
+    "UploadAudioSuccessReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "fileName": {
+          "type": "string"
+        }
+      },
+      "title": "UploadAudioSuccessReq",
+      "required": [
+        "profileName",
+        "recordId",
+        "fileName"
+      ]
+    },
+    "UploadAudioSuccessResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "profileName": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UploadAudioSuccessResp",
+      "required": [
+        "code",
+        "profileName",
+        "msg"
+      ]
+    },
+    "UploadVideoSuccessReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "fileName": {
+          "type": "string"
+        }
+      },
+      "title": "UploadVideoSuccessReq",
+      "required": [
+        "profileName",
+        "recordId",
+        "fileName"
+      ]
+    },
+    "UploadVideoSuccessResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UploadVideoSuccessResp",
+      "required": [
+        "code",
+        "msg"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+syntax = "v1"
+
+info (
+	title:   "media"
+	desc:    "media"
+	author:  "xuesong huang"
+	version: "v1"
+)
+
+import (
+	"media/record.api"
+)
+
+// goctl api go -api *.api -dir ../  -style=goZero
+// goctl api plugin -plugin goctl-swagger="swagger -filename media.json -host localhost:8889 -basepath /" -api media.api -dir ./doc
+//============================> usercenter v1 <============================
+@server (
+	prefix:     api/media/record
+	group:      media
+	middleware: UserAuthMiddleware
+)
+service media {
+	@doc "create new performance record"
+	@handler createRecord
+	post /createRecord (CreateRecordReq) returns (CreateRecordResp)
+
+	@doc "delete performance record"
+	@handler deleteRecord
+	post /deleteRecord (DeleteRecordReq) returns (DeleteRecordResp)
+
+	@doc "get performance record"
+	@handler getRecord
+	post /getRecord (GetRecordReq) returns (GetRecordResp)
+
+	@doc "set a performance record as reference"
+	@handler setAsReference
+	post /setAsReference (SetAsReferenceReq) returns (SetAsReferenceResp)
+
+	@doc "get vedio presigned url"
+	@handler getVedioUrl
+	post /getVedioUrl (GetVedioUrlReq) returns (GetVedioUrlResp)
+
+	@doc "upload video success"
+	@handler uploadVideoSuccess
+	post /uploadVideoSuccess (UploadVideoSuccessReq) returns (UploadVideoSuccessResp)
+
+	@doc "get audio presigned url"
+	@handler getAudioUrl
+	post /getAudioUrl (GetAudioUrlReq) returns (GetAudioUrlResp)
+
+	@doc "upload audio success"
+	@handler uploadAudioSuccess
+	post /uploadAudioSuccess (UploadAudioSuccessReq) returns (UploadAudioSuccessResp)
+
+	@doc "get performance thumbnail"
+	@handler getPerformanceImg
+	post /getPerformanceImg (GetPerformanceImgReq) returns (GetPerformanceImgResp)
+
+	@doc "get performance vedio"
+	@handler getPerformanceVedio
+	post /getPerformanceVedio (GetPerformanceVedioReq) returns (GetPerformanceVedioResp)
+
+	@doc "get performance audio"
+	@handler getPerformanceAudio
+	post /getPerformanceAudio (GetPerformanceAudioReq) returns (GetPerformanceAudioResp)
+
+	@doc "get performance midi"
+	@handler getPerformanceMidi
+	post /getPerformanceMidi (GetPerformanceMidiReq) returns (GetPerformanceMidiResp)
+
+	@doc "get performance sheet"
+	@handler getPerformanceSheet
+	post /getPerformanceSheet (GetPerformanceSheetReq) returns (GetPerformanceSheetResp)
+
+	@doc "get performance waterfall"
+	@handler getPerformanceWaterfall
+	post /getPerformanceWaterfall (GetPerformanceWaterfallReq) returns (GetPerformanceWaterfallResp)
+
+	@doc "get performance report"
+	@handler getPerformanceReport
+	post /getPerformanceReport (GetPerformanceReportReq) returns (GetPerformanceReportResp)
+}
+
