@@ -1,0 +1,245 @@
+{
+  "info": {
+    "name": "usercenter",
+    "description": "usercenter",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "/api/user/createSubUser",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"pin\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8888/api/user/createSubUser",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "createSubUser"]
+        },
+        "description": "create sub-user"
+      },
+      "response": []
+    },
+    {
+      "name": "/api/user/deleteSubUserByName",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"pin\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8888/api/user/deleteSubUserByName",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "deleteSubUserByName"]
+        },
+        "description": "delete sub-user by name"
+      },
+      "response": []
+    },
+    {
+      "name": "/api/user/getAvatarUploadUrl",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "profileName",
+            "value": "",
+            "description": ""
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/api/user/getAvatarUploadUrl",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "getAvatarUploadUrl"]
+        },
+        "description": "get avatar uploda url"
+      },
+      "response": []
+    },
+    {
+      "name": "/api/user/getSubUserByName",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "profileName",
+            "value": "",
+            "description": ""
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/api/user/getSubUserByName",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "getSubUserByName"]
+        },
+        "description": "get sub-user by name"
+      },
+      "response": []
+    },
+    {
+      "name": "/api/user/getSubUsers",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8888/api/user/getSubUsers",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "getSubUsers"]
+        },
+        "description": "get the list of sub-users"
+      },
+      "response": []
+    },
+    {
+      "name": "/api/user/setTokens",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"idToken\": \"\",\n  \"accessToken\": \"\"\n,\n  \"refreshToken\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8888/api/user/setTokens",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "setTokens"]
+        },
+        "description": "setTokens"
+      },
+      "response": []
+    },
+    {
+      "name": "/api/user/refreshTokens",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:8888/api/user/refreshTokens",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "refreshTokens"]
+        },
+        "description": "refreshTokens"
+      },
+      "response": []
+    },
+    {
+      "name": "/api/user/updateAvatarSuccess",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"fileName\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8888/api/user/updateAvatarSuccess",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "updateAvatarSuccess"]
+        },
+        "description": "update avatar"
+      },
+      "response": []
+    },
+    {
+      "name": "/api/user/updateSubUserAttr",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\"}"
+        },
+        "url": {
+          "raw": "http://localhost:8888/api/user/updateSubUserAttr",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "updateSubUserAttr"]
+        },
+        "description": "update sub-user attr, optional attr: gender, dob, level, instrument, badge"
+      },
+      "response": []
+    },
+    {
+      "name": "/api/user/verifypin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"pin\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8888/api/user/verifypin",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "verifypin"]
+        },
+        "description": "verify pin code"
+      },
+      "response": []
+    }
+  ]
+}

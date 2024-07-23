@@ -1,0 +1,218 @@
+syntax = "v1"
+
+info(
+    title: "media"
+    desc: "media"
+    author: "xuesong huang"
+)
+
+type Record {
+    SubUserId       string  `json:"subUserId"`
+    Timestamp       int64   `json:"timestamp"`
+    Composition     string  `json:"composition"`
+    Reference       string  `json:"reference"`
+    Image           string  `json:"image"`
+    Video           string  `json:"video"`
+    Audio           string  `json:"audio"`
+    Midi            string  `json:"midi"`
+    Sheet           string  `json:"sheet"`
+    Diff            string  `json:"diff"`
+    Waterfall       string  `json:"waterfall"`
+    Report          string  `json:"report"`
+    IsRef           string  `json:"isRef"`
+}
+
+type (
+    CreateRecordReq {
+        ProfileName     string  `json:"profileName"`
+        Reference       string  `json:"reference"`
+    }
+
+    CreateRecordResp {
+        Code        int64    `json:"code"`
+        RecordId    int64    `json:"recordId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    DeleteRecordReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+    DeleteRecordResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    RecordInfo {
+        RecordId        string  `json:"profileName"`
+        Composition     string  `json:"composition"`
+        Reference       string  `json:"reference"`
+    }
+    GetRecordReq {
+        ProfileName     string  `json:"profileName"`
+        Limit           int     `json:"limit,optional"`
+        Offset          int     `json:"offset,optional"`
+        Start           string  `json:"start,optional"`
+        End             string  `json:"end,optional"`
+    }
+    GetRecordResp {
+        Code    int             `json:"code"`
+        Data    []RecordInfo    `json:"data"`
+        Msg     string          `json:"msg"`
+    }
+)
+
+type (
+    SetAsReferenceReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+    SetAsReferenceResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type FileDetails {
+    PresignedURL  string    `json:"presignedurl"`
+    FileName      string    `json:"fileName"`
+}
+
+type (
+    GetVedioUrlReq {
+        ProfileName string   `json:"profileName"`
+        RecordId    int64    `json:"recordId"`
+    }
+
+    GetVedioUrlResp {
+        Code    int         `json:"code"`
+        Data    FileDetails `json:"data"`
+        Msg     string      `json:"msg"`
+    }
+)
+
+type (
+    UploadVideoSuccessReq {
+        ProfileName string   `json:"profileName"`
+        RecordId    int64    `json:"recordId"`
+        FileName    string   `json:"fileName"`
+    }
+    UploadVideoSuccessResp {
+        Code    int        `json:"code"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetAudioUrlReq {
+        ProfileName string   `json:"profileName"`
+        RecordId    int64    `json:"recordId"`
+    }
+
+    GetAudioUrlResp {
+        Code    int         `json:"code"`
+        Data    FileDetails `json:"data"`
+        Msg     string      `json:"msg"`
+    }
+)
+
+type (
+    UploadAudioSuccessReq {
+        ProfileName string   `json:"profileName"`
+        RecordId    int64    `json:"recordId"`
+        FileName    string   `json:"fileName"`
+    }
+    UploadAudioSuccessResp {
+        Code    int        `json:"code"`
+        ProfileName string   `json:"profileName"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetPerformanceImgReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+    GetPerformanceImgResp {
+        Code    int        `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetPerformanceVedioReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+    GetPerformanceVedioResp {
+        Code    int        `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetPerformanceAudioReq {
+        ProfileName     string  `json:"profileName"`
+        Pin             string  `json:"pin"`
+    }
+    GetPerformanceAudioResp {
+        Code    int        `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetPerformanceMidiReq {
+        ProfileName     string  `json:"profileName"`
+        Pin             string  `json:"pin"`
+    }
+    GetPerformanceMidiResp {
+        Code    int        `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetPerformanceSheetReq {
+        ProfileName     string  `json:"profileName"`
+        Pin             string  `json:"pin"`
+    }
+    GetPerformanceSheetResp {
+        Code    int        `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetPerformanceWaterfallReq {
+        ProfileName     string  `json:"profileName"`
+        Pin             string  `json:"pin"`
+    }
+    GetPerformanceWaterfallResp {
+        Code    int        `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetPerformanceReportReq {
+        ProfileName     string  `json:"profileName"`
+        Pin             string  `json:"pin"`
+    }
+    GetPerformanceReportResp {
+        Code    int        `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
