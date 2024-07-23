@@ -1,7 +1,7 @@
 package config
 
 type S3Conf struct {
-	AvatarBucket S3Bucket `json:"AvatarBucket"`
+	ThumbnailBucket S3Bucket `json:"ThumbnailBucket"`
 }
 
 type S3Bucket struct {

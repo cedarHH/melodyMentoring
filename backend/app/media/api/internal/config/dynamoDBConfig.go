@@ -1,7 +1,7 @@
 package config
 
 type DynamoDBConf struct {
-	UserTable DynamoDBTable `json:"UserTable"`
+	RecordTable DynamoDBTable `json:"RecordTable"`
 }
 
 type DynamoDBTable struct {

@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	common "github.com/cedarHH/mygo/common/middleware"
 
 	"github.com/cedarHH/mygo/app/media/api/internal/config"
 	"github.com/cedarHH/mygo/app/media/api/internal/handler"
@@ -20,7 +21,7 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
-	server := rest.MustNewServer(c.RestConf)
+	server := rest.MustNewServer(c.RestConf, common.WithCustomCORS())
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)
