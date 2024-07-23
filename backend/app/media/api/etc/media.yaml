@@ -11,12 +11,12 @@ CognitoConf:
 
 # DynamoDBConf
 DynamoDBConf:
-  UserTable:
+  RecordTable:
     Region: ap-southeast-2
     TableName: User
 
 # S3Conf
 S3Conf:
-  AvatarBucket:
+  ThumbnailBucket:
     Region: ap-southeast-2
     Bucket: mygo-avatars
