@@ -94,7 +94,8 @@ func (m *userModel) UpdateAttributes(ctx context.Context, uuid, profileName stri
 }
 
 func (m *userModel) QueryByPartitionKey(ctx context.Context, uuid string) ([]*User, error) {
-	items, err := m.baseModel.QueryByPartitionKey(ctx, "Uuid", uuid)
+	items, err := m.baseModel.QueryByPartitionKey(
+		ctx, "Uuid", uuid, "ProfileName", nil, nil, -1, -1)
 	if err != nil {
 		return nil, err
 	}
