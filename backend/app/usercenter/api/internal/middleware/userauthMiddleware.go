@@ -31,7 +31,6 @@ func NewUserAuthMiddleware(cognitoConf config.CognitoConf) *UserAuthMiddleware {
 func (m *UserAuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return m.jwtMiddleware.Handle(func(w http.ResponseWriter, r *http.Request) {
 
-		// Passthrough to next handler if need
 		next(w, r)
 	})
 }

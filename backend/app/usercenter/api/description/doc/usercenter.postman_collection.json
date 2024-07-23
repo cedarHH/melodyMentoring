@@ -9,10 +9,16 @@
       "name": "/api/user/createSubUser",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": ""
+          "raw": "{\n  \"profileName\": \"\",\n  \"pin\": \"\"\n}"
         },
         "url": {
           "raw": "http://localhost:8888/api/user/createSubUser",
@@ -48,6 +54,28 @@
           "path": ["api", "user", "deleteSubUserByName"]
         },
         "description": "delete sub-user by name"
+      },
+      "response": []
+    },
+    {
+      "name": "/api/user/getAvatar",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "profileName",
+            "value": "",
+            "description": ""
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/api/user/getAvatar",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8888",
+          "path": ["api", "user", "getAvatar"]
+        },
+        "description": "get avatar download url"
       },
       "response": []
     },
@@ -115,10 +143,16 @@
       "name": "/api/user/setTokens",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": ""
+          "raw": "{\n  \"idToken\": \"\",\n  \"accessToken\": \"\",\n  \"refreshToken\": \"\"\n}"
         },
         "url": {
           "raw": "http://localhost:8888/api/user/setTokens",
@@ -155,10 +189,16 @@
       "name": "/api/user/updateAvatarSuccess",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": ""
+          "raw": "{\n  \"profileName\": \"\",\n  \"fileName\": \"\"\n}"
         },
         "url": {
           "raw": "http://localhost:8888/api/user/updateAvatarSuccess",
@@ -175,10 +215,16 @@
       "name": "/api/user/updateSubUserAttr",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": ""
+          "raw": "{\n  \"profileName\": \"\"}"
         },
         "url": {
           "raw": "http://localhost:8888/api/user/updateSubUserAttr",
@@ -187,7 +233,7 @@
           "port": "8888",
           "path": ["api", "user", "updateSubUserAttr"]
         },
-        "description": "update sub-user attr"
+        "description": "update sub-user attr, optional attr: gender, dob, level, instrument, badge"
       },
       "response": []
     },
@@ -195,10 +241,16 @@
       "name": "/api/user/verifypin",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": ""
+          "raw": "{\n  \"profileName\": \"\",\n  \"pin\": \"\"\n}"
         },
         "url": {
           "raw": "http://localhost:8888/api/user/verifypin",
