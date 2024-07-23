@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"github.com/MicahParks/keyfunc/v2"
-	"github.com/cedarHH/mygo/app/usercenter/api/internal/config"
+	"github.com/cedarHH/mygo/app/media/api/internal/config"
 	common "github.com/cedarHH/mygo/common/middleware"
 	"net/http"
 )
