@@ -842,7 +842,10 @@
       },
       "title": "GetRecordReq",
       "required": [
-        "profileName"
+        "profileName",
+        "limit",
+        "start",
+        "end"
       ]
     },
     "GetRecordResp": {

@@ -117,10 +117,10 @@ type GetPerformanceWaterfallResp struct {
 
 type GetRecordReq struct {
 	ProfileName string `json:"profileName"`
-	Limit       int64  `json:"limit,optional"`
+	Limit       int64  `json:"limit"`
 	Offset      int64  `json:"offset,optional"`
-	Start       int64  `json:"start,optional"`
-	End         int64  `json:"end,optional"`
+	Start       int64  `json:"start"`
+	End         int64  `json:"end"`
 }
 
 type GetRecordResp struct {

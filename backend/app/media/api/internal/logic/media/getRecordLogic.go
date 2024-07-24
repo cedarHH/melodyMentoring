@@ -32,7 +32,7 @@ func (l *GetRecordLogic) GetRecord(req *types.GetRecordReq) (
 		"%s_%s",
 		l.ctx.Value("uuid").(string),
 		req.ProfileName)
-
+	fmt.Printf("%+v", req)
 	records, err := l.svcCtx.RecordModel.QueryByPartitionKey(
 		l.ctx,
 		subUserId,

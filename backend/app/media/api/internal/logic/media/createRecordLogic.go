@@ -40,7 +40,7 @@ func (l *CreateRecordLogic) CreateRecord(
 		SubUserId:   subUserId,
 		Timestamp:   recordId,
 		Composition: "",
-		Reference:   "",
+		Reference:   req.Reference,
 		Image:       "",
 		Video:       "",
 		Audio:       "",
