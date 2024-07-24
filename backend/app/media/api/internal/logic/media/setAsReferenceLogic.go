@@ -2,6 +2,7 @@ package media
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cedarHH/mygo/app/media/api/internal/svc"
 	"github.com/cedarHH/mygo/app/media/api/internal/types"
@@ -24,8 +25,24 @@ func NewSetAsReferenceLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Se
 	}
 }
 
-func (l *SetAsReferenceLogic) SetAsReference(req *types.SetAsReferenceReq) (resp *types.SetAsReferenceResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *SetAsReferenceLogic) SetAsReference(
+	req *types.SetAsReferenceReq) (resp *types.SetAsReferenceResp, err error) {
 
-	return
+	subUserId := fmt.Sprintf(
+		"%s_%s",
+		l.ctx.Value("uuid").(string),
+		req.ProfileName)
+	recordId := req.RecordId
+
+	updates := map[string]interface{}{
+		"IsRef": req.IsRef,
+	}
+	err = l.svcCtx.RecordModel.UpdateAttributes(l.ctx, subUserId, recordId, updates)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update record: %w", err)
+	}
+	return &types.SetAsReferenceResp{
+		Code: 0,
+		Msg:  "😥",
+	}, nil
 }

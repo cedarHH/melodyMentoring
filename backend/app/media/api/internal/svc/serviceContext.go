@@ -18,6 +18,12 @@ type ServiceContext struct {
 	UserAuthMiddleware rest.Middleware
 	RecordModel        dynamodb.RecordModel
 	ThumbnailModel     commonModel.IS3Model
+	AudioModel         commonModel.IS3Model
+	VideoModel         commonModel.IS3Model
+	MidiModel          commonModel.IS3Model
+	ReportModel        commonModel.IS3Model
+	SheetModel         commonModel.IS3Model
+	WaterfallModel     commonModel.IS3Model
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -36,11 +42,23 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	s3Client := AwsS3.NewFromConfig(s3Config)
 	presignClient := AwsS3.NewPresignClient(s3Client)
 	thumbnailModel := s3.NewThumbnailModel(s3Client, presignClient, c.S3Conf.ThumbnailBucket.Bucket)
+	audioModel := s3.NewAudioModel(s3Client, presignClient, c.S3Conf.AudioBucket.Bucket)
+	videoModel := s3.NewVideoModel(s3Client, presignClient, c.S3Conf.VideoBucket.Bucket)
+	midiModel := s3.NewVideoModel(s3Client, presignClient, c.S3Conf.MidiBucket.Bucket)
+	reportModel := s3.NewVideoModel(s3Client, presignClient, c.S3Conf.ReportBucket.Bucket)
+	sheetModel := s3.NewVideoModel(s3Client, presignClient, c.S3Conf.SheetBucket.Bucket)
+	waterfallModel := s3.NewVideoModel(s3Client, presignClient, c.S3Conf.WaterfallBucket.Bucket)
 
 	return &ServiceContext{
 		Config:             c,
 		UserAuthMiddleware: middleware.NewUserAuthMiddleware(c.CognitoConf).Handle,
 		RecordModel:        recordModel,
 		ThumbnailModel:     thumbnailModel,
+		AudioModel:         audioModel,
+		VideoModel:         videoModel,
+		MidiModel:          midiModel,
+		ReportModel:        reportModel,
+		SheetModel:         sheetModel,
+		WaterfallModel:     waterfallModel,
 	}
 }

@@ -45,5 +45,4 @@ func (l *GetSubUsersLogic) GetSubUsers() (resp *types.GetSubUsersResp, err error
 		Data: userList,
 		Msg:  "😋🤮",
 	}, nil
-	return
 }

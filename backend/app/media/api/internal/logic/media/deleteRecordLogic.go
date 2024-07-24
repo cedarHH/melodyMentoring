@@ -2,6 +2,7 @@ package media
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cedarHH/mygo/app/media/api/internal/svc"
 	"github.com/cedarHH/mygo/app/media/api/internal/types"
@@ -24,8 +25,22 @@ func NewDeleteRecordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Dele
 	}
 }
 
-func (l *DeleteRecordLogic) DeleteRecord(req *types.DeleteRecordReq) (resp *types.DeleteRecordResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *DeleteRecordLogic) DeleteRecord(
+	req *types.DeleteRecordReq) (resp *types.DeleteRecordResp, err error) {
 
-	return
+	subUserId := fmt.Sprintf(
+		"%s_%s",
+		l.ctx.Value("uuid").(string),
+		req.ProfileName)
+	recordId := req.RecordId
+
+	err = l.svcCtx.RecordModel.Delete(l.ctx, subUserId, recordId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to delete: %v", err)
+	}
+
+	return &types.DeleteRecordResp{
+		Code: 0,
+		Msg:  "Deleted successfully",
+	}, nil
 }

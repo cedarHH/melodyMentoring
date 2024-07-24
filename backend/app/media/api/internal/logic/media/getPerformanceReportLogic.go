@@ -2,6 +2,7 @@ package media
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cedarHH/mygo/app/media/api/internal/svc"
 	"github.com/cedarHH/mygo/app/media/api/internal/types"
@@ -24,8 +25,28 @@ func NewGetPerformanceReportLogic(ctx context.Context, svcCtx *svc.ServiceContex
 	}
 }
 
-func (l *GetPerformanceReportLogic) GetPerformanceReport(req *types.GetPerformanceReportReq) (resp *types.GetPerformanceReportResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *GetPerformanceReportLogic) GetPerformanceReport(
+	req *types.GetPerformanceReportReq) (resp *types.GetPerformanceReportResp, err error) {
 
-	return
+	subUserId := fmt.Sprintf(
+		"%s_%s",
+		l.ctx.Value("uuid").(string),
+		req.ProfileName)
+	recordId := req.RecordId
+
+	record, err := l.svcCtx.RecordModel.FindOne(l.ctx, subUserId, recordId)
+	if err != nil {
+		return nil, fmt.Errorf("record not found: %v", err)
+	}
+
+	presignedURL, err := l.svcCtx.ReportModel.GetPresignedDownloadURL(l.ctx, record.Report, 3600)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get presigned download URL: %w", err)
+	}
+
+	return &types.GetPerformanceReportResp{
+		Code:         0,
+		PresignedURL: presignedURL,
+		Msg:          "🍥",
+	}, nil
 }

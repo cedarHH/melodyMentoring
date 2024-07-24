@@ -137,8 +137,8 @@ func (m *BaseModel) QueryByPartitionKey(
 	sortKey string,
 	sortKeyStart interface{},
 	sortKeyEnd interface{},
-	offset int,
-	limit int) ([]map[string]types.AttributeValue, error) {
+	offset int64,
+	limit int64) ([]map[string]types.AttributeValue, error) {
 
 	var keyConditionExpression string
 	expressionAttributeValues := map[string]types.AttributeValue{
@@ -186,7 +186,7 @@ func (m *BaseModel) QueryByPartitionKey(
 				return nil, fmt.Errorf("failed to query items: %w", err)
 			}
 
-			offset -= len(result.Items)
+			offset -= int64(len(result.Items))
 			lastEvaluatedKey = result.LastEvaluatedKey
 
 			if len(result.Items) == 0 || len(lastEvaluatedKey) == 0 {
@@ -211,7 +211,7 @@ func (m *BaseModel) QueryByPartitionKey(
 			break
 		}
 
-		if limit != -1 && len(resultItems) >= limit {
+		if limit != -1 && int64(len(resultItems)) >= limit {
 			break
 		}
 
@@ -219,7 +219,7 @@ func (m *BaseModel) QueryByPartitionKey(
 		input.ExclusiveStartKey = lastEvaluatedKey
 	}
 
-	if limit != -1 && len(resultItems) > limit {
+	if limit != -1 && int64(len(resultItems)) > limit {
 		resultItems = resultItems[:limit]
 	}
 

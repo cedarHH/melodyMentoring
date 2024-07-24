@@ -11,23 +11,23 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetAudioUrlLogic struct {
+type GetVideoUrlLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-// get audio presigned url
-func NewGetAudioUrlLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetAudioUrlLogic {
-	return &GetAudioUrlLogic{
+// get video presigned url
+func NewGetVideoUrlLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetVideoUrlLogic {
+	return &GetVideoUrlLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *GetAudioUrlLogic) GetAudioUrl(
-	req *types.GetAudioUrlReq) (resp *types.GetAudioUrlResp, err error) {
+func (l *GetVideoUrlLogic) GetVideoUrl(
+	req *types.GetVideoUrlReq) (resp *types.GetVideoUrlResp, err error) {
 
 	subUserId := fmt.Sprintf(
 		"%s_%s",
@@ -35,12 +35,12 @@ func (l *GetAudioUrlLogic) GetAudioUrl(
 		req.ProfileName)
 	recordId := req.RecordId
 
-	fileType := ".mp3"
+	fileType := ".mp4"
 	fileName := subUserId + "_" + strconv.Itoa(int(recordId)) + fileType
 
-	presignedURL, err := l.svcCtx.AudioModel.GetPresignedUploadURL(l.ctx, fileName, 3600)
+	presignedURL, err := l.svcCtx.VideoModel.GetPresignedUploadURL(l.ctx, fileName, 3600)
 	if err != nil {
-		return &types.GetAudioUrlResp{
+		return &types.GetVideoUrlResp{
 			Code: 500,
 			Data: types.FileDetails{},
 			Msg:  "Failed to get presigned URL",
@@ -52,7 +52,7 @@ func (l *GetAudioUrlLogic) GetAudioUrl(
 		FileName:     fileName,
 	}
 
-	return &types.GetAudioUrlResp{
+	return &types.GetVideoUrlResp{
 		Code: 0,
 		Data: fileDetails,
 		Msg:  "",

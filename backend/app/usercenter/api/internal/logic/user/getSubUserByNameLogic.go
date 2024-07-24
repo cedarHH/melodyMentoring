@@ -54,5 +54,4 @@ func (l *GetSubUserByNameLogic) GetSubUserByName(
 		},
 		Msg: "Ciallo～(∠・ω< )⌒☆",
 	}, nil
-	return
 }
