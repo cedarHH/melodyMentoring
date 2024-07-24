@@ -8,19 +8,19 @@ import (
 )
 
 type Record struct {
-	SubUserId   string `json:"subUserId" dynamodbav:"subUserId"`
-	Timestamp   int64  `json:"timestamp" dynamodbav:"timestamp"`
-	Composition string `json:"composition" dynamodbav:"composition"`
-	Reference   string `json:"reference" dynamodbav:"reference"`
-	Image       string `json:"image" dynamodbav:"image"`
-	Video       string `json:"video" dynamodbav:"video"`
-	Audio       string `json:"audio" dynamodbav:"audio"`
-	Midi        string `json:"midi" dynamodbav:"midi"`
-	Sheet       string `json:"sheet" dynamodbav:"sheet"`
-	Diff        string `json:"diff" dynamodbav:"diff"`
-	Waterfall   string `json:"waterfall" dynamodbav:"waterfall"`
-	Report      string `json:"report" dynamodbav:"report"`
-	IsRef       bool   `json:"isRef" dynamodbav:"isRef"`
+	SubUserId   string `json:"subUserId" dynamodbav:"SubUserId"`
+	Timestamp   int64  `json:"timestamp" dynamodbav:"Timestamp"`
+	Composition string `json:"composition" dynamodbav:"Composition"`
+	Reference   string `json:"reference" dynamodbav:"Reference"`
+	Image       string `json:"image" dynamodbav:"Image"`
+	Video       string `json:"video" dynamodbav:"Video"`
+	Audio       string `json:"audio" dynamodbav:"Audio"`
+	Midi        string `json:"midi" dynamodbav:"Midi"`
+	Sheet       string `json:"sheet" dynamodbav:"Sheet"`
+	Diff        string `json:"diff" dynamodbav:"Diff"`
+	Waterfall   string `json:"waterfall" dynamodbav:"Waterfall"`
+	Report      string `json:"report" dynamodbav:"Report"`
+	IsRef       bool   `json:"isRef" dynamodbav:"IsRef"`
 }
 
 type RecordModel interface {
