@@ -2,6 +2,9 @@ package media
 
 import (
 	"context"
+	"fmt"
+	"github.com/cedarHH/mygo/app/media/model/dynamodb"
+	"time"
 
 	"github.com/cedarHH/mygo/app/media/api/internal/svc"
 	"github.com/cedarHH/mygo/app/media/api/internal/types"
@@ -15,7 +18,7 @@ type CreateRecordLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// create new performance record
+// NewCreateRecordLogic create new performance record
 func NewCreateRecordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateRecordLogic {
 	return &CreateRecordLogic{
 		Logger: logx.WithContext(ctx),
@@ -24,8 +27,38 @@ func NewCreateRecordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Crea
 	}
 }
 
-func (l *CreateRecordLogic) CreateRecord(req *types.CreateRecordReq) (resp *types.CreateRecordResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *CreateRecordLogic) CreateRecord(
+	req *types.CreateRecordReq) (resp *types.CreateRecordResp, err error) {
 
-	return
+	subUserId := fmt.Sprintf(
+		"%s_%s",
+		l.ctx.Value("uuid").(string),
+		req.ProfileName)
+	recordId := time.Now().Unix()
+
+	record := &dynamodb.Record{
+		SubUserId:   subUserId,
+		Timestamp:   recordId,
+		Composition: "",
+		Reference:   req.Reference,
+		Image:       "",
+		Video:       "",
+		Audio:       "",
+		Midi:        "",
+		Sheet:       "",
+		Diff:        "",
+		Waterfall:   "",
+		Report:      "",
+		IsRef:       false,
+	}
+
+	err = l.svcCtx.RecordModel.Insert(l.ctx, record)
+	if err != nil {
+		return nil, err
+	}
+	return &types.CreateRecordResp{
+		Code:     0,
+		RecordId: recordId,
+		Msg:      "Ciallo～(∠・ω< )⌒☆",
+	}, nil
 }

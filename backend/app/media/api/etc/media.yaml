@@ -1,6 +1,6 @@
 Name: media
 Host: 0.0.0.0
-Port: 8888
+Port: 8889
 
 #CognitoConf
 CognitoConf:
@@ -13,10 +13,28 @@ CognitoConf:
 DynamoDBConf:
   RecordTable:
     Region: ap-southeast-2
-    TableName: User
+    TableName: Record
 
 # S3Conf
 S3Conf:
   ThumbnailBucket:
     Region: ap-southeast-2
     Bucket: mygo-avatars
+  VideoBucket:
+    Region: ap-southeast-2
+    Bucket: mygo-video
+  AudioBucket:
+    Region: ap-southeast-2
+    Bucket: mygo-audio
+  MidiBucket:
+    Region: ap-southeast-2
+    Bucket: mygo-midi
+  ReportBucket:
+    Region: ap-southeast-2
+    Bucket: mygo-report
+  SheetBucket:
+    Region: ap-southeast-2
+    Bucket: mygo-sheet
+  WaterfallBucket:
+    Region: ap-southeast-2
+    Bucket: mygo-waterfall

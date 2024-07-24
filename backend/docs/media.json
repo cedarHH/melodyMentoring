@@ -234,15 +234,15 @@
         ]
       }
     },
-    "/api/media/record/getPerformanceVideo": {
+    "/api/media/record/getPerformanceVedio": {
       "post": {
-        "summary": "get performance video",
-        "operationId": "getPerformanceVideo",
+        "summary": "get performance vedio",
+        "operationId": "getPerformanceVedio",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/GetPerformanceVideoResp"
+              "$ref": "#/definitions/GetPerformanceVedioResp"
             }
           }
         },
@@ -252,7 +252,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GetPerformanceVideoReq"
+              "$ref": "#/definitions/GetPerformanceVedioReq"
             }
           }
         ],
@@ -315,15 +315,15 @@
         ]
       }
     },
-    "/api/media/record/getVideoUrl": {
+    "/api/media/record/getVedioUrl": {
       "post": {
-        "summary": "get video presigned url",
-        "operationId": "getVideoUrl",
+        "summary": "get vedio presigned url",
+        "operationId": "getVedioUrl",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/GetVideoUrlResp"
+              "$ref": "#/definitions/GetVedioUrlResp"
             }
           }
         },
@@ -333,7 +333,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GetVideoUrlReq"
+              "$ref": "#/definitions/GetVedioUrlReq"
             }
           }
         ],
@@ -485,7 +485,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "msg": {
           "type": "string"
@@ -535,7 +535,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "data": {
           "$ref": "#/definitions/FileDetails"
@@ -557,15 +557,14 @@
         "profileName": {
           "type": "string"
         },
-        "recordId": {
-          "type": "integer",
-          "format": "int64"
+        "pin": {
+          "type": "string"
         }
       },
       "title": "GetPerformanceAudioReq",
       "required": [
         "profileName",
-        "recordId"
+        "pin"
       ]
     },
     "GetPerformanceAudioResp": {
@@ -573,7 +572,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "presignedurl": {
           "type": "string"
@@ -611,7 +610,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "presignedurl": {
           "type": "string"
@@ -633,15 +632,14 @@
         "profileName": {
           "type": "string"
         },
-        "recordId": {
-          "type": "integer",
-          "format": "int64"
+        "pin": {
+          "type": "string"
         }
       },
       "title": "GetPerformanceMidiReq",
       "required": [
         "profileName",
-        "recordId"
+        "pin"
       ]
     },
     "GetPerformanceMidiResp": {
@@ -649,7 +647,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "presignedurl": {
           "type": "string"
@@ -671,15 +669,14 @@
         "profileName": {
           "type": "string"
         },
-        "recordId": {
-          "type": "integer",
-          "format": "int64"
+        "pin": {
+          "type": "string"
         }
       },
       "title": "GetPerformanceReportReq",
       "required": [
         "profileName",
-        "recordId"
+        "pin"
       ]
     },
     "GetPerformanceReportResp": {
@@ -687,7 +684,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "presignedurl": {
           "type": "string"
@@ -709,15 +706,14 @@
         "profileName": {
           "type": "string"
         },
-        "recordId": {
-          "type": "integer",
-          "format": "int64"
+        "pin": {
+          "type": "string"
         }
       },
       "title": "GetPerformanceSheetReq",
       "required": [
         "profileName",
-        "recordId"
+        "pin"
       ]
     },
     "GetPerformanceSheetResp": {
@@ -725,7 +721,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "presignedurl": {
           "type": "string"
@@ -741,7 +737,7 @@
         "msg"
       ]
     },
-    "GetPerformanceVideoReq": {
+    "GetPerformanceVedioReq": {
       "type": "object",
       "properties": {
         "profileName": {
@@ -752,18 +748,18 @@
           "format": "int64"
         }
       },
-      "title": "GetPerformanceVideoReq",
+      "title": "GetPerformanceVedioReq",
       "required": [
         "profileName",
         "recordId"
       ]
     },
-    "GetPerformanceVideoResp": {
+    "GetPerformanceVedioResp": {
       "type": "object",
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "presignedurl": {
           "type": "string"
@@ -772,7 +768,7 @@
           "type": "string"
         }
       },
-      "title": "GetPerformanceVideoResp",
+      "title": "GetPerformanceVedioResp",
       "required": [
         "code",
         "presignedurl",
@@ -785,15 +781,14 @@
         "profileName": {
           "type": "string"
         },
-        "recordId": {
-          "type": "integer",
-          "format": "int64"
+        "pin": {
+          "type": "string"
         }
       },
       "title": "GetPerformanceWaterfallReq",
       "required": [
         "profileName",
-        "recordId"
+        "pin"
       ]
     },
     "GetPerformanceWaterfallResp": {
@@ -801,7 +796,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "presignedurl": {
           "type": "string"
@@ -825,27 +820,22 @@
         },
         "limit": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "offset": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "start": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         },
         "end": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         }
       },
       "title": "GetRecordReq",
       "required": [
-        "profileName",
-        "limit",
-        "start",
-        "end"
+        "profileName"
       ]
     },
     "GetRecordResp": {
@@ -853,7 +843,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "data": {
           "type": "array",
@@ -872,7 +862,7 @@
         "msg"
       ]
     },
-    "GetVideoUrlReq": {
+    "GetVedioUrlReq": {
       "type": "object",
       "properties": {
         "profileName": {
@@ -883,18 +873,18 @@
           "format": "int64"
         }
       },
-      "title": "GetVideoUrlReq",
+      "title": "GetVedioUrlReq",
       "required": [
         "profileName",
         "recordId"
       ]
     },
-    "GetVideoUrlResp": {
+    "GetVedioUrlResp": {
       "type": "object",
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "data": {
           "$ref": "#/definitions/FileDetails"
@@ -903,7 +893,7 @@
           "type": "string"
         }
       },
-      "title": "GetVideoUrlResp",
+      "title": "GetVedioUrlResp",
       "required": [
         "code",
         "data",
@@ -951,8 +941,7 @@
           "type": "string"
         },
         "isRef": {
-          "type": "boolean",
-          "format": "boolean"
+          "type": "string"
         }
       },
       "title": "Record",
@@ -975,9 +964,8 @@
     "RecordInfo": {
       "type": "object",
       "properties": {
-        "RecordId": {
-          "type": "integer",
-          "format": "int64"
+        "profileName": {
+          "type": "string"
         },
         "composition": {
           "type": "string"
@@ -988,7 +976,7 @@
       },
       "title": "RecordInfo",
       "required": [
-        "RecordId",
+        "profileName",
         "composition",
         "reference"
       ]
@@ -1002,17 +990,12 @@
         "recordId": {
           "type": "integer",
           "format": "int64"
-        },
-        "isRef": {
-          "type": "boolean",
-          "format": "boolean"
         }
       },
       "title": "SetAsReferenceReq",
       "required": [
         "profileName",
-        "recordId",
-        "isRef"
+        "recordId"
       ]
     },
     "SetAsReferenceResp": {
@@ -1020,7 +1003,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "msg": {
           "type": "string"
@@ -1058,7 +1041,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "profileName": {
           "type": "string"
@@ -1100,7 +1083,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "msg": {
           "type": "string"

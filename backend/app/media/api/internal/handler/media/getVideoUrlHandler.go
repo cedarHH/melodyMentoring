@@ -9,17 +9,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-// get vedio presigned url
-func GetVedioUrlHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// get video presigned url
+func GetVideoUrlHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GetVedioUrlReq
+		var req types.GetVideoUrlReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := media.NewGetVedioUrlLogic(r.Context(), svcCtx)
-		resp, err := l.GetVedioUrl(&req)
+		l := media.NewGetVideoUrlLogic(r.Context(), svcCtx)
+		resp, err := l.GetVideoUrl(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

@@ -8,19 +8,19 @@ import (
 )
 
 type Record struct {
-	SubUserId   string `json:"subUserId"`
-	Timestamp   int64  `json:"timestamp"`
-	Composition string `json:"composition"`
-	Reference   string `json:"reference"`
-	Image       string `json:"image"`
-	Video       string `json:"video"`
-	Audio       string `json:"audio"`
-	Midi        string `json:"midi"`
-	Sheet       string `json:"sheet"`
-	Diff        string `json:"diff"`
-	Waterfall   string `json:"waterfall"`
-	Report      string `json:"report"`
-	IsRef       string `json:"isRef"`
+	SubUserId   string `json:"subUserId" dynamodbav:"SubUserId"`
+	Timestamp   int64  `json:"timestamp" dynamodbav:"Timestamp"`
+	Composition string `json:"composition" dynamodbav:"Composition"`
+	Reference   string `json:"reference" dynamodbav:"Reference"`
+	Image       string `json:"image" dynamodbav:"Image"`
+	Video       string `json:"video" dynamodbav:"Video"`
+	Audio       string `json:"audio" dynamodbav:"Audio"`
+	Midi        string `json:"midi" dynamodbav:"Midi"`
+	Sheet       string `json:"sheet" dynamodbav:"Sheet"`
+	Diff        string `json:"diff" dynamodbav:"Diff"`
+	Waterfall   string `json:"waterfall" dynamodbav:"Waterfall"`
+	Report      string `json:"report" dynamodbav:"Report"`
+	IsRef       bool   `json:"isRef" dynamodbav:"IsRef"`
 }
 
 type RecordModel interface {
@@ -29,7 +29,7 @@ type RecordModel interface {
 	Update(ctx context.Context, record *Record) error
 	Delete(ctx context.Context, subUserId string, timestamp int64) error
 	UpdateAttributes(ctx context.Context, subUserId string, timestamp int64, updates map[string]interface{}) error
-	QueryByPartitionKey(ctx context.Context, subUserId string, sortKeyStart, sortKeyEnd int64, offset, limit int) ([]*Record, error)
+	QueryByPartitionKey(ctx context.Context, subUserId string, sortKeyStart, sortKeyEnd, offset, limit int64) ([]*Record, error)
 }
 
 type recordModel struct {
@@ -89,8 +89,23 @@ func (m *recordModel) UpdateAttributes(ctx context.Context, subUserId string, ti
 	return m.baseModel.UpdateAttributes(ctx, key, updates)
 }
 
-func (m *recordModel) QueryByPartitionKey(ctx context.Context, subUserId string, sortKeyStart, sortKeyEnd int64, offset, limit int) ([]*Record, error) {
-	items, err := m.baseModel.QueryByPartitionKey(ctx, "SubUserId", subUserId, "Timestamp", sortKeyStart, sortKeyEnd, offset, limit)
+func (m *recordModel) QueryByPartitionKey(
+	ctx context.Context, subUserId string, sortKeyStart, sortKeyEnd, offset, limit int64) ([]*Record, error) {
+
+	start := func() interface{} {
+		if sortKeyStart == -1 {
+			return nil
+		}
+		return sortKeyStart
+	}()
+
+	end := func() interface{} {
+		if sortKeyEnd == -1 {
+			return nil
+		}
+		return sortKeyEnd
+	}()
+	items, err := m.baseModel.QueryByPartitionKey(ctx, "SubUserId", subUserId, "Timestamp", start, end, offset, limit)
 	if err != nil {
 		return nil, err
 	}

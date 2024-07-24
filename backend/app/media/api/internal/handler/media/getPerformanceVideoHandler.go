@@ -9,17 +9,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-// get performance vedio
-func GetPerformanceVedioHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// get performance video
+func GetPerformanceVideoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GetPerformanceVedioReq
+		var req types.GetPerformanceVideoReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := media.NewGetPerformanceVedioLogic(r.Context(), svcCtx)
-		resp, err := l.GetPerformanceVedio(&req)
+		l := media.NewGetPerformanceVideoLogic(r.Context(), svcCtx)
+		resp, err := l.GetPerformanceVideo(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

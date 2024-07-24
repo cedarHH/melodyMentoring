@@ -36,9 +36,9 @@ service media {
 	@handler setAsReference
 	post /setAsReference (SetAsReferenceReq) returns (SetAsReferenceResp)
 
-	@doc "get vedio presigned url"
-	@handler getVedioUrl
-	post /getVedioUrl (GetVedioUrlReq) returns (GetVedioUrlResp)
+	@doc "get video presigned url"
+	@handler getVideoUrl
+	post /getVideoUrl (GetVideoUrlReq) returns (GetVideoUrlResp)
 
 	@doc "upload video success"
 	@handler uploadVideoSuccess
@@ -56,9 +56,9 @@ service media {
 	@handler getPerformanceImg
 	post /getPerformanceImg (GetPerformanceImgReq) returns (GetPerformanceImgResp)
 
-	@doc "get performance vedio"
-	@handler getPerformanceVedio
-	post /getPerformanceVedio (GetPerformanceVedioReq) returns (GetPerformanceVedioResp)
+	@doc "get performance video"
+	@handler getPerformanceVideo
+	post /getPerformanceVideo (GetPerformanceVideoReq) returns (GetPerformanceVideoResp)
 
 	@doc "get performance audio"
 	@handler getPerformanceAudio

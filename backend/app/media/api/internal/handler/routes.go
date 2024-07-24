@@ -64,10 +64,10 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: media.GetPerformanceSheetHandler(serverCtx),
 				},
 				{
-					// get performance vedio
+					// get performance video
 					Method:  http.MethodPost,
-					Path:    "/getPerformanceVedio",
-					Handler: media.GetPerformanceVedioHandler(serverCtx),
+					Path:    "/getPerformanceVideo",
+					Handler: media.GetPerformanceVideoHandler(serverCtx),
 				},
 				{
 					// get performance waterfall
@@ -82,10 +82,10 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: media.GetRecordHandler(serverCtx),
 				},
 				{
-					// get vedio presigned url
+					// get video presigned url
 					Method:  http.MethodPost,
-					Path:    "/getVedioUrl",
-					Handler: media.GetVedioUrlHandler(serverCtx),
+					Path:    "/getVideoUrl",
+					Handler: media.GetVideoUrlHandler(serverCtx),
 				},
 				{
 					// set a performance record as reference

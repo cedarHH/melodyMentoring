@@ -19,7 +19,7 @@ type Record {
     Diff            string  `json:"diff"`
     Waterfall       string  `json:"waterfall"`
     Report          string  `json:"report"`
-    IsRef           string  `json:"isRef"`
+    IsRef           bool    `json:"isRef"`
 }
 
 type (
@@ -41,26 +41,26 @@ type (
         RecordId    int64   `json:"recordId"`
     }
     DeleteRecordResp {
-        Code    int        `json:"code"`
+        Code    int64      `json:"code"`
         Msg     string     `json:"msg"`
     }
 )
 
 type (
     RecordInfo {
-        RecordId        string  `json:"profileName"`
+        RecordId        int64   `json:"RecordId"`
         Composition     string  `json:"composition"`
         Reference       string  `json:"reference"`
     }
     GetRecordReq {
         ProfileName     string  `json:"profileName"`
-        Limit           int     `json:"limit,optional"`
-        Offset          int     `json:"offset,optional"`
-        Start           string  `json:"start,optional"`
-        End             string  `json:"end,optional"`
+        Limit           int64   `json:"limit"`
+        Offset          int64   `json:"offset,optional"`
+        Start           int64   `json:"start"`
+        End             int64   `json:"end"`
     }
     GetRecordResp {
-        Code    int             `json:"code"`
+        Code    int64           `json:"code"`
         Data    []RecordInfo    `json:"data"`
         Msg     string          `json:"msg"`
     }
@@ -70,9 +70,10 @@ type (
     SetAsReferenceReq {
         ProfileName string  `json:"profileName"`
         RecordId    int64   `json:"recordId"`
+        IsRef       bool    `json:"isRef"`
     }
     SetAsReferenceResp {
-        Code    int        `json:"code"`
+        Code    int64      `json:"code"`
         Msg     string     `json:"msg"`
     }
 )
@@ -83,13 +84,13 @@ type FileDetails {
 }
 
 type (
-    GetVedioUrlReq {
+    GetVideoUrlReq {
         ProfileName string   `json:"profileName"`
         RecordId    int64    `json:"recordId"`
     }
 
-    GetVedioUrlResp {
-        Code    int         `json:"code"`
+    GetVideoUrlResp {
+        Code    int64       `json:"code"`
         Data    FileDetails `json:"data"`
         Msg     string      `json:"msg"`
     }
@@ -102,7 +103,7 @@ type (
         FileName    string   `json:"fileName"`
     }
     UploadVideoSuccessResp {
-        Code    int        `json:"code"`
+        Code    int64      `json:"code"`
         Msg     string     `json:"msg"`
     }
 )
@@ -114,7 +115,7 @@ type (
     }
 
     GetAudioUrlResp {
-        Code    int         `json:"code"`
+        Code    int64       `json:"code"`
         Data    FileDetails `json:"data"`
         Msg     string      `json:"msg"`
     }
@@ -127,7 +128,7 @@ type (
         FileName    string   `json:"fileName"`
     }
     UploadAudioSuccessResp {
-        Code    int        `json:"code"`
+        Code    int64      `json:"code"`
         ProfileName string   `json:"profileName"`
         Msg     string     `json:"msg"`
     }
@@ -139,19 +140,19 @@ type (
         RecordId    int64   `json:"recordId"`
     }
     GetPerformanceImgResp {
-        Code    int        `json:"code"`
+        Code    int64      `json:"code"`
         PresignedURL  string    `json:"presignedurl"`
         Msg     string     `json:"msg"`
     }
 )
 
 type (
-    GetPerformanceVedioReq {
+    GetPerformanceVideoReq {
         ProfileName string  `json:"profileName"`
         RecordId    int64   `json:"recordId"`
     }
-    GetPerformanceVedioResp {
-        Code    int        `json:"code"`
+    GetPerformanceVideoResp {
+        Code    int64      `json:"code"`
         PresignedURL  string    `json:"presignedurl"`
         Msg     string     `json:"msg"`
     }
@@ -160,10 +161,10 @@ type (
 type (
     GetPerformanceAudioReq {
         ProfileName     string  `json:"profileName"`
-        Pin             string  `json:"pin"`
+        RecordId    int64   `json:"recordId"`
     }
     GetPerformanceAudioResp {
-        Code    int        `json:"code"`
+        Code    int64      `json:"code"`
         PresignedURL  string    `json:"presignedurl"`
         Msg     string     `json:"msg"`
     }
@@ -172,10 +173,10 @@ type (
 type (
     GetPerformanceMidiReq {
         ProfileName     string  `json:"profileName"`
-        Pin             string  `json:"pin"`
+        RecordId    int64   `json:"recordId"`
     }
     GetPerformanceMidiResp {
-        Code    int        `json:"code"`
+        Code    int64      `json:"code"`
         PresignedURL  string    `json:"presignedurl"`
         Msg     string     `json:"msg"`
     }
@@ -184,10 +185,10 @@ type (
 type (
     GetPerformanceSheetReq {
         ProfileName     string  `json:"profileName"`
-        Pin             string  `json:"pin"`
+        RecordId    int64   `json:"recordId"`
     }
     GetPerformanceSheetResp {
-        Code    int        `json:"code"`
+        Code    int64      `json:"code"`
         PresignedURL  string    `json:"presignedurl"`
         Msg     string     `json:"msg"`
     }
@@ -196,10 +197,10 @@ type (
 type (
     GetPerformanceWaterfallReq {
         ProfileName     string  `json:"profileName"`
-        Pin             string  `json:"pin"`
+        RecordId    int64   `json:"recordId"`
     }
     GetPerformanceWaterfallResp {
-        Code    int        `json:"code"`
+        Code    int64      `json:"code"`
         PresignedURL  string    `json:"presignedurl"`
         Msg     string     `json:"msg"`
     }
@@ -208,10 +209,10 @@ type (
 type (
     GetPerformanceReportReq {
         ProfileName     string  `json:"profileName"`
-        Pin             string  `json:"pin"`
+        RecordId    int64   `json:"recordId"`
     }
     GetPerformanceReportResp {
-        Code    int        `json:"code"`
+        Code    int64      `json:"code"`
         PresignedURL  string    `json:"presignedurl"`
         Msg     string     `json:"msg"`
     }

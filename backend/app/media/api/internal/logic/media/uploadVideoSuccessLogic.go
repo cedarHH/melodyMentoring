@@ -2,6 +2,7 @@ package media
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cedarHH/mygo/app/media/api/internal/svc"
 	"github.com/cedarHH/mygo/app/media/api/internal/types"
@@ -24,8 +25,30 @@ func NewUploadVideoSuccessLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 	}
 }
 
-func (l *UploadVideoSuccessLogic) UploadVideoSuccess(req *types.UploadVideoSuccessReq) (resp *types.UploadVideoSuccessResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *UploadVideoSuccessLogic) UploadVideoSuccess(
+	req *types.UploadVideoSuccessReq) (resp *types.UploadVideoSuccessResp, err error) {
 
-	return
+	subUserId := fmt.Sprintf(
+		"%s_%s",
+		l.ctx.Value("uuid").(string),
+		req.ProfileName)
+	recordId := req.RecordId
+	fileName := req.FileName
+
+	err = l.svcCtx.VideoModel.CheckFileExists(l.ctx, fileName)
+	if err != nil {
+		return nil, fmt.Errorf("file %s does not exist: %w", fileName, err)
+	}
+
+	updates := map[string]interface{}{
+		"Video": fileName,
+	}
+	err = l.svcCtx.RecordModel.UpdateAttributes(l.ctx, subUserId, recordId, updates)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update video: %w", err)
+	}
+	return &types.UploadVideoSuccessResp{
+		Code: 0,
+		Msg:  "😥",
+	}, nil
 }
