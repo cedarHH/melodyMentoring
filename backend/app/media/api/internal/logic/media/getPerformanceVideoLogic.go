@@ -10,23 +10,23 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetPerformanceImgLogic struct {
+type GetPerformanceVideoLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-// get performance thumbnail
-func NewGetPerformanceImgLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPerformanceImgLogic {
-	return &GetPerformanceImgLogic{
+// get performance video
+func NewGetPerformanceVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPerformanceVideoLogic {
+	return &GetPerformanceVideoLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *GetPerformanceImgLogic) GetPerformanceImg(
-	req *types.GetPerformanceImgReq) (resp *types.GetPerformanceImgResp, err error) {
+func (l *GetPerformanceVideoLogic) GetPerformanceVideo(
+	req *types.GetPerformanceVideoReq) (resp *types.GetPerformanceVideoResp, err error) {
 
 	subUserId := fmt.Sprintf(
 		"%s_%s",
@@ -39,14 +39,14 @@ func (l *GetPerformanceImgLogic) GetPerformanceImg(
 		return nil, fmt.Errorf("record not found: %v", err)
 	}
 
-	presignedURL, err := l.svcCtx.ThumbnailModel.GetPresignedDownloadURL(l.ctx, record.Image, 3600)
+	presignedURL, err := l.svcCtx.VideoModel.GetPresignedDownloadURL(l.ctx, record.Video, 3600)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get presigned download URL: %w", err)
 	}
 
-	return &types.GetPerformanceImgResp{
+	return &types.GetPerformanceVideoResp{
 		Code:         0,
 		PresignedURL: presignedURL,
-		Msg:          "(╯°□°）╯︵ ┻━┻",
+		Msg:          "😋",
 	}, nil
 }

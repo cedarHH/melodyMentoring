@@ -2,6 +2,7 @@ package media
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cedarHH/mygo/app/media/api/internal/svc"
 	"github.com/cedarHH/mygo/app/media/api/internal/types"
@@ -24,8 +25,28 @@ func NewGetPerformanceAudioLogic(ctx context.Context, svcCtx *svc.ServiceContext
 	}
 }
 
-func (l *GetPerformanceAudioLogic) GetPerformanceAudio(req *types.GetPerformanceAudioReq) (resp *types.GetPerformanceAudioResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *GetPerformanceAudioLogic) GetPerformanceAudio(
+	req *types.GetPerformanceAudioReq) (resp *types.GetPerformanceAudioResp, err error) {
 
-	return
+	subUserId := fmt.Sprintf(
+		"%s_%s",
+		l.ctx.Value("uuid").(string),
+		req.ProfileName)
+	recordId := req.RecordId
+
+	record, err := l.svcCtx.RecordModel.FindOne(l.ctx, subUserId, recordId)
+	if err != nil {
+		return nil, fmt.Errorf("record not found: %v", err)
+	}
+
+	presignedURL, err := l.svcCtx.AudioModel.GetPresignedDownloadURL(l.ctx, record.Audio, 3600)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get presigned download URL: %w", err)
+	}
+
+	return &types.GetPerformanceAudioResp{
+		Code:         0,
+		PresignedURL: presignedURL,
+		Msg:          "🀄",
+	}, nil
 }

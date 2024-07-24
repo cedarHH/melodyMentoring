@@ -60,5 +60,4 @@ func (l *UpdateSubUserAttrLogic) UpdateSubUserAttr(
 		Code: 0,
 		Msg:  "🍥😒😅🍥",
 	}, nil
-	return
 }

@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"fmt"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
 	"github.com/cedarHH/mygo/app/usercenter/model/dynamodb"
@@ -44,7 +43,6 @@ func (l *CreateSubUserLogic) CreateSubUser(
 	}
 
 	err = l.svcCtx.UserModel.Insert(l.ctx, user)
-	fmt.Printf("%s\n", err)
 	if err != nil {
 		return nil, err
 	}

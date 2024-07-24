@@ -46,5 +46,4 @@ func (l *VerifypinLogic) Verifypin(
 		Code: 0,
 		Msg:  "(｡･ω･｡)ﾉ♡",
 	}, nil
-	return
 }
