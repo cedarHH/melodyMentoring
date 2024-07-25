@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go application
-RUN go build -o /usercenter ./app/usercenter/api
+RUN go build -o /app/media ./app/media/api
 
 # Use a minimal image for the runtime environment
 FROM alpine:latest
@@ -25,16 +25,16 @@ RUN apk --no-cache add ca-certificates curl bash
 WORKDIR /app
 
 # Copy the binary from the build image
-COPY --from=0 /usercenter /usr/local/bin/usercenter
+COPY --from=builder /app/media /usr/local/bin/media
 
 # Copy the configuration file to the container
-COPY ./app/usercenter/api/etc/usercenter.yaml ./app/usercenter/api/etc/usercenter.yaml
+COPY ./app/media/api/etc/media.yaml ./app/media/api/etc/media.yaml
 
 # Copy AWS credentials
 COPY .aws /root/.aws
 
 # Expose the port the service runs on
-EXPOSE 8888
+EXPOSE 8889
 
 # Command to run the executable
-CMD ["usercenter", "-f", "./app/usercenter/api/etc/usercenter.yaml"]
+CMD ["/usr/local/bin/media", "-f", "./app/media/api/etc/media.yaml"]
