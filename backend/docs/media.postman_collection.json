@@ -1,0 +1,370 @@
+{
+  "info": {
+    "name": "media",
+    "description": "media",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "author": "xuesong huang"
+  },
+  "item": [
+    {
+      "name": "create new performance record",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/createRecord",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "createRecord"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"reference\": \"\"\n}"
+        },
+        "description": "create new performance record"
+      },
+      "response": []
+    },
+    {
+      "name": "delete performance record",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/deleteRecord",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "deleteRecord"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "delete performance record"
+      },
+      "response": []
+    },
+    {
+      "name": "get performance record",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/getRecord",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "getRecord"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"limit\": 0,\n  \"offset\": 0,\n  \"start\": 0,\n  \"end\": 0\n}"
+        },
+        "description": "get performance record"
+      },
+      "response": []
+    },
+    {
+      "name": "set a performance record as reference",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/setAsReference",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "setAsReference"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0,\n  \"isRef\": false\n}"
+        },
+        "description": "set a performance record as reference"
+      },
+      "response": []
+    },
+    {
+      "name": "get video presigned url",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/getVideoUrl",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "getVideoUrl"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "get video presigned url"
+      },
+      "response": []
+    },
+    {
+      "name": "upload video success",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/uploadVideoSuccess",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "uploadVideoSuccess"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0,\n  \"fileName\": \"\"\n}"
+        },
+        "description": "upload video success"
+      },
+      "response": []
+    },
+    {
+      "name": "get audio presigned url",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/getAudioUrl",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "getAudioUrl"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "get audio presigned url"
+      },
+      "response": []
+    },
+    {
+      "name": "upload audio success",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/uploadAudioSuccess",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "uploadAudioSuccess"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0,\n  \"fileName\": \"\"\n}"
+        },
+        "description": "upload audio success"
+      },
+      "response": []
+    },
+    {
+      "name": "get performance thumbnail",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/getPerformanceImg",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "getPerformanceImg"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "get performance thumbnail"
+      },
+      "response": []
+    },
+    {
+      "name": "get performance video",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/getPerformanceVideo",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "getPerformanceVideo"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "get performance video"
+      },
+      "response": []
+    },
+    {
+      "name": "get performance audio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/getPerformanceAudio",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "getPerformanceAudio"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "get performance audio"
+      },
+      "response": []
+    },
+    {
+      "name": "get performance midi",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/getPerformanceMidi",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "getPerformanceMidi"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "get performance midi"
+      },
+      "response": []
+    },
+    {
+      "name": "get performance sheet",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/getPerformanceSheet",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "getPerformanceSheet"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "get performance sheet"
+      },
+      "response": []
+    },
+    {
+      "name": "get performance waterfall",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/getPerformanceWaterfall",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "getPerformanceWaterfall"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "get performance waterfall"
+      },
+      "response": []
+    },
+    {
+      "name": "get performance report",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://mygo.bar/api/media/record/getPerformanceReport",
+          "protocol": "https",
+          "host": ["mygo.bar"],
+          "path": ["api", "media", "record", "getPerformanceReport"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "get performance report"
+      },
+      "response": []
+    }
+  ]
+}
