@@ -1,98 +1,158 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
+import React, {createContext, useState, useEffect, ReactNode, useContext} from 'react';
+import webapi from './api/gocliRequest';
+import {
+    SetTokensReq,
+    SetTokensResp,
+    RefreshTokensResp,
+    CreateSubUserReq,
+    CreateSubUserResp,
+    DeleteSubUserByNameReq,
+    DeleteSubUserByNameResp,
+    GetAvatarResp,
+    GetAvatarUploadUrlResp,
+    GetSubUserByNameResp,
+    GetSubUsersResp,
+    UpdateAvatarSuccessReq,
+    UpdateAvatarSuccessResp,
+    UpdateSubUserAttrReq,
+    UpdateSubUserAttrResp,
+    VerifypinReq,
+    VerifypinResp,
+    GetSubUserByNameReqParams,
+    GetAvatarUploadUrlReqParams,
+    GetAvatarReqParams,
+} from './api/usercenterComponents';
+import {USER_URL} from "../constants/apiConf";
 
-export interface IApiContext {
-    subUsers: string[];
-    fetchSubUsers: () => void;
-    addSubUser: (profileName: string, pin: string) => Promise<void>;
-    deleteSubUser: (profileName: string, pin: string) => Promise<void>;
-    updateSubUserAttr: (profileName: string, updatedInfo: any) => Promise<void>;
+interface ApiProviderProps {
+    children: ReactNode;
 }
 
-const defaultState: IApiContext = {
-    subUsers: [],
-    fetchSubUsers: () => {},
-    addSubUser: async () => {},
-    deleteSubUser: async () => {},
-    updateSubUserAttr: async () => {},
-};
+interface IApiContext {
+    setTokens: (req: SetTokensReq) => Promise<SetTokensResp>;
+    refreshTokens: () => Promise<RefreshTokensResp>;
+    getSubUsers: () => Promise<GetSubUsersResp>;
+    getSubUserByName: (params: GetSubUserByNameReqParams) => Promise<GetSubUserByNameResp>;
+    createSubUser: (req: CreateSubUserReq) => Promise<CreateSubUserResp>;
+    deleteSubUserByName: (req: DeleteSubUserByNameReq) => Promise<DeleteSubUserByNameResp>;
+    getAvatar: (params: GetAvatarReqParams) => Promise<GetAvatarResp>;
+    getAvatarUploadUrl: (params: GetAvatarUploadUrlReqParams) => Promise<GetAvatarUploadUrlResp>;
+    updateAvatarSuccess: (req: UpdateAvatarSuccessReq) => Promise<UpdateAvatarSuccessResp>;
+    updateSubUserAttr: (req: UpdateSubUserAttrReq) => Promise<UpdateSubUserAttrResp>;
+    verifyPin: (req: VerifypinReq) => Promise<VerifypinResp>;
+}
 
-type Props = {
-    children?: React.ReactNode;
-};
+export const ApiContext = createContext<IApiContext | undefined>(undefined);
 
-export const ApiContext = createContext<IApiContext>(defaultState);
-
-const ApiProvider = ({ children }: Props) => {
-    const [subUsers, setSubUsers] = useState<string[]>([]);
-
-    useEffect(() => {
-        fetchSubUsers();
-    }, []);
-
-    const fetchSubUsers = async () => {
-        try {
-            const response = await axios.get('/api/user/getSubUsers', {
-                withCredentials: true,
-            });
-            const subUsersData = response.data.data.map((user: any) => user.profileName);
-            setSubUsers(subUsersData);
-        } catch (error) {
-            console.error('Error fetching sub users:', error);
-        }
+export const ApiProvider = ({ children }: ApiProviderProps) => {
+    const defaultConfig = {
+        withCredentials: true,
+        headers: {
+            'Content-Type': 'application/json',
+        },
     };
 
-    const addSubUser = async (profileName: string, pin: string) => {
-        try {
-            await axios.post('/api/user/createSubUser', { profileName, pin }, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            await fetchSubUsers();
-        } catch (error) {
-            console.error('Error adding sub user:', error);
-        }
+    /**
+     * @description "setTokens"
+     * @param req
+     */
+    const setTokens = async (req: SetTokensReq) => {
+        return webapi.post<SetTokensResp>(`${USER_URL}/api/user/setTokens`, req);
+    }
+
+    /**
+     * @description "refreshTokens"
+     */
+    const refreshTokens = async () => {
+        return webapi.get<RefreshTokensResp>(`${USER_URL}/api/user/refreshTokens`, {});
+    }
+
+    /**
+     * @description "get the list of sub-users"
+     */
+    const getSubUsers = async () => {
+        return webapi.get<GetSubUsersResp>(`${USER_URL}/api/user/getSubUsers`, {}, defaultConfig);
     };
 
-    const deleteSubUser = async (profileName: string, pin: string) => {
-        try {
-            await axios.post('/api/user/deleteSubUserByName', { profileName, pin }, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            await fetchSubUsers();
-        } catch (error) {
-            console.error('Error deleting sub user:', error);
-        }
+    /**
+     * @description "get sub-user by name"
+     * @param params
+     */
+    const getSubUserByName = async (params: GetSubUserByNameReqParams) => {
+        return webapi.get<GetSubUserByNameResp>(`${USER_URL}/api/user/getSubUserByName?profileName=${params.profileName}`, {}, defaultConfig);
     };
 
-    const updateSubUserAttr = async (profileName: string, updatedInfo: any) => {
-        try {
-            await axios.post('/api/user/updateSubUserAttr', { profileName, ...updatedInfo }, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            await fetchSubUsers(); // Refresh the sub-users list
-        } catch (error) {
-            console.error('Error updating sub user attributes:', error);
-        }
+    /**
+     * @description "create sub-user"
+     * @param req
+     */
+    const createSubUser = async (req: CreateSubUserReq) => {
+        return webapi.post<CreateSubUserResp>(`${USER_URL}/api/user/createSubUser`, req, defaultConfig);
     };
 
-    const state: IApiContext = {
-        subUsers,
-        fetchSubUsers,
-        addSubUser,
-        deleteSubUser,
+    /**
+     * @description "delete sub-user by name"
+     * @param req
+     */
+    const deleteSubUserByName = async (req: DeleteSubUserByNameReq) => {
+        return webapi.post<DeleteSubUserByNameResp>(`${USER_URL}/api/user/deleteSubUserByName`, req, defaultConfig);
+    };
+
+    /**
+     * @description "get avatar url"
+     * @param params
+     */
+    const getAvatar = async (params: GetAvatarReqParams) => {
+        return webapi.get<GetAvatarResp>(`${USER_URL}/api/user/getAvatar?profileName=${params.profileName}`, {}, defaultConfig);
+    };
+
+    /**
+     * @description "get avatar uploda url"
+     * @param params
+     */
+    const getAvatarUploadUrl = async (params: GetAvatarUploadUrlReqParams) => {
+        return webapi.get<GetAvatarUploadUrlResp>(`${USER_URL}/api/user/getAvatarUploadUrl?profileName=${params.profileName}`, {}, defaultConfig);
+    };
+
+    /**
+     * @description "update avatar"
+     * @param req
+     */
+    const updateAvatarSuccess = async (req: UpdateAvatarSuccessReq) => {
+        return webapi.post<UpdateAvatarSuccessResp>(`${USER_URL}/api/user/updateAvatarSuccess`, req, defaultConfig);
+    };
+
+    /**
+     * @description "update sub-user attr"
+     * @param req
+     */
+    const updateSubUserAttr = async (req: UpdateSubUserAttrReq) => {
+        return webapi.post<UpdateSubUserAttrResp>(`${USER_URL}/api/user/updateSubUserAttr`, req, defaultConfig);
+    };
+
+    /**
+     * @description "verify pin code"
+     * @param req
+     */
+    const verifyPin = async (req: VerifypinReq) => {
+        return webapi.post<VerifypinResp>(`${USER_URL}/api/user/verifyPin`, req, defaultConfig);
+    };
+
+    const api: IApiContext = {
+        setTokens,
+        refreshTokens,
+        getSubUsers,
+        getSubUserByName,
+        createSubUser,
+        deleteSubUserByName,
+        getAvatar,
+        getAvatarUploadUrl,
+        updateAvatarSuccess,
         updateSubUserAttr,
+        verifyPin,
     };
 
-    return <ApiContext.Provider value={state}>{children}</ApiContext.Provider>;
+    return <ApiContext.Provider value={api}>{children}</ApiContext.Provider>;
 };
 
-export default ApiProvider;
+export default ApiProvider

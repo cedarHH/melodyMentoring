@@ -87,13 +87,16 @@
         "parameters": [
           {
             "name": "profileName",
-            "in": "header",
+            "in": "query",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
           "user"
+        ],
+        "consumes": [
+          "multipart/form-data"
         ]
       }
     },
@@ -112,13 +115,16 @@
         "parameters": [
           {
             "name": "profileName",
-            "in": "header",
+            "in": "query",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
           "user"
+        ],
+        "consumes": [
+          "multipart/form-data"
         ]
       }
     },
@@ -137,13 +143,16 @@
         "parameters": [
           {
             "name": "profileName",
-            "in": "header",
+            "in": "query",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
           "user"
+        ],
+        "consumes": [
+          "multipart/form-data"
         ]
       }
     },
@@ -375,7 +384,15 @@
     },
     "GetAvatarReq": {
       "type": "object",
-      "title": "GetAvatarReq"
+      "properties": {
+        "profileName": {
+          "type": "string"
+        }
+      },
+      "title": "GetAvatarReq",
+      "required": [
+        "profileName"
+      ]
     },
     "GetAvatarResp": {
       "type": "object",
@@ -400,7 +417,15 @@
     },
     "GetAvatarUploadUrlReq": {
       "type": "object",
-      "title": "GetAvatarUploadUrlReq"
+      "properties": {
+        "profileName": {
+          "type": "string"
+        }
+      },
+      "title": "GetAvatarUploadUrlReq",
+      "required": [
+        "profileName"
+      ]
     },
     "GetAvatarUploadUrlResp": {
       "type": "object",
@@ -425,7 +450,15 @@
     },
     "GetSubUserByNameReq": {
       "type": "object",
-      "title": "GetSubUserByNameReq"
+      "properties": {
+        "profileName": {
+          "type": "string"
+        }
+      },
+      "title": "GetSubUserByNameReq",
+      "required": [
+        "profileName"
+      ]
     },
     "GetSubUserByNameResp": {
       "type": "object",

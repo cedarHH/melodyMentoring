@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ApiContext } from '../../contexts/ApiContext';
+import {CreateSubUserReq, DeleteSubUserByNameReq, SubUser} from "../../contexts/api/usercenterComponents";
 
 interface SidebarProps {
     activeKid: string;
@@ -172,7 +173,7 @@ const Select = styled.select`
 `;
 
 const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
-    const { subUsers, addSubUser, deleteSubUser } = useContext(ApiContext);
+    const apiContext = useContext(ApiContext);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [newKidName, setNewKidName] = useState('');
@@ -180,6 +181,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
     const [selectedKid, setSelectedKid] = useState('');
     const [deleteKidPin, setDeleteKidPin] = useState('');
     const [showPin, setShowPin] = useState(false);
+    const [subUsers, setSubUsers] = useState([''])
 
     useEffect(() => {
         if (isAddModalOpen || isDeleteModalOpen) {
@@ -190,23 +192,49 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
         }
     }, [isAddModalOpen, isDeleteModalOpen]);
 
+    useEffect(() => {
+        const fetchUsers = async () => {
+            if (apiContext) {
+                const response = await apiContext.getSubUsers()
+                if (response.code === 0) {
+                    const profileNames = response.data.map(
+                        (subUser: SubUser) => subUser.profileName);
+                    setSubUsers(profileNames);
+                }
+            }
+        }
+        fetchUsers().then()
+    }, []);
+
     const handleAddKid = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (newKidName && newKidPin) {
-            await addSubUser(newKidName, newKidPin);
-            setNewKidName('');
-            setNewKidPin('');
-            setIsAddModalOpen(false);
+        if (newKidName && newKidPin && apiContext) {
+            const createSubUserReq: CreateSubUserReq = {
+                profileName:newKidName,
+                pin:newKidPin
+            }
+            const response = await apiContext.createSubUser(createSubUserReq)
+            if(response.code === 0) {
+                setNewKidName('');
+                setNewKidPin('');
+                setIsAddModalOpen(false);
+            }
         }
     };
 
     const handleDeleteKid = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (selectedKid && deleteKidPin) {
-            await deleteSubUser(selectedKid, deleteKidPin);
-            setSelectedKid('');
-            setDeleteKidPin('');
-            setIsDeleteModalOpen(false);
+        if (selectedKid && deleteKidPin && apiContext) {
+            const deleteSubUserByName: DeleteSubUserByNameReq = {
+                profileName: selectedKid,
+                pin: deleteKidPin
+            }
+            const response = await apiContext.deleteSubUserByName(deleteSubUserByName)
+            if(response.code === 0) {
+                setSelectedKid('');
+                setDeleteKidPin('');
+                setIsDeleteModalOpen(false);
+            }
         }
     };
 

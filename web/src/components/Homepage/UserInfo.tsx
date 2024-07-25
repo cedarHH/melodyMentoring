@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import { ApiContext } from '../../contexts/ApiContext';
 import Modal from 'react-modal';
 import axios from 'axios';
-import defaultAvatar from '../../assets/img/home/kid-avatar.jpg'; // 确保正确导入默认头像
+import defaultAvatar from '../../assets/img/home/kid-avatar.jpg';
+import {
+    GetSubUserByNameReqParams,
+    UpdateSubUserAttrReq
+} from "../../contexts/api/usercenterComponents"; // 确保正确导入默认头像
 
 interface UserInfoProps {
     activeKid: string;
@@ -176,58 +180,60 @@ const ModalButton = styled.button`
 `;
 
 const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
-    const { updateSubUserAttr } = useContext(ApiContext);
+    const apiContext = useContext(ApiContext);
     const [isEditing, setIsEditing] = useState(false);
     const [profileName, setProfileName] = useState(activeKid);
     const [gender, setGender] = useState('');
     const [dob, setDob] = useState('');
     const [instrument, setInstrument] = useState('');
-    const [badge, setBadge] = useState('');
+    const [badge, setBadge] = useState('')
+    const [badges, setBadges] = useState<string[]>(['']);
     const [level, setLevel] = useState('');
     const [avatar, setAvatar] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get(`/api/user/getSubUser?profileName=${activeKid}`, {
-                    withCredentials: true,
-                });
-                const data = response.data.data;
-                setProfileName(data.profileName);
-                setGender(data.gender);
-                setDob(data.dob);
-                setInstrument(data.instrument);
-                setBadge(data.badge);
-                setLevel(data.level);
-                setAvatar(data.avatar);
+                if(apiContext){
+                    const reqParams:GetSubUserByNameReqParams = {
+                        profileName: activeKid
+                    }
+                    const response = await apiContext.getSubUserByName(reqParams)
+                    if(response.code === 0){
+                        const data = response.data;
+                        setProfileName(data.profileName);
+                        setGender(data.gender);
+                        setDob(data.dob);
+                        setInstrument(data.instrument);
+                        setBadges(data.badges);
+                        setLevel(data.level);
+                        setAvatar(data.avatar);
+                    }
+                }
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
         };
 
-        fetchUserData();
+        fetchUserData().then(r => {});
     }, [activeKid]);
 
     const handleSave = async () => {
-        const updatedInfo = {
-            profileName,
-            avatar,
-            gender,
-            dob,
-            instrument,
-            badge,
-            level,
-        };
-
         try {
-            await axios.post('/api/user/updateSubUserAttr', updatedInfo, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            setIsEditing(false);
-            setActiveKid(profileName); // Update activeKid in Sidebar
+            const updateSubUserAttrReq:UpdateSubUserAttrReq = {
+                profileName: profileName,
+                gender: gender,
+                dob: dob,
+                level: level,
+                instrument: instrument,
+            };
+            if(apiContext){
+                const response = await apiContext.updateSubUserAttr(updateSubUserAttrReq)
+                if(response.code === 0){
+                    setIsEditing(false);
+                    setActiveKid(profileName); // Update activeKid in Sidebar
+                }
+            }
         } catch (error) {
             console.error('Error updating user info:', error);
         }
