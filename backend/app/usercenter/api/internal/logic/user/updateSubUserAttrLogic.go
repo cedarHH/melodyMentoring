@@ -34,6 +34,14 @@ func (l *UpdateSubUserAttrLogic) UpdateSubUserAttr(
 	uuid := l.ctx.Value("uuid").(string)
 	profileName := req.ProfileName
 
+	user, err := l.svcCtx.UserModel.FindOne(l.ctx, uuid, profileName)
+	if err != nil {
+		return nil, fmt.Errorf("user entry does not exist: %w", err)
+	}
+	if user == nil {
+		return nil, fmt.Errorf("user entry not found for uuid %s and profileName %s", uuid, profileName)
+	}
+
 	updates := map[string]interface{}{}
 	if req.Gender != "" {
 		updates["Gender"] = req.Gender
@@ -48,7 +56,7 @@ func (l *UpdateSubUserAttrLogic) UpdateSubUserAttr(
 		updates["Instrument"] = req.Instrument
 	}
 	if req.Badge != "" {
-		updates["Badges"] = req.Badge
+		updates["append_Badges"] = req.Badge
 	}
 
 	err = l.svcCtx.UserModel.UpdateAttributes(l.ctx, uuid, profileName, updates)
