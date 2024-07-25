@@ -100,13 +100,26 @@ func (m *BaseModel) UpdateAttributes(
 	for k, v := range updates {
 		attrName := fmt.Sprintf("#attr%d", i)
 		attrValue := fmt.Sprintf(":val%d", i)
-		exprAttrNames[attrName] = k
-		av, err := attributevalue.Marshal(v)
+
+		var av types.AttributeValue
+		var err error
+
+		if isListAppendOperation(k) {
+			exprAttrNames[attrName] = k[7:]
+			av, err = attributevalue.Marshal([]interface{}{v})
+		} else {
+			exprAttrNames[attrName] = k
+			av, err = attributevalue.Marshal(v)
+		}
 		if err != nil {
 			return fmt.Errorf("failed to marshal attribute value: %w", err)
 		}
 		exprAttrValues[attrValue] = av
-		updateExpr += fmt.Sprintf(" %s = %s,", attrName, attrValue)
+		if isListAppendOperation(k) {
+			updateExpr += fmt.Sprintf(" %s = list_append(%s, %s),", attrName, attrName, attrValue)
+		} else {
+			updateExpr += fmt.Sprintf(" %s = %s,", attrName, attrValue)
+		}
 		i++
 	}
 	updateExpr = updateExpr[:len(updateExpr)-1]
@@ -239,4 +252,8 @@ func createAttributeValue(value interface{}) types.AttributeValue {
 	default:
 		panic("unsupported attribute value type")
 	}
+}
+
+func isListAppendOperation(key string) bool {
+	return len(key) > 7 && key[:7] == "append_"
 }
