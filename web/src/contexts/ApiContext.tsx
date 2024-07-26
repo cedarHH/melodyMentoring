@@ -1,5 +1,6 @@
 import React, {createContext, useState, useEffect, ReactNode, useContext} from 'react';
 import webapi from './api/gocliRequest';
+import {USER_URL} from "../constants/apiConf";
 import {
     SetTokensReq,
     SetTokensResp,
@@ -22,13 +23,41 @@ import {
     GetAvatarUploadUrlReqParams,
     GetAvatarReqParams,
 } from './api/usercenterComponents';
-import {USER_URL} from "../constants/apiConf";
+import {
+    CreateRecordReq,
+    CreateRecordResp,
+    DeleteRecordReq,
+    DeleteRecordResp,
+    GetAudioUrlReq,
+    GetAudioUrlResp,
+    GetPerformanceAudioReq,
+    GetPerformanceAudioResp,
+    GetPerformanceImgReq, GetPerformanceImgResp, GetPerformanceMidiReq, GetPerformanceMidiResp,
+    GetPerformanceReportReq,
+    GetPerformanceReportResp,
+    GetPerformanceSheetReq,
+    GetPerformanceSheetResp,
+    GetPerformanceVideoReq,
+    GetPerformanceVideoResp,
+    GetPerformanceWaterfallReq,
+    GetPerformanceWaterfallResp,
+    GetRecordReq,
+    GetRecordResp,
+    GetVideoUrlReq,
+    GetVideoUrlResp,
+    SetAsReferenceReq,
+    SetAsReferenceResp,
+    UploadAudioSuccessReq,
+    UploadAudioSuccessResp,
+    UploadVideoSuccessReq,
+    UploadVideoSuccessResp
+} from "./api/mediaComponents";
 
 interface ApiProviderProps {
     children: ReactNode;
 }
 
-interface IApiContext {
+interface IUserApiContext {
     setTokens: (req: SetTokensReq) => Promise<SetTokensResp>;
     refreshTokens: () => Promise<RefreshTokensResp>;
     getSubUsers: () => Promise<GetSubUsersResp>;
@@ -40,6 +69,29 @@ interface IApiContext {
     updateAvatarSuccess: (req: UpdateAvatarSuccessReq) => Promise<UpdateAvatarSuccessResp>;
     updateSubUserAttr: (req: UpdateSubUserAttrReq) => Promise<UpdateSubUserAttrResp>;
     verifyPin: (req: VerifypinReq) => Promise<VerifypinResp>;
+}
+
+interface IRecordApiContext {
+    createRecord: (req: CreateRecordReq) => Promise<CreateRecordResp>;
+    deleteRecord: (req: DeleteRecordReq) => Promise<DeleteRecordResp>;
+    getAudioUrl: (req: GetAudioUrlReq) => Promise<GetAudioUrlResp>;
+    getPerformanceAudio: (req: GetPerformanceAudioReq) => Promise<GetPerformanceAudioResp>;
+    getPerformanceImg: (req: GetPerformanceImgReq) => Promise<GetPerformanceImgResp>;
+    getPerformanceMidi: (req: GetPerformanceMidiReq) => Promise<GetPerformanceMidiResp>;
+    getPerformanceReport: (req: GetPerformanceReportReq) => Promise<GetPerformanceReportResp>;
+    getPerformanceSheet: (req: GetPerformanceSheetReq) => Promise<GetPerformanceSheetResp>;
+    getPerformanceVideo: (req: GetPerformanceVideoReq) => Promise<GetPerformanceVideoResp>;
+    getPerformanceWaterfall: (req: GetPerformanceWaterfallReq) => Promise<GetPerformanceWaterfallResp>;
+    getRecord: (req: GetRecordReq) => Promise<GetRecordResp>;
+    getVideoUrl: (req: GetVideoUrlReq) => Promise<GetVideoUrlResp>;
+    setAsReference: (req: SetAsReferenceReq) => Promise<SetAsReferenceResp>;
+    uploadAudioSuccess: (req: UploadAudioSuccessReq) => Promise<UploadAudioSuccessResp>;
+    uploadVideoSuccess: (req: UploadVideoSuccessReq) => Promise<UploadVideoSuccessResp>;
+}
+
+interface IApiContext {
+    user: IUserApiContext;
+    record: IRecordApiContext;
 }
 
 export const ApiContext = createContext<IApiContext | undefined>(undefined);
@@ -138,7 +190,128 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
         return webapi.post<VerifypinResp>(`${USER_URL}/api/user/verifyPin`, req, defaultConfig);
     };
 
-    const api: IApiContext = {
+    /**
+     * @description "create new performance record"
+     * @param req
+     */
+    const createRecord = async (req: CreateRecordReq) => {
+        return webapi.post<CreateRecordResp>(`/api/media/record/createRecord`, req);
+    };
+
+    /**
+     * @description "delete performance record"
+     * @param req
+     */
+    const deleteRecord = async (req: DeleteRecordReq) => {
+        return webapi.post<DeleteRecordResp>(`/api/media/record/deleteRecord`, req);
+    };
+
+    /**
+     * @description "get audio presigned url"
+     * @param req
+     */
+    const getAudioUrl = async (req: GetAudioUrlReq) => {
+        return webapi.post<GetAudioUrlResp>(`/api/media/record/getAudioUrl`, req);
+    };
+
+    /**
+     * @description "get performance audio"
+     * @param req
+     */
+    const getPerformanceAudio = async (req: GetPerformanceAudioReq) => {
+        return webapi.post<GetPerformanceAudioResp>(`/api/media/record/getPerformanceAudio`, req);
+    };
+
+    /**
+     * @description "get performance thumbnail"
+     * @param req
+     */
+    const getPerformanceImg = async (req: GetPerformanceImgReq) => {
+        return webapi.post<GetPerformanceImgResp>(`/api/media/record/getPerformanceImg`, req);
+    };
+
+    /**
+     * @description "get performance midi"
+     * @param req
+     */
+    const getPerformanceMidi = async (req: GetPerformanceMidiReq) => {
+        return webapi.post<GetPerformanceMidiResp>(`/api/media/record/getPerformanceMidi`, req);
+    };
+
+    /**
+     * @description "get performance report"
+     * @param req
+     */
+    const getPerformanceReport = async (req: GetPerformanceReportReq) => {
+        return webapi.post<GetPerformanceReportResp>(`/api/media/record/getPerformanceReport`, req);
+    };
+
+    /**
+     * @description "get performance sheet"
+     * @param req
+     */
+    const getPerformanceSheet = async (req: GetPerformanceSheetReq) => {
+        return webapi.post<GetPerformanceSheetResp>(`/api/media/record/getPerformanceSheet`, req);
+    };
+
+    /**
+     * @description "get performance video"
+     * @param req
+     */
+    const getPerformanceVideo = async (req: GetPerformanceVideoReq) => {
+        return webapi.post<GetPerformanceVideoResp>(`/api/media/record/getPerformanceVideo`, req);
+    };
+
+    /**
+     * @description "get performance waterfall"
+     * @param req
+     */
+    const getPerformanceWaterfall = async (req: GetPerformanceWaterfallReq) => {
+        return webapi.post<GetPerformanceWaterfallResp>(`/api/media/record/getPerformanceWaterfall`, req);
+    };
+
+    /**
+     * @description "get performance record"
+     * @param req
+     */
+    const getRecord = async (req: GetRecordReq) => {
+        return webapi.post<GetRecordResp>(`/api/media/record/getRecord`, req);
+    };
+
+    /**
+     * @description "get video presigned url"
+     * @param req
+     */
+    const getVideoUrl = async (req: GetVideoUrlReq) => {
+        return webapi.post<GetVideoUrlResp>(`/api/media/record/getVideoUrl`, req);
+    };
+
+    /**
+     * @description "set a performance record as reference"
+     * @param req
+     */
+    const setAsReference = async (req: SetAsReferenceReq) => {
+        return webapi.post<SetAsReferenceResp>(`/api/media/record/setAsReference`, req);
+    };
+
+    /**
+     * @description "upload audio success"
+     * @param req
+     */
+    const uploadAudioSuccess = async (req: UploadAudioSuccessReq) => {
+        return webapi.post<UploadAudioSuccessResp>(`/api/media/record/uploadAudioSuccess`, req);
+    };
+
+    /**
+     * @description "upload video success"
+     * @param req
+     */
+    const uploadVideoSuccess = async (req: UploadVideoSuccessReq) => {
+        return webapi.post<UploadVideoSuccessResp>(`/api/media/record/uploadVideoSuccess`, req);
+    };
+
+
+    const userApi: IUserApiContext = {
         setTokens,
         refreshTokens,
         getSubUsers,
@@ -150,6 +323,29 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
         updateAvatarSuccess,
         updateSubUserAttr,
         verifyPin,
+    };
+
+    const recordApi: IRecordApiContext = {
+        createRecord,
+        deleteRecord,
+        getAudioUrl,
+        getPerformanceAudio,
+        getPerformanceImg,
+        getPerformanceMidi,
+        getPerformanceReport,
+        getPerformanceSheet,
+        getPerformanceVideo,
+        getPerformanceWaterfall,
+        getRecord,
+        getVideoUrl,
+        setAsReference,
+        uploadAudioSuccess,
+        uploadVideoSuccess,
+    };
+
+    const api: IApiContext = {
+        user: userApi,
+        record: recordApi,
     };
 
     return <ApiContext.Provider value={api}>{children}</ApiContext.Provider>;

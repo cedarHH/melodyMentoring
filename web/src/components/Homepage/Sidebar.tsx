@@ -195,7 +195,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
     useEffect(() => {
         const fetchUsers = async () => {
             if (apiContext) {
-                const response = await apiContext.getSubUsers()
+                const response = await apiContext.user.getSubUsers()
                 if (response.code === 0) {
                     const profileNames = response.data.map(
                         (subUser: SubUser) => subUser.profileName);
@@ -213,7 +213,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
                 profileName:newKidName,
                 pin:newKidPin
             }
-            const response = await apiContext.createSubUser(createSubUserReq)
+            const response = await apiContext.user.createSubUser(createSubUserReq)
             if(response.code === 0) {
                 setNewKidName('');
                 setNewKidPin('');
@@ -229,7 +229,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
                 profileName: selectedKid,
                 pin: deleteKidPin
             }
-            const response = await apiContext.deleteSubUserByName(deleteSubUserByName)
+            const response = await apiContext.user.deleteSubUserByName(deleteSubUserByName)
             if(response.code === 0) {
                 setSelectedKid('');
                 setDeleteKidPin('');
