@@ -72,6 +72,34 @@
         ]
       }
     },
+    "/api/user/getAvatar": {
+      "get": {
+        "summary": "get avatar url",
+        "operationId": "getAvatar",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAvatarResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "profileName",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
     "/api/user/getAvatarUploadUrl": {
       "get": {
         "summary": "get avatar uploda url",
@@ -87,13 +115,16 @@
         "parameters": [
           {
             "name": "profileName",
-            "in": "header",
+            "in": "query",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
           "user"
+        ],
+        "consumes": [
+          "multipart/form-data"
         ]
       }
     },
@@ -112,13 +143,16 @@
         "parameters": [
           {
             "name": "profileName",
-            "in": "header",
+            "in": "query",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
           "user"
+        ],
+        "consumes": [
+          "multipart/form-data"
         ]
       }
     },
@@ -183,15 +217,15 @@
         ]
       }
     },
-    "/api/user/updateAvatar": {
+    "/api/user/updateAvatarSuccess": {
       "post": {
         "summary": "update avatar",
-        "operationId": "updateAvatar",
+        "operationId": "updateAvatarSuccess",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/UpdateAvatarResp"
+              "$ref": "#/definitions/UpdateAvatarSuccessResp"
             }
           }
         },
@@ -201,7 +235,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/UpdateAvatarReq"
+              "$ref": "#/definitions/UpdateAvatarSuccessReq"
             }
           }
         ],
@@ -266,6 +300,22 @@
     }
   },
   "definitions": {
+    "AvatarFile": {
+      "type": "object",
+      "properties": {
+        "presignedurl": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string"
+        }
+      },
+      "title": "AvatarFile",
+      "required": [
+        "presignedurl",
+        "fileName"
+      ]
+    },
     "CreateSubUserReq": {
       "type": "object",
       "properties": {
@@ -332,11 +382,19 @@
         "msg"
       ]
     },
-    "GetAvatarUploadUrlReq": {
+    "GetAvatarReq": {
       "type": "object",
-      "title": "GetAvatarUploadUrlReq"
+      "properties": {
+        "profileName": {
+          "type": "string"
+        }
+      },
+      "title": "GetAvatarReq",
+      "required": [
+        "profileName"
+      ]
     },
-    "GetAvatarUploadUrlResp": {
+    "GetAvatarResp": {
       "type": "object",
       "properties": {
         "code": {
@@ -350,16 +408,57 @@
           "type": "string"
         }
       },
-      "title": "GetAvatarUploadUrlResp",
+      "title": "GetAvatarResp",
       "required": [
         "code",
         "presignedurl",
         "msg"
       ]
     },
+    "GetAvatarUploadUrlReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        }
+      },
+      "title": "GetAvatarUploadUrlReq",
+      "required": [
+        "profileName"
+      ]
+    },
+    "GetAvatarUploadUrlResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "$ref": "#/definitions/AvatarFile"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetAvatarUploadUrlResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
     "GetSubUserByNameReq": {
       "type": "object",
-      "title": "GetSubUserByNameReq"
+      "properties": {
+        "profileName": {
+          "type": "string"
+        }
+      },
+      "title": "GetSubUserByNameReq",
+      "required": [
+        "profileName"
+      ]
     },
     "GetSubUserByNameResp": {
       "type": "object",
@@ -476,23 +575,23 @@
         "avatar"
       ]
     },
-    "UpdateAvatarReq": {
+    "UpdateAvatarSuccessReq": {
       "type": "object",
       "properties": {
         "profileName": {
           "type": "string"
         },
-        "presignedurl": {
+        "fileName": {
           "type": "string"
         }
       },
-      "title": "UpdateAvatarReq",
+      "title": "UpdateAvatarSuccessReq",
       "required": [
         "profileName",
-        "presignedurl"
+        "fileName"
       ]
     },
-    "UpdateAvatarResp": {
+    "UpdateAvatarSuccessResp": {
       "type": "object",
       "properties": {
         "code": {
@@ -503,7 +602,7 @@
           "type": "string"
         }
       },
-      "title": "UpdateAvatarResp",
+      "title": "UpdateAvatarSuccessResp",
       "required": [
         "code",
         "msg"
@@ -513,9 +612,6 @@
       "type": "object",
       "properties": {
         "profileName": {
-          "type": "string"
-        },
-        "avatar": {
           "type": "string"
         },
         "gender": {

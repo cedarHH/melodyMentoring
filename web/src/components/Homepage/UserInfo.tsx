@@ -198,7 +198,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
                     const reqParams:GetSubUserByNameReqParams = {
                         profileName: activeKid
                     }
-                    const response = await apiContext.getSubUserByName(reqParams)
+                    const response = await apiContext.user.getSubUserByName(reqParams)
                     if(response.code === 0){
                         const data = response.data;
                         setProfileName(data.profileName);
@@ -228,7 +228,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
                 instrument: instrument,
             };
             if(apiContext){
-                const response = await apiContext.updateSubUserAttr(updateSubUserAttrReq)
+                const response = await apiContext.user.updateSubUserAttr(updateSubUserAttrReq)
                 if(response.code === 0){
                     setIsEditing(false);
                     setActiveKid(profileName); // Update activeKid in Sidebar
