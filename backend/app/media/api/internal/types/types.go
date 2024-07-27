@@ -180,9 +180,8 @@ type UploadAudioSuccessReq struct {
 }
 
 type UploadAudioSuccessResp struct {
-	Code        int64  `json:"code"`
-	ProfileName string `json:"profileName"`
-	Msg         string `json:"msg"`
+	Code int64  `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 type UploadVideoSuccessReq struct {

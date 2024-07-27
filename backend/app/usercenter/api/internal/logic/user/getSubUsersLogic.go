@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/svc"
 	"github.com/cedarHH/mygo/app/usercenter/api/internal/types"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
