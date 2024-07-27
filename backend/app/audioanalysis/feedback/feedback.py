@@ -3,7 +3,6 @@ import json
 import os
 from dotenv import load_dotenv, find_dotenv
 
-# 5. 需要总结的文本内容
 standard_performance_test = {
     "ticks_per_beat": 384,
     "total_time": 8.26953125,
@@ -97,29 +96,21 @@ diff_test = {
     ]
 }
 
-# 2. 读取系统中的环境变量
-# _ = load_dotenv(find_dotenv())
-# 3. 设置 API_KEY
-# 3.1）可从系统环境变量中读取
+
 openai.api_key = 'sk-proj-7Ar4LH2nb8SSHmwRx2v1T3BlbkFJT59kL7tiVL1zLKYLSK7G'
 
 
-# 3.2）也可直接提供
-# openai.api_key  = 'API_KEY' # 此处需将API_KEY替换成正常的
+# openai.api_key  = 'API_KEY'
 
-# 4. 一个封装 OpenAI 接口的函数，参数为 Prompt，返回对应结果
+
 def get_completion(prompt, model):
-    '''
-    prompt: 对应的提示
-    model: 调用的模型，默认为 gpt-3.5-turbo(ChatGPT)，有内测资格的用户可以选择 gpt-4
-    '''
+
     messages = [{"role": "user", "content": prompt}]
     response = openai.ChatCompletion.create(
         model=model,
         messages=messages,
-        temperature=0,  # 模型输出的温度系数，控制输出的随机程度，值越低则输出文本随机性越低
+        temperature=0,
     )
-    # 调用 OpenAI 的 ChatCompletion 接口
     return response.choices[0].message["content"]
 
 
@@ -128,7 +119,6 @@ def get_feedback(
         user_performance=user_performance_test,
         diff=diff_test
 ):
-    # 6. 指令内容，使用 ``` 来分隔指令和待总结的内容
     prompt = f"""
     You are a piano tutor and you need to compare the difference between the student's playing and the standard playing and give feedback.
     
