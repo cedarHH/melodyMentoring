@@ -5,7 +5,9 @@ import Modal from 'react-modal';
 import axios from 'axios';
 import defaultAvatar from '../../assets/img/home/kid-avatar.jpg';
 import {
-    GetSubUserByNameReqParams,
+    GetAvatarReqParams,
+    GetAvatarUploadUrlReqParams,
+    GetSubUserByNameReqParams, UpdateAvatarSuccessReq,
     UpdateSubUserAttrReq
 } from "../../contexts/api/usercenterComponents"; // 确保正确导入默认头像
 
@@ -239,15 +241,42 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
         }
     };
 
-    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            const fileReader = new FileReader();
-            fileReader.onload = () => {
-                if (fileReader.result) {
-                    setAvatar(fileReader.result as string);
+            try {
+                if(apiContext) {
+                    const getAvatarUploadUrlReq: GetAvatarUploadUrlReqParams = {
+                        profileName: profileName
+                    }
+                    const response = await apiContext.user.getAvatarUploadUrl(getAvatarUploadUrlReq);
+                    if(response.code === 0) {
+                        await fetch(response.data.presignedurl, {
+                            method: 'PUT',
+                            body: e.target.files[0],
+                            headers: {
+                                'Content-Type': e.target.files[0].type
+                            }
+                        })
+                        const updateAvatarSuccessReq: UpdateAvatarSuccessReq = {
+                            profileName: profileName,
+                            fileName: response.data.fileName
+                        }
+                        const response1 = await apiContext.user.updateAvatarSuccess(updateAvatarSuccessReq)
+                        if(response1.code === 0) {
+                            const getAvatarReq: GetAvatarReqParams = {
+                                profileName: profileName
+                            }
+                            const response2 = await apiContext.user.getAvatar(getAvatarReq)
+                            if(response2.code === 0) {
+                                // todo
+                                console.log(response2.presignedurl)
+                            }
+                        }
+                    }
                 }
-            };
-            fileReader.readAsDataURL(e.target.files[0]);
+            } catch (error) {
+                console.error('Avatar upload failed', error);
+            }
         }
     };
 

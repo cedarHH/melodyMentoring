@@ -1,0 +1,8 @@
+rabbitMQ:
+  host: localhost
+  port: 5672
+  user: admin
+  password: password
+
+openai:
+  key: sk-proj-7Ar4LH2nb8SSHmwRx2v1T3BlbkFJT59kL7tiVL1zLKYLSK7G

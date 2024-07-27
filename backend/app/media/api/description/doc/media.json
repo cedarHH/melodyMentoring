@@ -1060,9 +1060,6 @@
           "type": "integer",
           "format": "int64"
         },
-        "profileName": {
-          "type": "string"
-        },
         "msg": {
           "type": "string"
         }
@@ -1070,7 +1067,6 @@
       "title": "UploadAudioSuccessResp",
       "required": [
         "code",
-        "profileName",
         "msg"
       ]
     },

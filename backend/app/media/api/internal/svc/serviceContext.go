@@ -10,12 +10,14 @@ import (
 	"github.com/cedarHH/mygo/app/media/model/dynamodb"
 	"github.com/cedarHH/mygo/app/media/model/s3"
 	"github.com/cedarHH/mygo/common/commonModel"
+	"github.com/cedarHH/mygo/common/messageQueue"
 	"github.com/zeromicro/go-zero/rest"
 )
 
 type ServiceContext struct {
 	Config             config.Config
 	UserAuthMiddleware rest.Middleware
+	RabbitMQ           *messageQueue.RabbitMQClient
 	RecordModel        dynamodb.RecordModel
 	ThumbnailModel     commonModel.IS3Model
 	AudioModel         commonModel.IS3Model
@@ -36,6 +38,13 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic("Failed to load S3 config: " + err.Error())
 	}
 
+	rmqClient := messageQueue.GetRabbitMQClient(
+		c.RabbitMQConf.User,
+		c.RabbitMQConf.Password,
+		"localhost",
+		"audio_processing_queue",
+		c.RabbitMQConf.Port)
+
 	recordDynamoDBClient := AwsDynamodb.NewFromConfig(recordTableConfig)
 	recordModel := dynamodb.NewRecordModel(recordDynamoDBClient, c.DynamoDBConf.RecordTable.TableName)
 
@@ -52,6 +61,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:             c,
 		UserAuthMiddleware: middleware.NewUserAuthMiddleware(c.CognitoConf).Handle,
+		RabbitMQ:           rmqClient,
 		RecordModel:        recordModel,
 		ThumbnailModel:     thumbnailModel,
 		AudioModel:         audioModel,
