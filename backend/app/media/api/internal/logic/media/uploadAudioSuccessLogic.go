@@ -40,12 +40,6 @@ func (l *UploadAudioSuccessLogic) UploadAudioSuccess(
 		return nil, fmt.Errorf("file %s does not exist: %w", fileName, err)
 	}
 
-	message := fmt.Sprintf(`{"subUserId":"%s"}`, subUserId)
-	err = l.svcCtx.RabbitMQ.SendMessage(message)
-	if err != nil {
-		return nil, fmt.Errorf("failed to send message to RabbitMQ: %w", err)
-	}
-
 	updates := map[string]interface{}{
 		"Audio": fileName,
 	}

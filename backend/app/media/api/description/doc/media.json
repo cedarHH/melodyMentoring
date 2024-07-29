@@ -18,6 +18,62 @@
     "application/json"
   ],
   "paths": {
+    "/api/media/analysis/getAnalysisResult": {
+      "get": {
+        "summary": "get the ranking of the tasks to be analysed, if it is 0, the analysis is finished",
+        "operationId": "getAnalysisResult",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAnalysisResultResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "analysisId",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "media"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      }
+    },
+    "/api/media/analysis/performanceAnalysis": {
+      "post": {
+        "summary": "start analysing the performance",
+        "operationId": "performanceAnalysis",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PerformanceAnalysisResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PerformanceAnalysisReq"
+            }
+          }
+        ],
+        "tags": [
+          "media"
+        ]
+      }
+    },
     "/api/media/record/createRecord": {
       "post": {
         "summary": "create new performance record",
@@ -513,6 +569,40 @@
         "fileName"
       ]
     },
+    "GetAnalysisResultReq": {
+      "type": "object",
+      "properties": {
+        "analysisId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetAnalysisResultReq",
+      "required": [
+        "analysisId"
+      ]
+    },
+    "GetAnalysisResultResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "data": {
+          "$ref": "#/definitions/ResultData"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetAnalysisResultResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
     "GetAudioUrlReq": {
       "type": "object",
       "properties": {
@@ -910,6 +1000,45 @@
         "msg"
       ]
     },
+    "PerformanceAnalysisReq": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "PerformanceAnalysisReq",
+      "required": [
+        "profileName",
+        "recordId"
+      ]
+    },
+    "PerformanceAnalysisResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "analysisId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "PerformanceAnalysisResp",
+      "required": [
+        "code",
+        "analysisId",
+        "msg"
+      ]
+    },
     "Record": {
       "type": "object",
       "properties": {
@@ -991,6 +1120,19 @@
         "RecordId",
         "composition",
         "reference"
+      ]
+    },
+    "ResultData": {
+      "type": "object",
+      "properties": {
+        "analysisRank": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "ResultData",
+      "required": [
+        "analysisRank"
       ]
     },
     "SetAsReferenceReq": {

@@ -1,0 +1,34 @@
+syntax = "v1"
+
+info(
+    title: "media"
+    desc: "media"
+    author: "xuesong huang"
+)
+
+type (
+    PerformanceAnalysisReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+
+    PerformanceAnalysisResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    ResultData {
+        AnalysisRank int64 `json:"analysisRank"`
+    }
+    GetAnalysisResultReq {
+        AnalysisId int64  `form:"analysisId"`
+    }
+    GetAnalysisResultResp {
+        Code    int64      `json:"code"`
+        Data    ResultData `json:"data"`
+        Msg     string     `json:"msg"`
+    }
+)

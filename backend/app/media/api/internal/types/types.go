@@ -27,6 +27,16 @@ type FileDetails struct {
 	FileName     string `json:"fileName"`
 }
 
+type GetAnalysisResultReq struct {
+	AnalysisId int64 `form:"analysisId"`
+}
+
+type GetAnalysisResultResp struct {
+	Code int64      `json:"code"`
+	Data ResultData `json:"data"`
+	Msg  string     `json:"msg"`
+}
+
 type GetAudioUrlReq struct {
 	ProfileName string `json:"profileName"`
 	RecordId    int64  `json:"recordId"`
@@ -140,6 +150,17 @@ type GetVideoUrlResp struct {
 	Msg  string      `json:"msg"`
 }
 
+type PerformanceAnalysisReq struct {
+	ProfileName string `json:"profileName"`
+	RecordId    int64  `json:"recordId"`
+}
+
+type PerformanceAnalysisResp struct {
+	Code       int64  `json:"code"`
+	AnalysisId int64  `json:"analysisId"`
+	Msg        string `json:"msg"`
+}
+
 type Record struct {
 	SubUserId   string `json:"subUserId"`
 	Timestamp   int64  `json:"timestamp"`
@@ -160,6 +181,10 @@ type RecordInfo struct {
 	RecordId    int64  `json:"RecordId"`
 	Composition string `json:"composition"`
 	Reference   string `json:"reference"`
+}
+
+type ResultData struct {
+	AnalysisRank int64 `json:"analysisRank"`
 }
 
 type SetAsReferenceReq struct {
