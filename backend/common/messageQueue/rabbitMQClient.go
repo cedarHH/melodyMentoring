@@ -70,3 +70,41 @@ func (r *RabbitMQClient) SendMessage(message string) error {
 
 	return nil
 }
+
+func (r *RabbitMQClient) ConsumeMessages(handler func(message string)) error {
+	msgs, err := r.channel.Consume(
+		r.queue.Name, // queue
+		"",           // consumer
+		true,         // auto-ack
+		false,        // exclusive
+		false,        // no-local
+		false,        // no-wait
+		nil,          // args
+	)
+	if err != nil {
+		return fmt.Errorf("failed to register a consumer: %w", err)
+	}
+
+	go func() {
+		for d := range msgs {
+			handler(string(d.Body))
+		}
+	}()
+
+	return nil
+}
+
+func (r *RabbitMQClient) Close() error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	if err := r.channel.Close(); err != nil {
+		return fmt.Errorf("failed to close channel: %w", err)
+	}
+
+	if err := r.conn.Close(); err != nil {
+		return fmt.Errorf("failed to close connection: %w", err)
+	}
+
+	return nil
+}

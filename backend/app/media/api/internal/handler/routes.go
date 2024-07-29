@@ -109,4 +109,25 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		),
 		rest.WithPrefix("/api/media/record"),
 	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.UserAuthMiddleware},
+			[]rest.Route{
+				{
+					// get the ranking of the tasks to be analysed, if it is 0, the analysis is finished
+					Method:  http.MethodGet,
+					Path:    "/getAnalysisResult",
+					Handler: media.GetAnalysisResultHandler(serverCtx),
+				},
+				{
+					// start analysing the performance
+					Method:  http.MethodPost,
+					Path:    "/performanceAnalysis",
+					Handler: media.PerformanceAnalysisHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/api/media/analysis"),
+	)
 }

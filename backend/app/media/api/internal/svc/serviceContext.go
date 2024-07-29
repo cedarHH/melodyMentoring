@@ -6,6 +6,7 @@ import (
 	AwsDynamodb "github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	AwsS3 "github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/cedarHH/mygo/app/media/api/internal/config"
+	"github.com/cedarHH/mygo/app/media/api/internal/consumer"
 	"github.com/cedarHH/mygo/app/media/api/internal/middleware"
 	"github.com/cedarHH/mygo/app/media/model/dynamodb"
 	"github.com/cedarHH/mygo/app/media/model/s3"
@@ -26,6 +27,7 @@ type ServiceContext struct {
 	ReportModel        commonModel.IS3Model
 	SheetModel         commonModel.IS3Model
 	WaterfallModel     commonModel.IS3Model
+	ResultConsumer     *consumer.AnalysisResultConsumer
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -58,6 +60,18 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	sheetModel := s3.NewVideoModel(s3Client, presignClient, c.S3Conf.SheetBucket.Bucket)
 	waterfallModel := s3.NewVideoModel(s3Client, presignClient, c.S3Conf.WaterfallBucket.Bucket)
 
+	analysisResultConsumer := consumer.NewAnalysisResultConsumer(
+		context.Background(),
+		messageQueue.GetRabbitMQClient(
+			c.RabbitMQConf.User,
+			c.RabbitMQConf.Password,
+			"localhost",
+			"audio_processing_results",
+			c.RabbitMQConf.Port,
+		), recordModel)
+
+	go analysisResultConsumer.StartConsuming()
+
 	return &ServiceContext{
 		Config:             c,
 		UserAuthMiddleware: middleware.NewUserAuthMiddleware(c.CognitoConf).Handle,
@@ -70,5 +84,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		ReportModel:        reportModel,
 		SheetModel:         sheetModel,
 		WaterfallModel:     waterfallModel,
+		ResultConsumer:     analysisResultConsumer,
 	}
 }
