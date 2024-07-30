@@ -18,6 +18,8 @@ export type RootStackParamList = {
         image: string| undefined;
         // others
     }
+    Result: undefined;
+    Feedback: undefined;
     
     UploadMethod: {
         title: string;
