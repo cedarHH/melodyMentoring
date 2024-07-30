@@ -4,8 +4,8 @@ import CustomButton from '../../components/MISC/Button';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useApi } from '../../contexts/apiContext';
-import { 
-    CreateSubUserReq, 
+import {
+    CreateSubUserReq,
     CreateSubUserResp
 } from '../../contexts/apiParams/usercenterComponents';
 
@@ -27,40 +27,11 @@ const AddForm: React.FC<AddFormProps> = ({ visible, onClose }) => {
                 profileName: profileName,
                 pin: pin
             }
-            const resp = await api.user.createSubUser(reqParams)
+            const resp: CreateSubUserResp = await api.user.createSubUser(reqParams)
             if(resp.code === 0) {
                 Alert.alert('Success', 'Sub User created successfully');
                 onClose();
             }
-
-            // const tokenStr = await AsyncStorage.getItem('Token');
-            // if (tokenStr) {
-            //     const tokenData = JSON.parse(tokenStr);
-            //     const response = await fetch('https://mygo.bar/api/user/createSubUser', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //             'Authorization': `Bearer ${tokenData.idToken}`
-            //         },
-            //         body: JSON.stringify({
-            //             profileName,
-            //             pin
-            //         })
-            //     });
-
-            //     const textResponse = await response.text(); // 捕获响应内容
-            //     console.log('Response Text:', textResponse);
-
-            //     if (response.ok) {
-            //         Alert.alert('Success', 'Sub User created successfully');
-            //         onClose();
-            //     } else {
-            //         const errorData = await response.json();
-            //         Alert.alert('Error', errorData.message || 'Failed to create Sub User');
-            //     }
-            // } else {
-            //     Alert.alert('Error', 'Token not found');
-            // }
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An error occurred';
             Alert.alert('Error', errorMessage);
