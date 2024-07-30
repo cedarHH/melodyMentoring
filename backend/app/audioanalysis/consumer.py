@@ -1,8 +1,13 @@
-import time
+import re
 import pika
 import json
 import yaml
 import logging
+from reprocessing import parse, waterfall, midi2sheet, errorExtraction
+from inference import transcribe
+from feedback import feedback
+from s3 import s3
+
 
 class AudioProcessor:
     def __init__(self, config_file='audioanalysis.yaml'):
@@ -43,10 +48,71 @@ class AudioProcessor:
         )
         logging.info(f"Sent notification for job_id: {job_id}")
 
-    def process_audio(self, job_id, sub_user_id, record_id, file_name, audio_url, midi_url, sheet_url, waterfall_url, report_url):
+    def process_audio(
+            self, job_id, sub_user_id, record_id, file_name,
+            audio_url, midi_url, sheet_url, waterfall_url, report_url):
+
         logging.info(f"Received job {job_id} for processing")
-        # todo 分析音频
-        time.sleep(5)
+
+        s3.download_file_from_s3(
+            presigned_url=audio_url,
+            save_directory="./tempFile/",
+            filename=file_name+".mp3"
+        )
+
+        transcribe.transcribe(
+            intput_file_path="./tempFile/"+file_name+".mp3",
+            output_file_path="./tempFile/"+file_name + ".mid"
+        )
+        s3.upload_file_to_s3(
+            file_path="./tempFile/"+file_name + ".mid",
+            presigned_url=midi_url
+        )
+
+        midi_events = parse.parse_mid(
+            midi_file="./tempFile/"+file_name + ".mid"
+        )
+        parse.write2json(
+            midiData=midi_events,
+            json_file="./tempFile/"+file_name+"_notes" + ".json"
+        )
+        waterfall.waterfall(
+            midi_events,
+            output_file_path="./tempFile/"+file_name + ".png"
+        )
+        s3.upload_file_to_s3(
+            file_path="./tempFile/"+file_name + ".png",
+            presigned_url=waterfall_url
+        )
+
+        midi2sheet.midi_to_sheet(
+            midi_file_path="./tempFile/"+file_name + ".mid",
+            output_file_path="./tempFile/"+file_name
+        )
+        s3.upload_file_to_s3(
+            file_path="./tempFile/"+file_name + ".musicxml",
+            presigned_url=sheet_url
+        )
+
+        diff_result, standard_performance, user_performance = errorExtraction.diff(
+            reference_performance="data/data1_2.json",
+            user_performance="./tempFile/"+file_name+"_notes" + ".json"
+        )
+        feedback_response = feedback.get_feedback(
+            standard_performance=standard_performance,
+            user_performance=user_performance,
+            diff=diff_result
+        )
+        json_data = re.search(r'```json\n(.*?)\n```', feedback_response, re.DOTALL).group(1)
+        data = json.loads(json_data)
+        with open("./tempFile/" + file_name + ".json", 'w') as json_file:
+            json.dump(data, json_file, indent=4)
+
+        s3.upload_file_to_s3(
+            file_path="./tempFile/" + file_name + ".json",
+            presigned_url=report_url
+        )
+
         self.send_notification(job_id, sub_user_id, record_id, file_name)
         logging.info(f"Processed and sent notification for job {job_id}")
 
@@ -89,6 +155,7 @@ def main():
         processor.start_consuming()
     except KeyboardInterrupt:
         processor.close_connection()
+
 
 if __name__ == "__main__":
     main()

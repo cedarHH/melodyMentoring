@@ -177,7 +177,6 @@ def get_feedback(
         prompt=prompt,
         model="gpt-4o"
     )
-    print(response)
     return response
 
 if __name__ == "__main__":

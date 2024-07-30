@@ -33,7 +33,6 @@ def performance_analysis(file_path: str):
     return file_name + ".mid", file_name + ".png", "Analysis Report Content"
 
 def compare(filePath1, filePath2):
-    print(f"{filePath1}, {filePath2}")
     midi_file1, chart_image1, report1 = performance_analysis(filePath1)
     midi_file2, chart_image2, report2 = performance_analysis(filePath2)
 
