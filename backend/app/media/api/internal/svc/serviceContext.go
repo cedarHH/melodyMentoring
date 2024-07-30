@@ -16,18 +16,19 @@ import (
 )
 
 type ServiceContext struct {
-	Config             config.Config
-	UserAuthMiddleware rest.Middleware
-	RabbitMQ           *messageQueue.RabbitMQClient
-	RecordModel        dynamodb.RecordModel
-	ThumbnailModel     commonModel.IS3Model
-	AudioModel         commonModel.IS3Model
-	VideoModel         commonModel.IS3Model
-	MidiModel          commonModel.IS3Model
-	ReportModel        commonModel.IS3Model
-	SheetModel         commonModel.IS3Model
-	WaterfallModel     commonModel.IS3Model
-	ResultConsumer     *consumer.AnalysisResultConsumer
+	Config                config.Config
+	UserAuthMiddleware    rest.Middleware
+	AudioProcessingQueue  *messageQueue.RabbitMQClient
+	AudioProcessingResult *messageQueue.RabbitMQClient
+	ResultConsumer        *consumer.AnalysisResultConsumer
+	RecordModel           dynamodb.RecordModel
+	ThumbnailModel        commonModel.IS3Model
+	AudioModel            commonModel.IS3Model
+	VideoModel            commonModel.IS3Model
+	MidiModel             commonModel.IS3Model
+	ReportModel           commonModel.IS3Model
+	SheetModel            commonModel.IS3Model
+	WaterfallModel        commonModel.IS3Model
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -39,13 +40,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	if err != nil {
 		panic("Failed to load S3 config: " + err.Error())
 	}
-
-	rmqClient := messageQueue.GetRabbitMQClient(
-		c.RabbitMQConf.User,
-		c.RabbitMQConf.Password,
-		"localhost",
-		"audio_processing_queue",
-		c.RabbitMQConf.Port)
 
 	recordDynamoDBClient := AwsDynamodb.NewFromConfig(recordTableConfig)
 	recordModel := dynamodb.NewRecordModel(recordDynamoDBClient, c.DynamoDBConf.RecordTable.TableName)
@@ -60,30 +54,42 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	sheetModel := s3.NewVideoModel(s3Client, presignClient, c.S3Conf.SheetBucket.Bucket)
 	waterfallModel := s3.NewVideoModel(s3Client, presignClient, c.S3Conf.WaterfallBucket.Bucket)
 
+	audioProcessingQueueClient := messageQueue.GetRabbitMQClient(
+		c.RabbitMQConf.User,
+		c.RabbitMQConf.Password,
+		"localhost",
+		"audio_processing_queue",
+		c.RabbitMQConf.Port,
+	)
+
+	audioProcessingResultsClient := messageQueue.GetRabbitMQClient(
+		c.RabbitMQConf.User,
+		c.RabbitMQConf.Password,
+		"localhost",
+		"audio_processing_results",
+		c.RabbitMQConf.Port,
+	)
+
 	analysisResultConsumer := consumer.NewAnalysisResultConsumer(
 		context.Background(),
-		messageQueue.GetRabbitMQClient(
-			c.RabbitMQConf.User,
-			c.RabbitMQConf.Password,
-			"localhost",
-			"audio_processing_results",
-			c.RabbitMQConf.Port,
-		), recordModel)
-
-	go analysisResultConsumer.StartConsuming()
+		audioProcessingResultsClient,
+		recordModel,
+	)
+	analysisResultConsumer.StartConsuming()
 
 	return &ServiceContext{
-		Config:             c,
-		UserAuthMiddleware: middleware.NewUserAuthMiddleware(c.CognitoConf).Handle,
-		RabbitMQ:           rmqClient,
-		RecordModel:        recordModel,
-		ThumbnailModel:     thumbnailModel,
-		AudioModel:         audioModel,
-		VideoModel:         videoModel,
-		MidiModel:          midiModel,
-		ReportModel:        reportModel,
-		SheetModel:         sheetModel,
-		WaterfallModel:     waterfallModel,
-		ResultConsumer:     analysisResultConsumer,
+		Config:                c,
+		UserAuthMiddleware:    middleware.NewUserAuthMiddleware(c.CognitoConf).Handle,
+		AudioProcessingQueue:  audioProcessingQueueClient,
+		AudioProcessingResult: audioProcessingResultsClient,
+		ResultConsumer:        analysisResultConsumer,
+		RecordModel:           recordModel,
+		ThumbnailModel:        thumbnailModel,
+		AudioModel:            audioModel,
+		VideoModel:            videoModel,
+		MidiModel:             midiModel,
+		ReportModel:           reportModel,
+		SheetModel:            sheetModel,
+		WaterfallModel:        waterfallModel,
 	}
 }
