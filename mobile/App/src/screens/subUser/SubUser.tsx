@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet,Text,FlatList,TouchableOpacity } from 'react-native';
 import { StackNavigationProp} from '@react-navigation/stack';
-import { RootStackParamList } from '../../../types';
+import { RootStackParamList } from '../../contexts/types';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -57,7 +57,7 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
 
     const onPressHandler = useCallback(({ item, index }: { item: typeof data[0], index: number }) => {
         if (selectedIndex === index) {
-            navigation.navigate('Home', { profileName: item.profileName });
+            navigation.navigate('Configure', { profileName: item.profileName });
             console.log('user login:', item.profileName)
         } else {
             setSelectedIndex(index);

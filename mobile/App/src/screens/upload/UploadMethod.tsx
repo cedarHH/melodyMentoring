@@ -3,7 +3,7 @@ import {View, Text, Button, TouchableOpacity, StyleSheet, Dimensions,Image,Alert
 import { StackNavigationProp,createStackNavigator } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { RootStackParamList } from '../../../types';
+import { RootStackParamList } from '../../contexts/types';
 import { styles } from './ui';
 import {  useState, useRef, useEffect } from 'react';
 import { SelectVideo, UploadVideo,SelectAudio,UploadAudio } from './mediaUtils'; 

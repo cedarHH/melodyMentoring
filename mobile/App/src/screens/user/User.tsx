@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import CustomButton from '../components/MISC/Button';
+import CustomButton from '../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../contexts/types';
+import { RootStackParamList } from '../../contexts/types';
 import { responsiveHeight } from "react-native-responsive-dimensions";
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useAppDispatch, userLogout  } from '../store';
+import { useAppDispatch, userLogout  } from '../../store';
 
 type UserScreenNavigationProp = StackNavigationProp<RootStackParamList, 'User'>;
 
