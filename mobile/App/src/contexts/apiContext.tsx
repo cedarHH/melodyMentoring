@@ -11,6 +11,7 @@ interface ApiContextType {
     record: {
         createRecord: (reqParams: CreateRecordReq) => Promise<CreateRecordResp>;
     };
+    setIdToken: (token:string) => void
 }
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
@@ -41,6 +42,10 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
         }
     );
 
+    const setIdToken = (idToken: string) => {
+        setToken(idToken)
+    }
+
     const user = {
         createSubUser: async (reqParams: CreateSubUserReq): Promise<CreateSubUserResp> => {
             const response = await axiosInstance.post<CreateSubUserResp>('/api/user/createSubUser', reqParams);
@@ -56,11 +61,15 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
     };
 
     return (
-        <ApiContext.Provider value={{ user, record}}>
+        <ApiContext.Provider value={{ user, record, setIdToken}}>
             {children}
         </ApiContext.Provider>
     );
 };
+
+export const setIdToken = (idToken: string) => {
+
+}
 
 export const useApi = (): ApiContextType => {
     const context = useContext(ApiContext);
