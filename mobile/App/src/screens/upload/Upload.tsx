@@ -1,9 +1,8 @@
-
 import React from 'react';
 import {View, Text, Button, TouchableOpacity, StyleSheet, Dimensions,Image,Alert} from 'react-native';
 import { StackNavigationProp,createStackNavigator } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../../types';
+import { RootStackParamList } from '../../contexts/types';
 import UploadMethod from './UploadMethod';
 import Practice from './Practice';
 import CameraRecorder from './CameraRecorder';

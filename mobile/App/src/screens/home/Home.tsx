@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet,Dimensions } from 'react-native';
 import { StackNavigationProp,createStackNavigator } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../types';
+import { RootStackParamList } from '../../contexts/types';
 import Sidebar from './Sidebar';
 import Content from './Content';
 import ContentContext from './Context';

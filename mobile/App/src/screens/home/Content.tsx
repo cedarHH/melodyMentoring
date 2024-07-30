@@ -3,7 +3,7 @@ import { View, Text, StyleSheet} from 'react-native';
 import CustomButton from '../../components/MISC/Button';
 import { StackNavigationProp,createStackNavigator,CardStyleInterpolators, Header } from '@react-navigation/stack';
 import { DrawerActions } from '@react-navigation/native';
-import { RootStackParamList } from '../../../types';
+import { RootStackParamList } from '../../contexts/types';
 import Search from './search/Search';
 import Main from './main/Main';
 import History from './history/History';

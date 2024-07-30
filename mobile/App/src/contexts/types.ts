@@ -20,6 +20,9 @@ export type RootStackParamList = {
     }
     Result: undefined;
     Feedback: undefined;
+    Configure: {
+        profileName:string;
+    };
     
     UploadMethod: {
         title: string;

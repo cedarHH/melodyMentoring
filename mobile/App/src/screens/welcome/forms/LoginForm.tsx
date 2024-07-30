@@ -4,7 +4,7 @@ import CustomButton from '../../../components/MISC/Button';
 import { responsiveHeight, responsiveWidth, responsiveFontSize,  } from 'react-native-responsive-dimensions';
 import { useAppDispatch, useAppSelector, RootState, setAuthMode, AuthMode, showNotificationWithTimeout } from '../../../store';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../../types';
+import { RootStackParamList } from '../../../contexts/types';
 import Notification from '../../../components/MISC/Notification';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Welcome'>;

@@ -2,7 +2,7 @@ import React, { useState,useCallback,useEffect }from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, FlatList, Image} from 'react-native';
 import CustomButton from '../../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../../types';
+import { RootStackParamList } from '../../../contexts/types';
 import musicData from '../../../data/MusicData';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;

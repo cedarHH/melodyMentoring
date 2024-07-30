@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity,Image,Alert } from 'react-nati
 import CustomButton from '../../components/MISC/Button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../types';
+import { RootStackParamList } from '../../contexts/types';
 import { signOut } from '../../libs/cognito';
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 

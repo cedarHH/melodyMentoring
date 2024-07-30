@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../../types';
+import { RootStackParamList } from '../../../contexts/types';
 import { RouteProp } from '@react-navigation/native';
 import CustomButton from '../../../components/MISC/Button';
 
