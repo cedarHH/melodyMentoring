@@ -16,38 +16,35 @@ type RabbitMQClient struct {
 }
 
 var instance *RabbitMQClient
-var once sync.Once
 
 func GetRabbitMQClient(user, password, host, queueName string, port int) *RabbitMQClient {
-	once.Do(func() {
-		conn, err := amqp.Dial(fmt.Sprintf("amqp://%s:%s@%s:%d/", user, password, host, port))
-		if err != nil {
-			log.Fatalf("Failed to connect to RabbitMQ: %v", err)
-		}
+	conn, err := amqp.Dial(fmt.Sprintf("amqp://%s:%s@%s:%d/", user, password, host, port))
+	if err != nil {
+		log.Fatalf("Failed to connect to RabbitMQ: %v", err)
+	}
 
-		ch, err := conn.Channel()
-		if err != nil {
-			log.Fatalf("Failed to open a channel: %v", err)
-		}
+	ch, err := conn.Channel()
+	if err != nil {
+		log.Fatalf("Failed to open a channel: %v", err)
+	}
 
-		q, err := ch.QueueDeclare(
-			queueName, // name
-			false,     // durable
-			false,     // delete when unused
-			false,     // exclusive
-			false,     // no-wait
-			nil,       // arguments
-		)
-		if err != nil {
-			log.Fatalf("Failed to declare a queue: %v", err)
-		}
+	q, err := ch.QueueDeclare(
+		queueName, // name
+		false,     // durable
+		false,     // delete when unused
+		false,     // exclusive
+		false,     // no-wait
+		nil,       // arguments
+	)
+	if err != nil {
+		log.Fatalf("Failed to declare a queue: %v", err)
+	}
 
-		instance = &RabbitMQClient{
-			conn:    conn,
-			channel: ch,
-			queue:   q,
-		}
-	})
+	instance = &RabbitMQClient{
+		conn:    conn,
+		channel: ch,
+		queue:   q,
+	}
 	return instance
 }
 
@@ -67,7 +64,6 @@ func (r *RabbitMQClient) SendMessage(message string) error {
 	if err != nil {
 		return fmt.Errorf("failed to publish a message: %w", err)
 	}
-
 	return nil
 }
 

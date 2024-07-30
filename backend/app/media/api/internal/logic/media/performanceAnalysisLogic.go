@@ -82,7 +82,7 @@ func (l *PerformanceAnalysisLogic) PerformanceAnalysis(
 	message := fmt.Sprintf(
 		`{"jobId":%d, "subUserId":"%s", "recordId":%d, "fileName":"%s", "audioURL":"%s", "midiURL":"%s", "sheetURL":"%s", "waterfallURL":"%s", "reportURL":"%s"}`,
 		jobId, subUserId, recordId, fileName, audioURL, midiURL, sheetURL, waterfallURL, reportURL)
-	err = l.svcCtx.RabbitMQ.SendMessage(message)
+	err = l.svcCtx.AudioProcessingQueue.SendMessage(message)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send message to RabbitMQ: %w", err)
 	}

@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Modal, Image, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Modal, Image, Alert, useAnimatedValue } from 'react-native';
 import CustomButton from '../../components/MISC/Button';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useApi } from '../../contexts/apiContext';
+import {
+    CreateSubUserReq,
+    CreateSubUserResp
+} from '../../contexts/apiParams/usercenterComponents';
 
 const logo = require('../../assets/img/logo/mygo1.png');
 
@@ -14,36 +19,18 @@ interface AddFormProps {
 const AddForm: React.FC<AddFormProps> = ({ visible, onClose }) => {
     const [profileName, setProfileName] = useState('');
     const [pin, setPin] = useState('');
+    const api = useApi();
 
     const handleCreate = async () => {
         try {
-            const tokenStr = await AsyncStorage.getItem('Token');
-            if (tokenStr) {
-                const tokenData = JSON.parse(tokenStr);
-                const response = await fetch('https://mygo.bar/api/user/createSubUser', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${tokenData.idToken}`
-                    },
-                    body: JSON.stringify({
-                        profileName,
-                        pin
-                    })
-                });
-
-                const textResponse = await response.text(); // 捕获响应内容
-                console.log('Response Text:', textResponse);
-
-                if (response.ok) {
-                    Alert.alert('Success', 'Sub User created successfully');
-                    onClose();
-                } else {
-                    const errorData = await response.json();
-                    Alert.alert('Error', errorData.message || 'Failed to create Sub User');
-                }
-            } else {
-                Alert.alert('Error', 'Token not found');
+            const reqParams: CreateSubUserReq = {
+                profileName: profileName,
+                pin: pin
+            }
+            const resp: CreateSubUserResp = await api.user.createSubUser(reqParams)
+            if(resp.code === 0) {
+                Alert.alert('Success', 'Sub User created successfully');
+                onClose();
             }
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An error occurred';

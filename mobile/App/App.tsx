@@ -10,6 +10,7 @@ import SubUser from './src/screens/subUser/SubUser';
 import Upload from './src/screens/upload/Upload';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { RootStackParamList } from './types';
+import { ApiProvider } from './src/contexts/apiContext';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -25,16 +26,18 @@ export default function App() {
     }, []);
 
     return (
-        <Provider store={store}>
-            <NavigationContainer>
-                <Stack.Navigator initialRouteName="Welcome">
-                    <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
-                    <Stack.Screen name="SubUser" component={SubUser} options={{ headerShown: false }}/>
-                    <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-                    <Stack.Screen name="User" component={User} options={{ headerShown: false }}/>
-                    <Stack.Screen name="Upload" component={Upload} options={{ headerShown: false }}/>
-                </Stack.Navigator>
-            </NavigationContainer>
-        </Provider>
+        <ApiProvider>
+            <Provider store={store}>
+                <NavigationContainer>
+                    <Stack.Navigator initialRouteName="Welcome">
+                        <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
+                        <Stack.Screen name="SubUser" component={SubUser} options={{ headerShown: false }}/>
+                        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+                        <Stack.Screen name="User" component={User} options={{ headerShown: false }}/>
+                        <Stack.Screen name="Upload" component={Upload} options={{ headerShown: false }}/>
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </Provider>
+        </ApiProvider>
     );
 }
