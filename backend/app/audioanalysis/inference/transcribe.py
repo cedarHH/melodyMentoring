@@ -46,9 +46,3 @@ def parse_arguments(audio_path, output_midi_path, cuda=False):
 def transcribe(intput_file_path:str, output_file_path:str):
     args = parse_arguments(intput_file_path, output_file_path, cuda=True)
     inference(args)
-
-if __name__ == '__main__':
-    transcribe(
-        intput_file_path="../data/unravel.mp3",
-        output_file_path="../data/unravel.mid"
-    )

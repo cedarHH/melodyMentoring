@@ -1,6 +1,5 @@
 import mido
 import json
-import waterfall
 
 
 def parse_mid(midi_file: str):
@@ -62,7 +61,7 @@ def write2txt(midiEvents, txt_file):
 
 if __name__ == "__main__":
     file_name = "data1_1"
-    midi_data = parse_mid(f"data/{file_name}.mid")
-    write2json(midi_data, f"data/{file_name}.json")
-    waterfall.waterfall(midi_data, f"data/{file_name}.png")
+    midi_data = parse_mid(f"../data/{file_name}.mid")
+    write2json(midi_data, f"../data/{file_name}.json")
+    # waterfall.waterfall(midi_data, f"../data/{file_name}.png")
     # write2txt(midi_events, "data/data1_1.txt")

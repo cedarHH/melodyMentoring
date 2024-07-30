@@ -38,6 +38,24 @@ def write2json(data, json_file):
         file.write(json_data)
 
 
+def diff(
+        reference_performance,
+        user_performance
+):
+    key = 'note'
+    json1 = read_json(reference_performance)
+    json2 = read_json(user_performance)
+    list1 = json1["performance_info"]
+    list2 = json2["performance_info"]
+    adds, deletes, changes = find_diffs_with_subsequences(list1, list2, key)
+
+    result = dict()
+    result["adds"] = adds
+    result["deletes"] = deletes
+    result["changes"] = changes
+    return result, json1, json2
+
+
 list1 = [{'id': 1, 'value': 'a'}, {'id': 2, 'value': 'b'}, {'id': 3, 'value': 'c'}, {'id': 4, 'value': 'd'},
          {'id': 5, 'value': 'e'}, {'id': 6, 'value': 'f'}]
 list2 = [{'id': 1, 'value': 'a'}, {'id': 2, 'value': 'b'}, {'id': 7, 'value': 'g'}, {'id': 8, 'value': 'h'},
@@ -45,13 +63,5 @@ list2 = [{'id': 1, 'value': 'a'}, {'id': 2, 'value': 'b'}, {'id': 7, 'value': 'g
 
 
 if __name__ == "__main__":
-    key = 'note'
-    list1 = read_json("../data/data1_2.json")["performance_info"]
-    list2 = read_json("../data/data1_4.json")["performance_info"]
-    adds, deletes, changes = find_diffs_with_subsequences(list1, list2, key)
-
-    result = dict()
-    result["adds"] = adds
-    result["deletes"] = deletes
-    result["changes"] = changes
+    result = diff("../data/data1_2.json", "../data/data1_4.json")
     write2json(result, "../data/data1_2_data1_4.json")

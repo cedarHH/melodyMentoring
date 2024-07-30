@@ -9,7 +9,3 @@ def convert(file_path, output_mp3_path):
         print(f"An error occurred: {e}")
 
     print(f"Audio extracted and saved as {output_mp3_path}")
-
-
-if __name__ == "__main__":
-    convert(file_path="littlestar.mp4", output_mp3_path="littlestar.mp3")
