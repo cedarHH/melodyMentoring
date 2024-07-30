@@ -6,8 +6,10 @@ export type RootStackParamList = {
     Upload: {
         title: string;
     };
+
     Welcome: undefined;
     SubUser: undefined;
+
     Main: undefined;
     Search: undefined;
     History: undefined;
@@ -16,4 +18,10 @@ export type RootStackParamList = {
         image: string| undefined;
         // others
     }
+    
+    UploadMethod: {
+        title: string;
+    };
+    CameraRecorder: undefined;
+    Practice: undefined;
 };
