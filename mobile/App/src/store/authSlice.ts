@@ -5,6 +5,7 @@ import { RootState, AppDispatch } from './store';
 import { showNotification, showNotificationWithTimeout } from './notificationSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
+import { useApi } from '../contexts/apiContext';
 
 export enum AuthMode {
     WELCOME = 'welcome',
