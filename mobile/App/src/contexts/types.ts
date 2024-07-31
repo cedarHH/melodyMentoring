@@ -7,6 +7,7 @@ export type RootStackParamList = {
     };
     Upload: {
         title: string;
+        refId: string;
         profileName:string;
     };
 
@@ -24,6 +25,7 @@ export type RootStackParamList = {
     };
     Music: {
         title: string;
+        refId: string;
         image: string | undefined;
         profileName: string;
         // others
@@ -32,15 +34,18 @@ export type RootStackParamList = {
         profileName: string;
         recordId: number;
     };
-    Feedback: undefined;
+    Feedback: {
+        profileName: string;
+        comment: string,
+        Errors: string,
+        feedback: string
+        recommendations: string
+    };
     Configure: {
         profileName: string;
     };
 
-    UploadMethod: {
-        title: string;
-        profileName:string;
-    };
+    UploadMethod: undefined;
     CameraRecorder: undefined;
     Practice: undefined;
 };

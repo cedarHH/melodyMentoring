@@ -1,6 +1,22 @@
 version: '3.8'
 
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: password
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "status" ]
+      interval: 3s
+      timeout: 1s
+      retries: 3
+    networks:
+      - app-network
+
   usercenter:
     build:
       context: .
@@ -15,4 +31,26 @@ services:
       dockerfile: app/media/Dockerfile
     ports:
       - "8889:8889"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
 
+  audioanalysis:
+    build:
+      context: .
+      dockerfile: app/audioanalysis/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
+    volumes:
+      - ./app/audioanalysis:/app/audioanalysis
+    working_dir: /app/audioanalysis
+    command: ["python", "consumer.py"]
+
+networks:
+  app-network:
+    driver: bridge

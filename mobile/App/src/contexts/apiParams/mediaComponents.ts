@@ -387,7 +387,6 @@ export interface UploadRefAudioSuccessReq {
 
 export interface UploadRefAudioSuccessResp {
 	code: number
-	analysisId: number
 	msg: string
 }
 
@@ -398,7 +397,6 @@ export interface UploadRefImgSuccessReq {
 
 export interface UploadRefImgSuccessResp {
 	code: number
-	analysisId: number
 	msg: string
 }
 
@@ -409,7 +407,6 @@ export interface UploadRefVideoSuccessReq {
 
 export interface UploadRefVideoSuccessResp {
 	code: number
-	analysisId: number
 	msg: string
 }
 

@@ -1,0 +1,2 @@
+backend/data/piano_transcription_inference_data/note_F1=0.9677_pedal_F1=0.9186.pth filter=lfs diff=lfs merge=lfs -text
+*.pth filter=lfs diff=lfs merge=lfs -text

@@ -21,6 +21,11 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
     const [noteAccuracy, setNoteAccuracy] = useState<string>('Loading...');
     const [velocityAccuracy, setVelocityAccuracy] = useState<string>('Loading...');
     const [durationAccuracy, setDurationAccuracy] = useState<string>('Loading...');
+    const [comment, setComment] = useState<string>('Loading...');
+    const [Errors, setErrors] = useState<string>('Loading...');
+    const [feedback, setFeedback] = useState<string>('Loading...');
+    const [recommendations, setRecommendations] = useState<string>('Loading...');
+
     const api = useApi();
 
     useEffect(() => {
@@ -39,17 +44,29 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                     setNoteAccuracy(data['Note accuracy']);
                     setVelocityAccuracy(data['Velocity accuracy']);
                     setDurationAccuracy(data['Duration accuracy']);
+                    setComment(data['Comment']);
+                    setErrors(data['Errors']);
+                    setFeedback(data['Feedback']);
+                    setRecommendations(data['Recommendations']);
                 } else {
                     console.error('Error fetching performance report:', performanceResponse.msg);
                     setNoteAccuracy('Error');
                     setVelocityAccuracy('Error');
                     setDurationAccuracy('Error');
+                    setComment('Error');
+                    setErrors('Error');
+                    setFeedback('Error');
+                    setRecommendations('Error');
                 }
             } catch (error) {
                 console.error('Error fetching performance report:', error);
                 setNoteAccuracy('Error');
                 setVelocityAccuracy('Error');
                 setDurationAccuracy('Error');
+                setComment('Error');
+                setErrors('Error');
+                setFeedback('Error');
+                setRecommendations('Error');
             }
         };
 
@@ -62,7 +79,13 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                 <Text style={styles.headerText}>AI Support</Text>
                 <TouchableOpacity
                     style={styles.aiSupportButton}
-                    onPress={() => navigation.navigate('Feedback')}
+                    onPress={() => navigation.navigate('Feedback', {
+                        profileName,
+                        comment,
+                        Errors,
+                        feedback,
+                        recommendations,
+                    })}
                 >
                     <Text style={styles.aiSupportButtonText}>Waiting for AI...</Text>
                     <Text style={styles.aiSupportButtonSubText}>{'>.<'}</Text>

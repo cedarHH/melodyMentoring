@@ -1,87 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import CustomButton from '../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../contexts/types';
-import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
-import { useApi } from '../../contexts/apiContext';
-import { useAppDispatch } from '../../store';
-import {GetPerformanceReportReq, GetPerformanceReportResp} from "../../contexts/apiParams/mediaComponents";
+import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 
-type UserScreenNavigationProp = StackNavigationProp<RootStackParamList, 'User'>;
+type FeedbackScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Feedback'>;
+type FeedbackScreenRouteProp = RouteProp<RootStackParamList, 'Feedback'>;
 
 type Props = {
-    navigation: UserScreenNavigationProp;
+    navigation: FeedbackScreenNavigationProp;
+    route: FeedbackScreenRouteProp;
 };
 
-const User: React.FC<Props> = ({ navigation }) => {
-    const dispatch = useAppDispatch();
-    const api = useApi();
-
-    const [reportData, setReportData] = useState<GetPerformanceReportResp | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        const fetchPerformanceReport = async () => {
-            try {
-                const params: GetPerformanceReportReq = {
-                    profileName: 'DefaultProfile',
-                    recordId: 123, // 根据实际需要设置recordId
-                };
-                const response = await api.record.getPerformanceReport(params);
-                if (response.code === 0) {
-                    setReportData(response);
-                } else {
-                    setError(response.msg);
-                    Alert.alert('Error', response.msg);
-                }
-            } catch (e) {
-                const errorMessage = e instanceof Error ? e.message : 'An error occurred';
-                setError(errorMessage);
-                Alert.alert('Error', errorMessage);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchPerformanceReport();
-    }, []);
-
-    if (loading) {
-        return (
-            <View style={styles.container}>
-                <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-        );
-    }
-
-    if (error) {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.errorText}>{error}</Text>
-                <CustomButton
-                    text="Go Home"
-                    onPress={() => navigation.navigate('Home', { profileName: 'DefaultProfile' })}
-                    style={styles.button}
-                />
-            </View>
-        );
-    }
+const Feedback: React.FC<Props> = ({ navigation, route }) => {
+    const { comment, Errors, feedback, recommendations } = route.params;
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Performance Report</Text>
-            {reportData && (
-                <View style={styles.reportContainer}>
-                    <Text style={styles.reportText}>Code: {reportData.code}</Text>
-                    <Text style={styles.reportText}>Presigned URL: {reportData.presignedurl}</Text>
-                    <Text style={styles.reportText}>Message: {reportData.msg}</Text>
-                </View>
-            )}
+            <Text style={styles.header}>AI Feedback</Text>
+            <Text style={styles.text}>Comment: {comment}</Text>
+            <Text style={styles.text}>Errors: {Errors}</Text>
+            <Text style={styles.text}>Feedback: {feedback}</Text>
+            <Text style={styles.text}>Recommendations: {recommendations}</Text>
+
             <CustomButton
                 text="Go Home"
-                onPress={() => navigation.navigate('Home', { profileName: 'DefaultProfile' })}
+                onPress={() => navigation.navigate('Home', { profileName: route.params.profileName })}
                 style={styles.button}
             />
         </View>
@@ -91,28 +37,25 @@ const User: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: responsiveWidth(5),
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#1B1C1E',
     },
-    button: {
-        marginVertical: responsiveHeight(1),
-    },
-    reportContainer: {
-        marginVertical: responsiveHeight(2),
-    },
-    reportText: {
-        fontSize: responsiveFontSize(2),
-        marginVertical: responsiveHeight(0.5),
-    },
-    errorText: {
-        color: 'red',
-        fontSize: responsiveFontSize(2),
-    },
-    title: {
+    header: {
         fontSize: responsiveFontSize(3),
         fontWeight: 'bold',
         marginBottom: responsiveHeight(2),
+        color: 'white',
+    },
+    text: {
+        fontSize: responsiveFontSize(2),
+        marginBottom: responsiveHeight(1),
+        color: 'white',
+    },
+    button: {
+
     },
 });
 
-export default User;
+export default Feedback;

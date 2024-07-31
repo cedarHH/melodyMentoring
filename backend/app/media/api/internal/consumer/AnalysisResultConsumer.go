@@ -18,14 +18,21 @@ type AnalysisResultConsumer struct {
 	latestCompletedJobId int64
 	completedMu          sync.Mutex
 	recordModel          dynamodb.RecordModel
+	referenceModel       dynamodb.ReferenceModel
 }
 
-func NewAnalysisResultConsumer(ctx context.Context, rmqClient *messageQueue.RabbitMQClient, recordModel dynamodb.RecordModel) *AnalysisResultConsumer {
+func NewAnalysisResultConsumer(
+	ctx context.Context,
+	rmqClient *messageQueue.RabbitMQClient,
+	recordModel dynamodb.RecordModel,
+	referenceModel dynamodb.ReferenceModel) *AnalysisResultConsumer {
+
 	return &AnalysisResultConsumer{
 		Logger:         logx.WithContext(ctx),
 		ctx:            ctx,
 		rabbitMQClient: rmqClient,
 		recordModel:    recordModel,
+		referenceModel: referenceModel,
 	}
 }
 
@@ -43,20 +50,35 @@ func (c *AnalysisResultConsumer) handleMessage(message string) {
 		fmt.Printf("Failed to unmarshal message: %v\n", err)
 		return
 	}
+	isRef := msg["isRef"].(string)
 	jobId := int64(msg["jobId"].(float64))
 	subUserId := msg["subUserId"].(string)
 	recordId := int64(msg["recordId"].(float64))
+	refId := msg["refId"].(string)
 	fileName := msg["fileName"].(string)
 
-	updates := map[string]interface{}{
-		"Midi":      fileName + ".mid",
-		"Sheet":     fileName + ".musicxml",
-		"Waterfall": fileName + ".png",
-		"Report":    fileName + ".json",
-	}
-	err = c.recordModel.UpdateAttributes(c.ctx, subUserId, recordId, updates)
-	if err != nil {
-		c.Logger.Errorf("failed to update record: %w", err)
+	if isRef == "TRUE" {
+		updates := map[string]interface{}{
+			"Midi":      fileName + ".mid",
+			"Sheet":     fileName + ".musicxml",
+			"Waterfall": fileName + ".png",
+			"Json":      fileName + ".json",
+		}
+		err = c.referenceModel.UpdateAttributes(c.ctx, refId, updates)
+		if err != nil {
+			c.Logger.Errorf("failed to update reference: %w", err)
+		}
+	} else {
+		updates := map[string]interface{}{
+			"Midi":      fileName + ".mid",
+			"Sheet":     fileName + ".musicxml",
+			"Waterfall": fileName + ".png",
+			"Report":    fileName + ".json",
+		}
+		err = c.recordModel.UpdateAttributes(c.ctx, subUserId, recordId, updates)
+		if err != nil {
+			c.Logger.Errorf("failed to update record: %w", err)
+		}
 	}
 
 	c.updateLatestCompletedJobId(jobId)

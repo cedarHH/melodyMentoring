@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button, TouchableOpacity, StyleSheet, Dimensions,Image,Alert} from 'react-native';
+import {View, Text, Button, TouchableOpacity, StyleSheet, Dimensions,Image,Alert,TextInput} from 'react-native';
 import { StackNavigationProp,createStackNavigator } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -11,6 +11,7 @@ import CameraRecorder from './CameraRecorder';
 import ChooseMethod from './methodChoose';
 import { UploadContext } from './UploadContext';
 import { useApi } from '../../contexts/apiContext';
+import { CreateReferenceReq, CreateReferenceResp } from '../../contexts/apiParams/mediaComponents';
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'UploadMethod'>;
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
@@ -27,16 +28,21 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
     const [videoUri, setVideoUri] = useState<string | null>(null);
     const [audioUri, setAudioUri] = useState<string | null>(null);
     const [reference, setReference] = useState(false);
+    const [refid, setrefid] = useState<string | null>(null);
     const [aov, setaov] = useState<string | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const context = useContext(UploadContext);
+    const [form, setForm] = useState({
+        title: '',
+        style: '',
+        composer: '',
+        instrument: ''
+    });
     const api = useApi();
 
     if (!context) {
         throw new Error('UploadMethod must be used within an UploadProvider');
     }
-    console.log(context)
-
     const { title, profileName } = context;
     const handleChoose = () => {
         setIsModalVisible(true);
@@ -92,6 +98,41 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
         }
     };
 
+    const handleInputChange = (field: string, value: string) => {
+        setForm({
+            ...form,
+            [field]: value
+        });
+    };
+
+    const handleRefUpload = async () => {
+        try {
+            const reqParams: CreateReferenceReq = form
+            const resp: CreateReferenceResp = await api.reference.createReference(reqParams)
+            if(resp.code === 0) {
+                const refid = resp.refId;
+                setrefid(refid)
+            }
+            
+        } catch(error) {
+            console.error('Error create ref:', error);
+        }
+
+        if (aov=='video' && videoUri) {
+            await UploadVideo(videoUri, refid);
+            Alert.alert('Video uploaded successfully');
+        } 
+
+        if (aov=='audio' && audioUri) {
+            await UploadAudio(audioUri, refid);
+            Alert.alert('Audio uploaded successfully');
+        }
+
+        else {
+            Alert.alert('No video to upload');
+        }
+    };
+
     useEffect(() => {
         if (title === 'default') {
             setReference(true);
@@ -108,6 +149,7 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
                 <Icon name='chevron-back-outline' size={30} color={'white'} onPress={navigation.goBack}/>
             </View>
             <View style={styles.uploadSection}>
+
                 <TouchableOpacity onPress={handleSelectVideo}>
                     <Image source={require('../../assets/icon/gallery.png')}
                         style={styles.uploadButton}
@@ -115,7 +157,7 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
                     <Text style={styles.buttonText}>Select Video</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={handleUpload}>
+                <TouchableOpacity onPress={reference ? handleRefUpload : handleUpload}>
                     <Image source={videoUri || audioUri ? require('../../assets/img/logo/mygo1.png') : require('../../assets/icon/music-playlist.png')}
                     style={styles.uploadButton}
                     />
@@ -128,8 +170,6 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
                     />
                     <Text style={styles.buttonText}>Select Audio</Text>
                 </TouchableOpacity>
-
-
                 
             </View>
             { !reference && (
@@ -137,6 +177,35 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
                     <Image source={require('../../assets/icon/music-circle.png')} style={styles.recordButton}/>
                     <Text style={styles.recordButtonText}>Record Now!</Text>
                 </TouchableOpacity>
+            )}
+
+            { reference && (
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Title"
+                        value={form.title}
+                        onChangeText={(text) => handleInputChange('title', text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Style"
+                        value={form.style}
+                        onChangeText={(text) => handleInputChange('style', text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Composer"
+                        value={form.composer}
+                        onChangeText={(text) => handleInputChange('composer', text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Instrument"
+                        value={form.instrument}
+                        onChangeText={(text) => handleInputChange('instrument', text)}
+                    />
+                </View>
             )}
             
             <ChooseMethod visible={isModalVisible} onClose={handleCloseModal} navigation={navigation} route={route} />

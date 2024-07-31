@@ -7,7 +7,7 @@ import { responsiveHeight } from "react-native-responsive-dimensions";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useAppDispatch, userLogout  } from '../../store';
 import { RouteProp } from '@react-navigation/native';
-import { GetAvatarReqParams, GetAvatarResp } from '../../contexts/apiParams/usercenterComponents';
+import { GetAvatarReqParams, GetAvatarResp, GetSubUserByNameReqParams, GetSubUserByNameResp, GetSubUsersResp } from '../../contexts/apiParams/usercenterComponents';
 import { useApi } from '../../contexts/apiContext';
 
 type UserScreenNavigationProp = StackNavigationProp<RootStackParamList, 'User'>;
@@ -22,6 +22,7 @@ const User: React.FC<Props> = ({ navigation,route }) => {
     
     const name = route.params.profileName
     const [avatarUri, setAvatarUri] = useState<string | undefined>(undefined);
+    // const [userData, setUserdata] = useState<string | undefined>(undefined);
     console.log(name)
     const dispatch = useAppDispatch();
     const api = useApi();
@@ -42,8 +43,24 @@ const User: React.FC<Props> = ({ navigation,route }) => {
         }
     };
 
+    const handleUserData = async () => {
+        try {
+        const reqParams: GetSubUserByNameReqParams= {
+            profileName: name,
+        };
+        const resp: GetSubUserByNameResp = await api.user.getSubUserByName(reqParams)
+        
+        if(resp.code === 0) {
+            console.log(resp)
+        }
+        } catch (error) {
+            Alert.alert('Error');
+        }
+    };
+
     useEffect(() => {
         handleAvatar()
+        handleUserData()
     }, []);
     
     const handleLogout = async () => {
@@ -54,7 +71,11 @@ const User: React.FC<Props> = ({ navigation,route }) => {
         <View style={styles.container}>
             <Text>{name} Screen</Text>
             <Text>User details</Text>
-            <Image source={ {uri: avatarUri}} style={styles.avatarImage}/>
+            <View>
+                {/* <Image source={require('../../assets/icon/loading.png')} style={styles.avatarImage}/> */}
+                <Image source={ {uri: avatarUri}} style={styles.avatarImage}/>  
+            </View>
+            
             <CustomButton
                 text="Go Home"
                 onPress={() => navigation.navigate('Home', { profileName: route.params.profileName })}
@@ -91,8 +112,8 @@ const styles = StyleSheet.create({
         transform: [{ scaleX: -1 }]
     },
     avatarImage: {
-        width: responsiveHeight(20),
-        height: responsiveHeight(20),
+        width: '10%',
+        aspectRatio:1,
         borderRadius: 50,
         marginBottom: 24,
     },

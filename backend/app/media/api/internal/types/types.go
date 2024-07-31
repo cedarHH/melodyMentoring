@@ -373,9 +373,8 @@ type UploadRefAudioSuccessReq struct {
 }
 
 type UploadRefAudioSuccessResp struct {
-	Code       int64  `json:"code"`
-	AnalysisId int64  `json:"analysisId"`
-	Msg        string `json:"msg"`
+	Code int64  `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 type UploadRefImgSuccessReq struct {
@@ -384,9 +383,8 @@ type UploadRefImgSuccessReq struct {
 }
 
 type UploadRefImgSuccessResp struct {
-	Code       int64  `json:"code"`
-	AnalysisId int64  `json:"analysisId"`
-	Msg        string `json:"msg"`
+	Code int64  `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 type UploadRefVideoSuccessReq struct {
@@ -395,9 +393,8 @@ type UploadRefVideoSuccessReq struct {
 }
 
 type UploadRefVideoSuccessResp struct {
-	Code       int64  `json:"code"`
-	AnalysisId int64  `json:"analysisId"`
-	Msg        string `json:"msg"`
+	Code int64  `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 type UploadVideoSuccessReq struct {
