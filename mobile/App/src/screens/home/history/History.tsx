@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import CustomButton from '../../../components/MISC/Button';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../contexts/types';
-import {RouteProp} from '@react-navigation/native';
-import {responsiveHeight, responsiveFontSize} from 'react-native-responsive-dimensions';
-import {useApi} from '../../../contexts/apiContext';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../contexts/types';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
+import { responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions';
+import { useApi } from '../../../contexts/apiContext';
 import {
     GetPerformanceReportReq,
     GetPerformanceReportResp,
@@ -20,41 +20,54 @@ type Props = {
     route: HistoryRoute;
 };
 
-const History: React.FC<Props> = ({ navigation,route }) => {
+const History: React.FC<Props> = ({ navigation, route }) => {
     const api = useApi();
-    const {profileName} = route.params;
+    const { profileName } = route.params;
     const [records, setRecords] = useState<Array<RecordInfo>>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchRecords = async () => {
-            try {
-                const params: GetRecordReq = {
-                    profileName: profileName,
-                    limit: 10,
-                    start: 0,
-                    end: Date.now(),
-                };
-                const response = await api.record.getRecord(params);
-                if (response.code === 0) {
-                    console.log(response);
-                    setRecords(response.data);
-                } else {
-                    setError(response.msg);
-                    Alert.alert('Error', response.msg);
+    useFocusEffect(
+        React.useCallback(() => {
+            const fetchRecords = async () => {
+                try {
+                    const params: GetRecordReq = {
+                        profileName: profileName,
+                        limit: 10,
+                        start: 0,
+                        end: Date.now(),
+                    };
+                    const response = await api.record.getRecord(params);
+                    if (response.code === 0) {
+                        console.log('Records:', response.data);
+                        setRecords(response.data);
+                    } else {
+                        setError(response.msg);
+                        Alert.alert('Error', response.msg);
+                    }
+                } catch (e) {
+                    const errorMessage = e instanceof Error ? e.message : 'An error occurred';
+                    setError(errorMessage);
+                    Alert.alert('Error', errorMessage);
+                } finally {
+                    setLoading(false);
                 }
-            } catch (e) {
-                const errorMessage = e instanceof Error ? e.message : 'An error occurred';
-                setError(errorMessage);
-                Alert.alert('Error', errorMessage);
-            } finally {
-                setLoading(false);
-            }
-        };
+            };
 
-        fetchRecords();
-    }, []);
+            fetchRecords();
+
+            return () => {
+                setRecords([]);
+                setLoading(true);
+                setError(null);
+            };
+        }, [navigation])
+    );
+
+    const convertRecordIdToDate = (recordId: number) => {
+        const date = new Date(recordId * 1000);
+        return date.toLocaleString();
+    };
 
     if (loading) {
         return (
@@ -70,6 +83,19 @@ const History: React.FC<Props> = ({ navigation,route }) => {
                 <Text style={styles.errorText}>{error}</Text>
                 <CustomButton
                     text="Go Home"
+                    onPress={() => navigation.navigate('Home', { profileName: profileName })}
+                    style={styles.button}
+                />
+            </View>
+        );
+    }
+
+    if (!records || records.length === 0) {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.text}>No history available.</Text>
+                <CustomButton
+                    text="Go Home"
                     onPress={() => navigation.navigate('Home', { profileName: 'DefaultProfile' })}
                     style={styles.button}
                 />
@@ -80,17 +106,17 @@ const History: React.FC<Props> = ({ navigation,route }) => {
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.text}>History</Text>
-            {/*{records.map((record) => (*/}
-            {/*    <TouchableOpacity*/}
-            {/*        key={record.id}*/}
-            {/*        style={styles.recordContainer}*/}
-            {/*        onPress={() => navigation.navigate('Result', { recordId: record.id })}*/}
-            {/*    >*/}
-            {/*        <Text style={styles.recordText}>ID: {record.id}</Text>*/}
-            {/*        /!* 这里假设RecordInfo有一个timestamp属性来表示记录时间 *!/*/}
-            {/*        <Text style={styles.recordText}>Time: {new Date(record.timestamp).toLocaleString()}</Text>*/}
-            {/*    </TouchableOpacity>*/}
-            {/*))}*/}
+            {records.map((record) => (
+                <TouchableOpacity
+                    key={record.RecordId}
+                    style={styles.recordContainer}
+                    onPress={() => navigation.navigate('Result', {profileName: profileName ,recordId: record.RecordId })}
+                >
+                    <Text style={styles.recordText}>ID: {record.RecordId}</Text>
+                    <Text style={styles.recordText}>Time: {convertRecordIdToDate(record.RecordId)}</Text>
+                    <Text style={styles.recordText}>Reference: {record.reference}</Text>
+                </TouchableOpacity>
+            ))}
             <CustomButton
                 text="Go Home"
                 onPress={() => navigation.navigate('Home', { profileName: 'DefaultProfile' })}
