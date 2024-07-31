@@ -31,6 +31,8 @@ export const checkFirstLogin = () => async (dispatch: AppDispatch) => {
         } else {
             dispatch(setFirstLogin(false));
         }
+        // // test, always true
+        // dispatch(setFirstLogin(true));
     } catch (error) {
         console.error('Failed to check first login:', error);
     }
