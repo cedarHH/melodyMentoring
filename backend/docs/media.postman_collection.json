@@ -365,6 +365,53 @@
         "description": "get performance report"
       },
       "response": []
+    },
+    {
+      "name": "start analysing the performance",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/analysis/performanceAnalysis",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "analysis", "performanceAnalysis"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+        },
+        "description": "start analysing the performance"
+      },
+      "response": []
+    },
+    {
+      "name": "get the ranking of the tasks to be analysed, if it is 0, the analysis is finished",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8889/api/media/analysis/getAnalysisResult?analysisId=0",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "analysis", "getAnalysisResult"],
+          "query": [
+            {
+              "key": "analysisId",
+              "value": "0"
+            }
+          ]
+        },
+        "description": "get the ranking of the tasks to be analysed, if it is 0, the analysis is finished"
+      },
+      "response": []
     }
   ]
 }

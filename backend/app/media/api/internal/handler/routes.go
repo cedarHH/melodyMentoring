@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	media "github.com/cedarHH/mygo/app/media/api/internal/handler/media"
+	reference "github.com/cedarHH/mygo/app/media/api/internal/handler/reference"
 	"github.com/cedarHH/mygo/app/media/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -129,5 +130,110 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			}...,
 		),
 		rest.WithPrefix("/api/media/analysis"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.UserAuthMiddleware},
+			[]rest.Route{
+				{
+					// create a new reference
+					Method:  http.MethodPost,
+					Path:    "/createReference",
+					Handler: reference.CreateReferenceHandler(serverCtx),
+				},
+				{
+					// delete a reference
+					Method:  http.MethodPost,
+					Path:    "/deleteReference",
+					Handler: reference.DeleteReferenceHandler(serverCtx),
+				},
+				{
+					// get reference audio
+					Method:  http.MethodPost,
+					Path:    "/getRefAudio",
+					Handler: reference.GetRefAudioHandler(serverCtx),
+				},
+				{
+					// get reference audio
+					Method:  http.MethodPost,
+					Path:    "/getRefAudioUrl",
+					Handler: reference.GetRefAudioUrlHandler(serverCtx),
+				},
+				{
+					// get reference image
+					Method:  http.MethodPost,
+					Path:    "/getRefImg",
+					Handler: reference.GetRefImgHandler(serverCtx),
+				},
+				{
+					// get reference img
+					Method:  http.MethodPost,
+					Path:    "/getRefImgUrl",
+					Handler: reference.GetRefImgUrlHandler(serverCtx),
+				},
+				{
+					// get reference midi
+					Method:  http.MethodPost,
+					Path:    "/getRefMidi",
+					Handler: reference.GetRefMidiHandler(serverCtx),
+				},
+				{
+					// get reference sheet
+					Method:  http.MethodPost,
+					Path:    "/getRefSheet",
+					Handler: reference.GetRefSheetHandler(serverCtx),
+				},
+				{
+					// get reference video
+					Method:  http.MethodPost,
+					Path:    "/getRefVideo",
+					Handler: reference.GetRefVideoHandler(serverCtx),
+				},
+				{
+					// get reference video
+					Method:  http.MethodPost,
+					Path:    "/getRefVideoUrl",
+					Handler: reference.GetRefVideoUrlHandler(serverCtx),
+				},
+				{
+					// get reference waterfall image
+					Method:  http.MethodPost,
+					Path:    "/getRefWaterfall",
+					Handler: reference.GetRefWaterfallHandler(serverCtx),
+				},
+				{
+					// get reference list
+					Method:  http.MethodPost,
+					Path:    "/getReference",
+					Handler: reference.GetReferenceHandler(serverCtx),
+				},
+				{
+					// query reference
+					Method:  http.MethodPost,
+					Path:    "/queryReference",
+					Handler: reference.QueryReferenceHandler(serverCtx),
+				},
+				{
+					// upload audio success
+					Method:  http.MethodPost,
+					Path:    "/uploadRefAudioSuccess",
+					Handler: reference.UploadRefAudioSuccessHandler(serverCtx),
+				},
+				{
+					// upload image success
+					Method:  http.MethodPost,
+					Path:    "/uploadRefImgSuccess",
+					Handler: reference.UploadRefImgSuccessHandler(serverCtx),
+				},
+				{
+					// upload video success
+					Method:  http.MethodPost,
+					Path:    "/uploadRefVideoSuccess",
+					Handler: reference.UploadRefVideoSuccessHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/api/media/reference"),
 	)
 }

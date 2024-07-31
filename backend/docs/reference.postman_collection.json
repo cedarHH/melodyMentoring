@@ -1,13 +1,13 @@
 {
   "info": {
-    "name": "media",
-    "description": "media",
+    "name": "reference",
+    "description": "reference",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "author": "xuesong huang"
   },
   "item": [
     {
-      "name": "create new performance record",
+      "name": "create a new reference",
       "request": {
         "method": "POST",
         "header": [
@@ -17,22 +17,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/createRecord",
+          "raw": "http://localhost:8889/api/media/reference/createReference",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "createRecord"]
+          "path": ["api", "media", "reference", "createReference"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"reference\": \"\"\n}"
+          "raw": "{\n  \"title\": \"\",\n  \"style\": \"\",\n  \"composer\": \"\",\n  \"instrument\": \"\"\n}"
         },
-        "description": "create new performance record"
+        "description": "create a new reference"
       },
       "response": []
     },
     {
-      "name": "delete performance record",
+      "name": "delete a reference",
       "request": {
         "method": "POST",
         "header": [
@@ -42,22 +42,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/deleteRecord",
+          "raw": "http://localhost:8889/api/media/reference/deleteReference",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "deleteRecord"]
+          "path": ["api", "media", "reference", "deleteReference"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "delete performance record"
+        "description": "delete a reference"
       },
       "response": []
     },
     {
-      "name": "get performance record",
+      "name": "query reference",
       "request": {
         "method": "POST",
         "header": [
@@ -67,22 +67,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/getRecord",
+          "raw": "http://localhost:8889/api/media/reference/queryReference",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "getRecord"]
+          "path": ["api", "media", "reference", "queryReference"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"limit\": 0,\n  \"offset\": 0,\n  \"start\": 0,\n  \"end\": 0\n}"
+          "raw": "{\n  \"title\": \"\",\n  \"style\": \"\",\n  \"composer\": \"\",\n  \"instrument\": \"\"\n}"
         },
-        "description": "get performance record"
+        "description": "query reference"
       },
       "response": []
     },
     {
-      "name": "set a performance record as reference",
+      "name": "get reference list",
       "request": {
         "method": "POST",
         "header": [
@@ -92,22 +92,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/setAsReference",
+          "raw": "http://localhost:8889/api/media/reference/getReference",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "setAsReference"]
+          "path": ["api", "media", "reference", "getReference"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0,\n  \"isRef\": false\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "set a performance record as reference"
+        "description": "get reference list"
       },
       "response": []
     },
     {
-      "name": "get video presigned url",
+      "name": "get reference video",
       "request": {
         "method": "POST",
         "header": [
@@ -117,22 +117,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/getVideoUrl",
+          "raw": "http://localhost:8889/api/media/reference/getRefVideoUrl",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "getVideoUrl"]
+          "path": ["api", "media", "reference", "getRefVideoUrl"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "get video presigned url"
+        "description": "get reference video"
       },
       "response": []
     },
     {
-      "name": "upload video success",
+      "name": "get reference img",
       "request": {
         "method": "POST",
         "header": [
@@ -142,22 +142,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/uploadVideoSuccess",
+          "raw": "http://localhost:8889/api/media/reference/getRefImgUrl",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "uploadVideoSuccess"]
+          "path": ["api", "media", "reference", "getRefImgUrl"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0,\n  \"fileName\": \"\"\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "upload video success"
+        "description": "get reference img"
       },
       "response": []
     },
     {
-      "name": "get audio presigned url",
+      "name": "get reference audio",
       "request": {
         "method": "POST",
         "header": [
@@ -167,17 +167,17 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/getAudioUrl",
+          "raw": "http://localhost:8889/api/media/reference/getRefAudioUrl",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "getAudioUrl"]
+          "path": ["api", "media", "reference", "getRefAudioUrl"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "get audio presigned url"
+        "description": "get reference audio"
       },
       "response": []
     },
@@ -192,22 +192,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/uploadAudioSuccess",
+          "raw": "http://localhost:8889/api/media/reference/uploadRefAudioSuccess",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "uploadAudioSuccess"]
+          "path": ["api", "media", "reference", "uploadRefAudioSuccess"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0,\n  \"fileName\": \"\"\n}"
+          "raw": "{\n  \"refId\": \"\",\n  \"fileName\": \"\"\n}"
         },
         "description": "upload audio success"
       },
       "response": []
     },
     {
-      "name": "get performance thumbnail",
+      "name": "upload image success",
       "request": {
         "method": "POST",
         "header": [
@@ -217,22 +217,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/getPerformanceImg",
+          "raw": "http://localhost:8889/api/media/reference/uploadRefImgSuccess",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "getPerformanceImg"]
+          "path": ["api", "media", "reference", "uploadRefImgSuccess"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\",\n  \"fileName\": \"\"\n}"
         },
-        "description": "get performance thumbnail"
+        "description": "upload image success"
       },
       "response": []
     },
     {
-      "name": "get performance video",
+      "name": "upload video success",
       "request": {
         "method": "POST",
         "header": [
@@ -242,22 +242,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/getPerformanceVideo",
+          "raw": "http://localhost:8889/api/media/reference/uploadRefVideoSuccess",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "getPerformanceVideo"]
+          "path": ["api", "media", "reference", "uploadRefVideoSuccess"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\",\n  \"fileName\": \"\"\n}"
         },
-        "description": "get performance video"
+        "description": "upload video success"
       },
       "response": []
     },
     {
-      "name": "get performance audio",
+      "name": "get reference video",
       "request": {
         "method": "POST",
         "header": [
@@ -267,22 +267,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/getPerformanceAudio",
+          "raw": "http://localhost:8889/api/media/reference/getRefVideo",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "getPerformanceAudio"]
+          "path": ["api", "media", "reference", "getRefVideo"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "get performance audio"
+        "description": "get reference video"
       },
       "response": []
     },
     {
-      "name": "get performance midi",
+      "name": "get reference image",
       "request": {
         "method": "POST",
         "header": [
@@ -292,22 +292,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/getPerformanceMidi",
+          "raw": "http://localhost:8889/api/media/reference/getRefImg",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "getPerformanceMidi"]
+          "path": ["api", "media", "reference", "getRefImg"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "get performance midi"
+        "description": "get reference image"
       },
       "response": []
     },
     {
-      "name": "get performance sheet",
+      "name": "get reference audio",
       "request": {
         "method": "POST",
         "header": [
@@ -317,22 +317,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/getPerformanceSheet",
+          "raw": "http://localhost:8889/api/media/reference/getRefAudio",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "getPerformanceSheet"]
+          "path": ["api", "media", "reference", "getRefAudio"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "get performance sheet"
+        "description": "get reference audio"
       },
       "response": []
     },
     {
-      "name": "get performance waterfall",
+      "name": "get reference midi",
       "request": {
         "method": "POST",
         "header": [
@@ -342,22 +342,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/getPerformanceWaterfall",
+          "raw": "http://localhost:8889/api/media/reference/getRefMidi",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "getPerformanceWaterfall"]
+          "path": ["api", "media", "reference", "getRefMidi"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "get performance waterfall"
+        "description": "get reference midi"
       },
       "response": []
     },
     {
-      "name": "get performance report",
+      "name": "get reference sheet",
       "request": {
         "method": "POST",
         "header": [
@@ -367,22 +367,22 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/record/getPerformanceReport",
+          "raw": "http://localhost:8889/api/media/reference/getRefSheet",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "record", "getPerformanceReport"]
+          "path": ["api", "media", "reference", "getRefSheet"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "get performance report"
+        "description": "get reference sheet"
       },
       "response": []
     },
     {
-      "name": "start analysing the performance",
+      "name": "get reference waterfall image",
       "request": {
         "method": "POST",
         "header": [
@@ -392,39 +392,17 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8889/api/media/analysis/performanceAnalysis",
+          "raw": "http://localhost:8889/api/media/reference/getRefWaterfall",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8889",
-          "path": ["api", "media", "analysis", "performanceAnalysis"]
+          "path": ["api", "media", "reference", "getRefWaterfall"]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"profileName\": \"\",\n  \"recordId\": 0\n}"
+          "raw": "{\n  \"refId\": \"\"\n}"
         },
-        "description": "start analysing the performance"
-      },
-      "response": []
-    },
-    {
-      "name": "get the ranking of the tasks to be analysed, if it is 0, the analysis is finished",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8889/api/media/analysis/getAnalysisResult?analysisId=0",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8889",
-          "path": ["api", "media", "analysis", "getAnalysisResult"],
-          "query": [
-            {
-              "key": "analysisId",
-              "value": "0"
-            }
-          ]
-        },
-        "description": "get the ranking of the tasks to be analysed, if it is 0, the analysis is finished"
+        "description": "get reference waterfall image"
       },
       "response": []
     }

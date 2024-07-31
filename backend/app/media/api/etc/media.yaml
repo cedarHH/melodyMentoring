@@ -20,6 +20,9 @@ DynamoDBConf:
   RecordTable:
     Region: ap-southeast-2
     TableName: Record
+  ReferenceTable:
+    Region: ap-southeast-2
+    TableName: Reference
 
 # S3Conf
 S3Conf:
