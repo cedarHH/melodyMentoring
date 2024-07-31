@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import axios from "axios";
 import styled from 'styled-components';
 import Sidebar from '../components/Homepage/Sidebar';
 import UserInfo from '../components/Homepage/UserInfo';
@@ -10,9 +9,6 @@ import { AuthContext } from "../contexts/AuthContext";
 import { practiceData, accuracyData, practiceData1, accuracyData1, practiceData2, accuracyData2, options } from '../constants/chartData';
 import { musicData, MusicItem } from '../constants/musicData';
 import { childrenData } from '../constants/childrenData';
-import userAvatar from '../assets/img/home/kid-avatar.jpg';
-import '../styles/Home.css';
-import Button from "../components/MISC/Button";
 import { Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -269,7 +265,7 @@ interface LevelCounts {
 
 const Home = () => {
     const authContext = useContext(AuthContext);
-    const [activeKid, setActiveKid] = useState(Object.keys(childrenData)[0]);
+    const [activeKid, setActiveKid] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
     const [activeChartData, setActiveChartData] = useState<'practice' | 'accuracy' | 'musicHistory'>('practice');
@@ -279,7 +275,8 @@ const Home = () => {
     const [markedAccuracyPoints, setMarkedAccuracyPoints] = useState<number[]>([]);
 
     useEffect(() => {
-        setActiveKid(Object.keys(childrenData)[0]); // Set the first child as active
+        const childrenKeys = Object.keys(childrenData);
+        setActiveKid(childrenKeys.length > 0 ? childrenKeys[0] : null);
 
         const handleResize = () => {
             setResizeKey(prevKey => prevKey + 1); // Increment key to force re-render
@@ -379,19 +376,6 @@ const Home = () => {
         }
     }
 
-    const debug_button = async () => {
-        axios.get("api/user/refreshTokens", {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-        },).then((response)=>{
-
-        }).catch((err)=>{
-            console.log(err)
-        })
-    }
-
     const handleSignOutClick = () => {
         setIsSignOutModalOpen(true);
     };
@@ -409,9 +393,7 @@ const Home = () => {
         <MainContainer>
             <Header>
                 <Logo>MyGO!!!</Logo>
-                <div className="user-avatar" onClick={handleSignOutClick}>
-                    <img src={userAvatar} alt="User Avatar" style={{ width: "50px", height: "50px" }} />
-                </div>
+                <Button1 onClick={handleSignOutClick}>Log Out</Button1>
             </Header>
             <Content key={resizeKey}>
                 <SidebarContainer>

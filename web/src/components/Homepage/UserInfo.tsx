@@ -2,23 +2,22 @@ import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ApiContext } from '../../contexts/ApiContext';
 import Modal from 'react-modal';
-import axios from 'axios';
-import defaultAvatar from '../../assets/img/home/kid-avatar.jpg';
 import {
     GetAvatarReqParams,
     GetAvatarUploadUrlReqParams,
-    GetSubUserByNameReqParams, UpdateAvatarSuccessReq,
+    GetSubUserByNameReqParams,
+    UpdateAvatarSuccessReq,
     UpdateSubUserAttrReq
-} from "../../contexts/api/usercenterComponents"; // 确保正确导入默认头像
+} from "../../contexts/api/usercenterComponents";
 
 interface UserInfoProps {
-    activeKid: string;
+    activeKid: string | null;
     setActiveKid: (kid: string) => void;
 }
 
 const UserInfoContainer = styled.div`
     display: flex;
-    align-items: center;
+    flex-direction: column;
     background-color: #1B1C1E;
     padding: 20px;
     border-radius: 10px;
@@ -26,52 +25,86 @@ const UserInfoContainer = styled.div`
     overflow-x: auto;
     overflow-y: hidden;
     border: 2px solid #4B4B4B;
+    position: relative;
 `;
 
 const Avatar = styled.img`
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  flex-shrink: 0;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    top: -10px;
 `;
 
 const InfoBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 25px;
-  flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 25px;
+    margin-right: 25px;
+    flex-grow: 1;
+`;
+
+const InfoColumn = styled.div<{ isRight?: boolean }>`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: ${(props) => (props.isRight ? '0' : '30px')};
+    margin-left: ${(props) => (props.isRight ? 'auto' : '0')};
+    width: 40%;
 `;
 
 const InfoRow = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 5px 0;
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
 `;
 
 const InfoLabel = styled.p`
     font-weight: bold;
     font-size: 18px;
     font-family: 'Cambria', serif;
-    width: 80px;
+    width: 110px; /* 增大标题宽度 */
     margin: 0;
 `;
 
-const InfoValue = styled.p`
+const InfoValue = styled.p<{ isRight?: boolean }>`
     font-size: 18px;
     font-family: 'Cambria', serif;
     margin: 0;
+    margin-left: ${(props) => (props.isRight ? '10px' : '5px')}; /* 左边列和右边列的不同间距 */
 `;
 
 const EditButton = styled.button`
-    background-color: transparent;
+    background-color: #292A2C;
+    color: #fff;
     border: none;
-    color: #ffffff;
-    font-size: 18px;
+    border-radius: 5px;
     cursor: pointer;
-    margin-left: auto;
+    padding: 5px 10px;
+    position: absolute;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    top: 5px;
+    right: 10px;
     &:hover {
-        color: #aaaaaa;
+        background-color: #777;
+    }
+
+    @media (max-height: 824px) {
+        font-size: 17px;
+    }
+    @media (max-width: 1380px) {
+        font-size: 15px;
+        padding: 4px 8px;
+    }
+    @media (max-width: 768px) {
+        font-size: 17px;
+        padding: 5px 10px;
     }
 `;
 
@@ -99,7 +132,7 @@ const EditModal = styled.div`
     max-height: 550px;
     border: 4px solid #555555;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    
+
     @media (min-width: 768px) {
         width: 30%;
         height: 80%;
@@ -174,17 +207,34 @@ const ModalButton = styled.button`
     &:hover {
         background-color: #777;
     }
-    
+
     @media (max-width: 768px) {
         padding: 8px 12px;
         font-size: 15px;
     }
 `;
 
+const ProgressBar = styled.div`
+    width: 80%;
+    height: 20px;
+    background-color: #333;
+    border-radius: 5px;
+    margin: 10px 0;
+    overflow: hidden;
+    position: relative;
+`;
+
+const Progress = styled.div<{ progress: number }>`
+    height: 100%;
+    background-color: #4caf50;
+    width: ${(props) => props.progress}%;
+    transition: width 0.4s ease-in-out;
+`;
+
 const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
     const apiContext = useContext(ApiContext);
     const [isEditing, setIsEditing] = useState(false);
-    const [profileName, setProfileName] = useState(activeKid);
+    const [profileName, setProfileName] = useState(activeKid || '');
     const [gender, setGender] = useState('');
     const [dob, setDob] = useState('');
     const [instrument, setInstrument] = useState('');
@@ -192,11 +242,22 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
     const [badges, setBadges] = useState<string[]>(['']);
     const [level, setLevel] = useState('');
     const [avatar, setAvatar] = useState<string | null>(null);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [isUploading, setIsUploading] = useState(false);
+
+    // Local state to hold the form data temporarily
+    const [tempProfileName, setTempProfileName] = useState(activeKid || '');
+    const [tempGender, setTempGender] = useState('');
+    const [tempDob, setTempDob] = useState('');
+    const [tempInstrument, setTempInstrument] = useState('');
+    const [tempBadge, setTempBadge] = useState('');
+    const [tempLevel, setTempLevel] = useState('');
+    const [tempAvatar, setTempAvatar] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                if(apiContext){
+                if(apiContext && activeKid){
                     const reqParams:GetSubUserByNameReqParams = {
                         profileName: activeKid
                     }
@@ -208,8 +269,16 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
                         setDob(data.dob);
                         setInstrument(data.instrument);
                         setBadges(data.badges);
+                        setBadge(data.badges && data.badges.length > 0 ? data.badges[0] : ''); // 从 badges 数组中提取 badge
                         setLevel(data.level);
-                        setAvatar(data.avatar);
+
+                        const getAvatarReq: GetAvatarReqParams = {
+                            profileName: activeKid
+                        }
+                        const avatarResp = await apiContext.user.getAvatar(getAvatarReq)
+                        if(avatarResp.code === 0) {
+                            setAvatar(avatarResp.presignedurl);
+                        }
                     }
                 }
             } catch (error) {
@@ -218,22 +287,42 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
         };
 
         fetchUserData().then(r => {});
-    }, [activeKid]);
+    }, [activeKid, apiContext]);
+
+    useEffect(() => {
+        // Initialize the temp states when the user data is fetched
+        setTempProfileName(profileName);
+        setTempGender(gender);
+        setTempDob(dob);
+        setTempInstrument(instrument);
+        setTempBadge(badge); // 添加这行
+        setTempLevel(level);
+        setTempAvatar(avatar);
+    }, [profileName, gender, dob, instrument, badge, level, avatar]);
 
     const handleSave = async () => {
         try {
-            const updateSubUserAttrReq:UpdateSubUserAttrReq = {
-                profileName: profileName,
-                gender: gender,
-                dob: dob,
-                level: level,
-                instrument: instrument,
+            const updateSubUserAttrReq: UpdateSubUserAttrReq = {
+                profileName: tempProfileName,
+                gender: tempGender,
+                dob: tempDob,
+                level: tempLevel,
+                instrument: tempInstrument,
+                badge: tempBadge, // 使用 badge
             };
             if(apiContext){
-                const response = await apiContext.user.updateSubUserAttr(updateSubUserAttrReq)
+                const response = await apiContext.user.updateSubUserAttr(updateSubUserAttrReq);
                 if(response.code === 0){
+                    // Update the main states after saving to the database
+                    setProfileName(tempProfileName);
+                    setGender(tempGender);
+                    setDob(tempDob);
+                    setInstrument(tempInstrument);
+                    setBadge(tempBadge); // 更新主状态
+                    setLevel(tempLevel);
+                    setAvatar(tempAvatar);
                     setIsEditing(false);
-                    setActiveKid(profileName); // Update activeKid in Sidebar
+                    setActiveKid(tempProfileName); // Update activeKid in Sidebar
                 }
             }
         } catch (error) {
@@ -246,32 +335,55 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
             try {
                 if(apiContext) {
                     const getAvatarUploadUrlReq: GetAvatarUploadUrlReqParams = {
-                        profileName: profileName
+                        profileName: tempProfileName
                     }
                     const response = await apiContext.user.getAvatarUploadUrl(getAvatarUploadUrlReq);
                     if(response.code === 0) {
-                        await fetch(response.data.presignedurl, {
-                            method: 'PUT',
-                            body: e.target.files[0],
-                            headers: {
-                                'Content-Type': e.target.files[0].type
+                        const file = e.target.files[0];
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('PUT', response.data.presignedurl, true);
+                        xhr.setRequestHeader('Content-Type', file.type);
+
+                        xhr.upload.onprogress = (event) => {
+                            if (event.lengthComputable) {
+                                const percentComplete = (event.loaded / event.total) * 100;
+                                setUploadProgress(percentComplete);
                             }
-                        })
-                        const updateAvatarSuccessReq: UpdateAvatarSuccessReq = {
-                            profileName: profileName,
-                            fileName: response.data.fileName
-                        }
-                        const response1 = await apiContext.user.updateAvatarSuccess(updateAvatarSuccessReq)
-                        if(response1.code === 0) {
-                            const getAvatarReq: GetAvatarReqParams = {
-                                profileName: profileName
+                        };
+
+                        xhr.onload = async () => {
+                            if (xhr.status === 200) {
+                                const updateAvatarSuccessReq: UpdateAvatarSuccessReq = {
+                                    profileName: tempProfileName,
+                                    fileName: response.data.fileName
+                                }
+                                const response1 = await apiContext.user.updateAvatarSuccess(updateAvatarSuccessReq)
+                                if(response1.code === 0) {
+                                    const getAvatarReq: GetAvatarReqParams = {
+                                        profileName: tempProfileName
+                                    }
+                                    const response2 = await apiContext.user.getAvatar(getAvatarReq)
+                                    if(response2.code === 0) {
+                                        setTempAvatar(response2.presignedurl); // Only update the temp avatar for the current profile
+                                        setUploadProgress(0);
+                                        setIsUploading(false);
+                                    }
+                                }
+                            } else {
+                                console.error('Avatar upload failed', xhr.statusText);
+                                setUploadProgress(0);
+                                setIsUploading(false);
                             }
-                            const response2 = await apiContext.user.getAvatar(getAvatarReq)
-                            if(response2.code === 0) {
-                                // todo
-                                console.log(response2.presignedurl)
-                            }
-                        }
+                        };
+
+                        xhr.onerror = () => {
+                            console.error('Avatar upload failed', xhr.statusText);
+                            setUploadProgress(0);
+                            setIsUploading(false);
+                        };
+
+                        setIsUploading(true);
+                        xhr.send(file);
                     }
                 }
             } catch (error) {
@@ -280,39 +392,53 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
         }
     };
 
+    const handleCancel = () => {
+        // Reset the temp states when cancelling
+        setTempProfileName(profileName);
+        setTempGender(gender);
+        setTempDob(dob);
+        setTempInstrument(instrument);
+        setTempBadge(badge); // 添加这行
+        setTempLevel(level);
+        setTempAvatar(avatar);
+        setIsEditing(false);
+    };
+
     return (
         <>
             <UserInfoContainer>
-                <Avatar src={avatar || defaultAvatar} alt="Kid Avatar" />
+                <Avatar src={avatar || undefined} alt="Kid Avatar" />
                 <InfoBlock>
-                    <InfoRow>
-                        <InfoLabel>Name:</InfoLabel>
-                        <InfoValue>{profileName}</InfoValue>
-                    </InfoRow>
-                    <InfoRow>
-                        <InfoLabel>Gender:</InfoLabel>
-                        <InfoValue>{gender}</InfoValue>
-                    </InfoRow>
-                    <InfoRow>
-                        <InfoLabel>Level:</InfoLabel>
-                        <InfoValue>{level}</InfoValue>
-                    </InfoRow>
+                    <InfoColumn>
+                        <InfoRow>
+                            <InfoLabel>Name:</InfoLabel>
+                            <InfoValue>{profileName}</InfoValue>
+                        </InfoRow>
+                        <InfoRow>
+                            <InfoLabel>Gender:</InfoLabel>
+                            <InfoValue>{gender}</InfoValue>
+                        </InfoRow>
+                        <InfoRow>
+                            <InfoLabel>Level:</InfoLabel>
+                            <InfoValue>{level}</InfoValue>
+                        </InfoRow>
+                    </InfoColumn>
+                    <InfoColumn isRight>
+                        <InfoRow>
+                            <InfoLabel>Birthday:</InfoLabel>
+                            <InfoValue isRight>{dob}</InfoValue>
+                        </InfoRow>
+                        <InfoRow>
+                            <InfoLabel>Instrument:</InfoLabel>
+                            <InfoValue isRight>{instrument}</InfoValue>
+                        </InfoRow>
+                        <InfoRow>
+                            <InfoLabel>Badge:</InfoLabel>
+                            <InfoValue isRight>{badge}</InfoValue>
+                        </InfoRow>
+                    </InfoColumn>
                 </InfoBlock>
-                <InfoBlock>
-                    <InfoRow>
-                        <InfoLabel>Birthday:</InfoLabel>
-                        <InfoValue>{dob}</InfoValue>
-                    </InfoRow>
-                    <InfoRow>
-                        <InfoLabel>Instrument:</InfoLabel>
-                        <InfoValue>{instrument}</InfoValue>
-                    </InfoRow>
-                    <InfoRow>
-                        <InfoLabel>Badge:</InfoLabel>
-                        <InfoValue>{badge}</InfoValue>
-                    </InfoRow>
-                </InfoBlock>
-                <EditButton onClick={() => setIsEditing(true)}>Edit</EditButton>
+                {activeKid && <EditButton onClick={() => setIsEditing(true)}>Edit</EditButton>}
             </UserInfoContainer>
             {isEditing && (
                 <ModalOverlay>
@@ -321,15 +447,15 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
                         <Input
                             type="text"
                             placeholder="Name"
-                            value={profileName}
-                            onChange={(e) => setProfileName(e.target.value)}
+                            value={tempProfileName}
+                            onChange={(e) => setTempProfileName(e.target.value)}
                         />
-                        <Select value={gender} onChange={(e) => setGender(e.target.value)}>
+                        <Select value={tempGender} onChange={(e) => setTempGender(e.target.value)}>
                             <option value="">Select Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </Select>
-                        <Select value={level} onChange={(e) => setLevel(e.target.value)}>
+                        <Select value={tempLevel} onChange={(e) => setTempLevel(e.target.value)}>
                             <option value="">Select Level</option>
                             <option value="1">Beginner</option>
                             <option value="2">Elementary</option>
@@ -339,22 +465,32 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
                         </Select>
                         <Input
                             type="date"
-                            value={dob}
-                            onChange={(e) => setDob(e.target.value)}
+                            value={tempDob}
+                            onChange={(e) => setTempDob(e.target.value)}
                         />
-                        <Select value={instrument} onChange={(e) => setInstrument(e.target.value)}>
+                        <Select value={tempInstrument} onChange={(e) => setTempInstrument(e.target.value)}>
+                            <option value="">Select Instrument</option>
                             <option value="Piano">Piano</option>
+                            <option value="Violin">Violin</option>
+                            <option value="Guitar">Guitar</option>
+                            <option value="Drums">Drums</option>
+                            <option value="Flute">Flute</option>
+                            <option value="Saxophone">Saxophone</option>
+                            <option value="Trumpet">Trumpet</option>
+                            <option value="Cello">Cello</option>
+                            <option value="Clarinet">Clarinet</option>
                         </Select>
                         <Input
                             type="text"
                             placeholder="Badge"
-                            value={badge}
-                            onChange={(e) => setBadge(e.target.value)}
+                            value={tempBadge}
+                            onChange={(e) => setTempBadge(e.target.value)}
                         />
                         <Input type="file" accept="image/*" onChange={handleAvatarChange} />
+                        {isUploading && <ProgressBar><Progress progress={uploadProgress} /></ProgressBar>}
                         <ModalActions>
                             <ModalButton onClick={handleSave}>Save</ModalButton>
-                            <ModalButton onClick={() => setIsEditing(false)}>Cancel</ModalButton>
+                            <ModalButton onClick={handleCancel}>Cancel</ModalButton>
                         </ModalActions>
                     </EditModal>
                 </ModalOverlay>
