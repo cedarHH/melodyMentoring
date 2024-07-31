@@ -40,5 +40,20 @@ export const styles = StyleSheet.create({
         color: 'white',
         marginTop: 5,
         fontSize: 18,
+    },
+    inputContainer: {
+        marginTop:'5%',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        padding: 10,
+    },
+    input: {
+        width: '15%',
+        backgroundColor:'white',
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginHorizontal: 10,
+        padding: 10,
+        color: 'white'
     }
 });
