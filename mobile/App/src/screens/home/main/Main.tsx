@@ -4,16 +4,19 @@ import CustomButton from '../../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../contexts/types';
 import musicData from '../../../data/MusicData';
+import { RouteProp } from '@react-navigation/native';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
-
+type MainRouteProp = RouteProp<RootStackParamList, 'Main'>;
 type Props = {
     navigation: HomeScreenNavigationProp;
+    route:MainRouteProp;
 };
 
 
 
-const Main: React.FC<Props> = ({ navigation }) => {
+const Main: React.FC<Props> = ({ navigation,route }) => {
+    const name = route.params.profileName
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
 
@@ -26,7 +29,7 @@ const Main: React.FC<Props> = ({ navigation }) => {
 
     const onPressHandler = useCallback(({ item, index }: { item: typeof musicData[0], index: number }) => {
         if (selectedIndex === index) {
-            navigation.navigate('Music', { title: item.title, image: item.image });
+            navigation.navigate('Music', { title: item.title, image: item.image, profileName: name});
         } else {
             setSelectedIndex(index);
         }

@@ -5,27 +5,30 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../contexts/types';
 import { signOut } from '../../libs/cognito';
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+import { RouteProp } from '@react-navigation/native';
+
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'History'>;
+type SidebarRouteProp = RouteProp<RootStackParamList, 'Home'>;
 
 interface Props {
     navigation: HomeScreenNavigationProp;
     setActiveContent: (content: string) => void;
     activeContent: string;
+    route: SidebarRouteProp;
 }
 
-const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent }) => {
-
+const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent,route }) => {
     const handleMain = () =>  {
         setActiveContent('main');
-        navigation.navigate('Main');
+        navigation.navigate('Main',{ profileName: route.params.profileName });
     };
     const handleSearch = () => {
         setActiveContent('search');
-        navigation.navigate('Search');
+        navigation.navigate('Search',{ profileName: route.params.profileName });
     };
     const handleHistory = () => {
         setActiveContent('history');
-        navigation.navigate('History');
+        navigation.navigate('History',{ profileName: route.params.profileName });
     };
 
     const changeUser = async () => {

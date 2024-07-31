@@ -1,8 +1,56 @@
 // ApiContext.tsx
 import React, {createContext, ReactNode, useContext, useState} from 'react';
 import axios, { AxiosInstance } from 'axios';
-import {CreateSubUserReq, CreateSubUserResp} from "./apiParams/usercenterComponents";
-import {CreateRecordReq, CreateRecordResp} from "./apiParams/mediaComponents";
+import {CreateSubUserReq, 
+    CreateSubUserResp, 
+    DeleteSubUserByNameReq, 
+    DeleteSubUserByNameResp, 
+    GetAvatarReqParams, 
+    GetAvatarResp, 
+    GetAvatarUploadUrlReqParams, 
+    GetAvatarUploadUrlResp, 
+    GetSubUserByNameReqParams, 
+    GetSubUserByNameResp, 
+    GetSubUsersResp,
+    UpdateAvatarSuccessReq,
+    UpdateAvatarSuccessResp,
+    UpdateSubUserAttrReq,
+    UpdateSubUserAttrResp,
+    VerifypinReq,
+    VerifypinResp
+} from "./apiParams/usercenterComponents";
+import {CreateRecordReq, 
+    CreateRecordResp, 
+    DeleteRecordReq, 
+    DeleteRecordResp, 
+    GetAudioUrlReq, 
+    GetAudioUrlResp, 
+    GetPerformanceAudioReq, 
+    GetPerformanceAudioResp, 
+    GetPerformanceImgReq, 
+    GetPerformanceImgResp, 
+    GetPerformanceMidiReq, 
+    GetPerformanceMidiResp, 
+    GetPerformanceReportReq, 
+    GetPerformanceReportResp, 
+    GetPerformanceSheetReq, 
+    GetPerformanceSheetResp, 
+    GetPerformanceVideoReq, 
+    GetPerformanceVideoResp, 
+    GetPerformanceWaterfallReq, 
+    GetPerformanceWaterfallResp, 
+    GetRecordReq, 
+    GetRecordResp, 
+    GetVideoUrlReq, 
+    GetVideoUrlResp, 
+    SetAsReferenceReq, 
+    SetAsReferenceResp, 
+    UploadAudioSuccessReq, 
+    UploadAudioSuccessResp,
+    UploadVideoSuccessReq,
+    UploadVideoSuccessResp
+} from "./apiParams/mediaComponents";
+
 
 interface ApiContextType {
     user: {

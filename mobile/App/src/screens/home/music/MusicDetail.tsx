@@ -13,6 +13,7 @@ type Props = {
 };
 
 const MusicDetail: React.FC<Props> = ({ route, navigation }) => {
+    console.log(route)
     const { title, image } = route.params;
     if (!title || !image) return null;
 

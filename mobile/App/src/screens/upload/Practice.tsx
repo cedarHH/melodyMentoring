@@ -65,6 +65,9 @@ const Practice: React.FC<Props> = () => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.musicContainer}>
+
+            </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={recording ? handleStopRecording : handleStartRecording}
@@ -89,8 +92,12 @@ const Practice: React.FC<Props> = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection:'column',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    musicContainer: {
+        
     },
     title: {
         fontSize: 24,

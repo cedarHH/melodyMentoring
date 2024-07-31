@@ -11,6 +11,7 @@ import Upload from './src/screens/upload/Upload';
 import Result from './src/screens/result/Result';
 import Feedback from "./src/screens/feedback/Feedback";
 import Configure from './src/screens/config/Configure';
+import Main from './src/screens/home/main/Main';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {RootStackParamList} from './src/contexts/types';
 import {ApiProvider} from './src/contexts/apiContext';

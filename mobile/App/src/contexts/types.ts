@@ -10,12 +10,19 @@ export type RootStackParamList = {
     Welcome: undefined;
     SubUser: undefined;
 
-    Main: undefined;
-    Search: undefined;
-    History: undefined;
+    Main: {
+        profileName:string;
+    };
+    Search: {
+        profileName:string;
+    };
+    History: {
+        profileName:string;
+    };
     Music: {
         title: string;
         image: string| undefined;
+        profileName: string;
         // others
     }
     Result: undefined;

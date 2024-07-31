@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AddForm from './AddForm';
 import { useApi } from '../../contexts/apiContext';
+import { CreateSubUserResp } from '../../contexts/apiParams/usercenterComponents';
 
 type SubUserNavigationProp = StackNavigationProp<RootStackParamList, 'SubUser'>;
 
@@ -30,6 +31,8 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
                 const tokenData = JSON.parse(tokenStr);
                 const idToken = tokenData.idToken;
                 api.setIdToken(idToken)
+                // const resp: CreateSubUserResp = await api.user.getSubUsers()
+            
                 const response = await axios.get('https://mygo.bar/api/user/getSubUsers', {
                     headers: {
                         Authorization: `Bearer ${idToken}`,
