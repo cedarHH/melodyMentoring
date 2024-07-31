@@ -1,6 +1,5 @@
 .venv
 __pycache__
-data
-static
+data/
 .idea
-tempFile
+tempFile/

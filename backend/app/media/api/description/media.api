@@ -10,6 +10,7 @@ info (
 import (
 	"media/record.api"
 	"media/analysis.api"
+	"media/reference.api"
 )
 
 // goctl api go -api *.api -dir ../  -style=goZero
@@ -97,3 +98,37 @@ service media {
 	get /getAnalysisResult (GetAnalysisResultReq) returns (GetAnalysisResultResp)
 }
 
+@server (
+	prefix:     api/media/reference
+	group:      reference
+	middleware: UserAuthMiddleware
+)
+service reference {
+	@doc "create a new reference"
+	@handler createReference
+	post /createReference (CreateReferenceReq) returns (CreateReferenceResp)
+
+	@doc "delete a reference"
+	@handler deleteReference
+	post /deleteReference (DeleteReferenceReq) returns (DeleteRecordResp)
+
+	@doc "query reference"
+	@handler queryReference
+	post /queryReference (QueryReferenceReq) returns (QueryReferenceResp)
+
+	@doc "get reference list"
+	@handler getReferences
+	post /getReferences (GetReferencesReq) returns (GetReferencesResp)
+
+	@doc "get a reference"
+	@handler getReferenceDetail
+	post /getReferenceDetail (GetReferenceDetailReq) returns (GetReferenceDetailResp)
+
+	@doc "upload audio success"
+	@handler uploadRefAudioSuccess
+	post /uploadRefAudioSuccess (UploadRefAudioSuccessReq) returns (UploadRefAudioSuccessResp)
+
+	@doc "upload video success"
+	@handler uploadRefVideoSuccess
+	post /uploadRefVideoSuccess (UploadRefVideoSuccessReq) returns (UploadRefVideoSuccessResp)
+}

@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-
+import parse
 
 def midi_to_note_name(midi_number):
     note_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -29,3 +29,13 @@ def waterfall(midi_events: dict, output_file_path: str):
 
     plt.savefig(output_file_path)
 
+if __name__ == "__main__":
+
+    midi_events = parse.parse_mid(
+        midi_file="data/data1_1.mid"
+    )
+    print(midi_events)
+    waterfall(
+        midi_events=midi_events,
+        output_file_path="test.png"
+    )

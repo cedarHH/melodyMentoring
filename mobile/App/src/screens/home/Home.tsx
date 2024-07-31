@@ -5,24 +5,28 @@ import { RootStackParamList } from '../../contexts/types';
 import Sidebar from './Sidebar';
 import Content from './Content';
 import ContentContext from './Context';
+import { RouteProp } from '@react-navigation/native';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
 
 type Props = {
     navigation: HomeScreenNavigationProp;
+    route: HomeScreenRouteProp;
 };
 
 
-const HomeScreen: React.FC<Props> = ({ navigation }) => {
+const HomeScreen: React.FC<Props> = ({ navigation,route }) => {
+    
     const [activeContent, setActiveContent] = useState('main');
-
     return (
         <ContentContext.Provider value={{ activeContent, setActiveContent }}>
             <View style={styles.container}>
                 <Sidebar
                     navigation={navigation}
                     setActiveContent={setActiveContent}
-                    activeContent={activeContent}
+                    activeContent={activeContent} 
+                    route={route}
                 />
                 <Content navigation={navigation}/>
             </View>

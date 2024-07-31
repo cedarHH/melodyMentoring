@@ -1,19 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ApiContext } from '../../contexts/ApiContext';
-import {CreateSubUserReq, DeleteSubUserByNameReq, SubUser} from "../../contexts/api/usercenterComponents";
+import {CreateSubUserReq, DeleteSubUserByNameReq, SubUser, GetAvatarUploadUrlReqParams, UpdateAvatarSuccessReq} from "../../contexts/api/usercenterComponents";
+import defaultAvatar from '../../assets/img/home/origin.png'; // 导入默认头像
 
 interface SidebarProps {
-    activeKid: string;
-    setActiveKid: (kid: string) => void;
+    activeKid: string | null;
+    setActiveKid: (kid: string | null) => void;
 }
-
-const Aside = styled.aside`
-  width: 100%;
-  background-color: #222222;
-  padding: 20px;
-  box-sizing: border-box;
-`;
 
 const List = styled.ul`
   list-style-type: none;
@@ -181,7 +175,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
     const [selectedKid, setSelectedKid] = useState('');
     const [deleteKidPin, setDeleteKidPin] = useState('');
     const [showPin, setShowPin] = useState(false);
-    const [subUsers, setSubUsers] = useState([''])
+    const [subUsers, setSubUsers] = useState<string[]>([])
 
     useEffect(() => {
         if (isAddModalOpen || isDeleteModalOpen) {
@@ -200,24 +194,49 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
                     const profileNames = response.data.map(
                         (subUser: SubUser) => subUser.profileName);
                     setSubUsers(profileNames);
+                    if (profileNames.length > 0 && !activeKid) {
+                        setActiveKid(profileNames[0]);
+                    }
                 }
             }
         }
         fetchUsers().then()
-    }, []);
+    }, [apiContext, activeKid]);
 
     const handleAddKid = async (event: React.FormEvent) => {
         event.preventDefault();
         if (newKidName && newKidPin && apiContext) {
             const createSubUserReq: CreateSubUserReq = {
-                profileName:newKidName,
-                pin:newKidPin
+                profileName: newKidName,
+                pin: newKidPin
             }
             const response = await apiContext.user.createSubUser(createSubUserReq)
-            if(response.code === 0) {
+            if (response.code === 0) {
+                // Add default avatar
+                const getAvatarUploadUrlReq: GetAvatarUploadUrlReqParams = {
+                    profileName: newKidName
+                }
+                const uploadUrlResponse = await apiContext.user.getAvatarUploadUrl(getAvatarUploadUrlReq);
+                if (uploadUrlResponse.code === 0) {
+                    const defaultAvatarFile = await fetch(defaultAvatar).then(res => res.blob());
+                    await fetch(uploadUrlResponse.data.presignedurl, {
+                        method: 'PUT',
+                        body: defaultAvatarFile,
+                        headers: {
+                            'Content-Type': defaultAvatarFile.type
+                        }
+                    });
+                    const updateAvatarSuccessReq: UpdateAvatarSuccessReq = {
+                        profileName: newKidName,
+                        fileName: uploadUrlResponse.data.fileName
+                    }
+                    await apiContext.user.updateAvatarSuccess(updateAvatarSuccessReq);
+                }
+
                 setNewKidName('');
                 setNewKidPin('');
                 setIsAddModalOpen(false);
+                setSubUsers([...subUsers, newKidName]); // 添加新用户到子用户列表的末尾
             }
         }
     };
@@ -230,10 +249,14 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
                 pin: deleteKidPin
             }
             const response = await apiContext.user.deleteSubUserByName(deleteSubUserByName)
-            if(response.code === 0) {
+            if (response.code === 0) {
                 setSelectedKid('');
                 setDeleteKidPin('');
                 setIsDeleteModalOpen(false);
+                setSubUsers(subUsers.filter((kid) => kid !== selectedKid));
+                if (activeKid === selectedKid) {
+                    setActiveKid(subUsers.length > 1 ? subUsers[0] : null);
+                }
             }
         }
     };

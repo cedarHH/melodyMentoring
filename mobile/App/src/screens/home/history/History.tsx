@@ -13,7 +13,7 @@ import {
 } from '../../../contexts/apiParams/mediaComponents';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
-type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
+type HistoryRoute = RouteProp<RootStackParamList, 'History'>;
 
 type Props = {
     navigation: HomeScreenNavigationProp;

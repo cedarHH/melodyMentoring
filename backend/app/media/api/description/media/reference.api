@@ -1,0 +1,98 @@
+syntax = "v1"
+
+info(
+    title: "media"
+    desc: "media"
+    author: "xuesong huang"
+)
+
+type (
+    CreateReferenceReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+
+    CreateReferenceResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    DeleteReferenceReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+
+    DeleteReferenceResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    QueryReferenceReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+
+    QueryReferenceResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    GetReferencesReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+
+    GetReferencesResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    GetReferenceDetailReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+
+    GetReferenceDetailResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    UploadRefAudioSuccessReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+
+    UploadRefAudioSuccessResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    UploadRefVideoSuccessReq {
+        ProfileName string  `json:"profileName"`
+        RecordId    int64   `json:"recordId"`
+    }
+
+    UploadRefVideoSuccessResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
