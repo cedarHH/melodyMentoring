@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../../types';
+import { RootStackParamList } from '../../../contexts/types';
 import { RouteProp } from '@react-navigation/native';
 import CustomButton from '../../../components/MISC/Button';
 
@@ -13,7 +13,7 @@ type Props = {
 };
 
 const MusicDetail: React.FC<Props> = ({ route, navigation }) => {
-    const { title, image } = route.params;
+    const { title, image, profileName } = route.params;
     if (!title || !image) return null;
 
     return (
@@ -22,7 +22,7 @@ const MusicDetail: React.FC<Props> = ({ route, navigation }) => {
             <Text style={styles.title}>{title}</Text>
             <CustomButton
                 text="Practice"
-                onPress={() => navigation.navigate('Upload', { title})}
+                onPress={() => navigation.navigate('Upload', { title, profileName})}
             />            
         </View>
 

@@ -49,6 +49,7 @@
           "raw": "https://mygo.bar/api/user/deleteSubUserByName",
           "protocol": "https",
           "host": ["mygo.bar"],
+          "port": "8888",
           "path": ["api", "user", "deleteSubUserByName"]
         },
         "description": "delete sub-user by name"
@@ -59,18 +60,19 @@
       "name": "/api/user/getAvatar",
       "request": {
         "method": "GET",
-        "header": [
-          {
-            "key": "profileName",
-            "value": "",
-            "description": ""
-          }
-        ],
         "url": {
-          "raw": "https://mygo.bar/api/user/getAvatar",
+          "raw": "https://mygo.bar/api/user/getAvatar?profileName=",
           "protocol": "https",
           "host": ["mygo.bar"],
-          "path": ["api", "user", "getAvatar"]
+          "port": "8888",
+          "path": ["api", "user", "getAvatar"],
+          "query": [
+            {
+              "key": "profileName",
+              "value": "",
+              "description": "The profile name to get the avatar for"
+            }
+          ]
         },
         "description": "get avatar download url"
       },
@@ -80,18 +82,19 @@
       "name": "/api/user/getAvatarUploadUrl",
       "request": {
         "method": "GET",
-        "header": [
-          {
-            "key": "profileName",
-            "value": "",
-            "description": ""
-          }
-        ],
         "url": {
-          "raw": "https://mygo.bar/api/user/getAvatarUploadUrl",
+          "raw": "https://mygo.bar/api/user/getAvatarUploadUrl?profileName=",
           "protocol": "https",
           "host": ["mygo.bar"],
-          "path": ["api", "user", "getAvatarUploadUrl"]
+          "port": "8888",
+          "path": ["api", "user", "getAvatarUploadUrl"],
+          "query": [
+            {
+              "key": "profileName",
+              "value": "",
+              "description": ""
+            }
+          ]
         },
         "description": "get avatar uploda url"
       },
@@ -101,18 +104,19 @@
       "name": "/api/user/getSubUserByName",
       "request": {
         "method": "GET",
-        "header": [
-          {
-            "key": "profileName",
-            "value": "",
-            "description": ""
-          }
-        ],
         "url": {
-          "raw": "https://mygo.bar/api/user/getSubUserByName",
+          "raw": "https://mygo.bar/api/user/getSubUserByName?profileName=",
           "protocol": "https",
           "host": ["mygo.bar"],
-          "path": ["api", "user", "getSubUserByName"]
+          "port": "8888",
+          "path": ["api", "user", "getSubUserByName"],
+          "query": [
+            {
+              "key": "profileName",
+              "value": "",
+              "description": ""
+            }
+          ]
         },
         "description": "get sub-user by name"
       },
@@ -127,6 +131,7 @@
           "raw": "https://mygo.bar/api/user/getSubUsers",
           "protocol": "https",
           "host": ["mygo.bar"],
+          "port": "8888",
           "path": ["api", "user", "getSubUsers"]
         },
         "description": "get the list of sub-users"
@@ -152,6 +157,7 @@
           "raw": "https://mygo.bar/api/user/setTokens",
           "protocol": "https",
           "host": ["mygo.bar"],
+          "port": "8888",
           "path": ["api", "user", "setTokens"]
         },
         "description": "setTokens"
@@ -171,6 +177,7 @@
           "raw": "https://mygo.bar/api/user/refreshTokens",
           "protocol": "https",
           "host": ["mygo.bar"],
+          "port": "8888",
           "path": ["api", "user", "refreshTokens"]
         },
         "description": "refreshTokens"
@@ -196,6 +203,7 @@
           "raw": "https://mygo.bar/api/user/updateAvatarSuccess",
           "protocol": "https",
           "host": ["mygo.bar"],
+          "port": "8888",
           "path": ["api", "user", "updateAvatarSuccess"]
         },
         "description": "update avatar"
@@ -221,6 +229,7 @@
           "raw": "https://mygo.bar/api/user/updateSubUserAttr",
           "protocol": "https",
           "host": ["mygo.bar"],
+          "port": "8888",
           "path": ["api", "user", "updateSubUserAttr"]
         },
         "description": "update sub-user attr, optional attr: gender, dob, level, instrument, badge"
@@ -246,6 +255,7 @@
           "raw": "https://mygo.bar/api/user/verifypin",
           "protocol": "https",
           "host": ["mygo.bar"],
+          "port": "8888",
           "path": ["api", "user", "verifypin"]
         },
         "description": "verify pin code"

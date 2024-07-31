@@ -3,7 +3,7 @@ import { View, Text, Image} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import CustomButton from '../../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../../types';
+import { RootStackParamList } from '../../../contexts/types';
 import {
   useAppDispatch,
   useAppSelector,

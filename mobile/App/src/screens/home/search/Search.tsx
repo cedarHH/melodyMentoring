@@ -3,7 +3,7 @@ import { View, Text, StyleSheet} from 'react-native';
 import CustomButton from '../../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { DrawerActions } from '@react-navigation/native';
-import { RootStackParamList } from '../../../../types';
+import { RootStackParamList } from '../../../contexts/types';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Search'>;
 

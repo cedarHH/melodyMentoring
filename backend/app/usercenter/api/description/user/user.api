@@ -56,7 +56,7 @@ type (
 
 type (
     GetSubUserByNameReq {
-        ProfileName     string  `header:"profileName"`
+        ProfileName     string  `form:"profileName"`
     }
     GetSubUserByNameResp {
         Code    int        `json:"code"`
@@ -93,7 +93,7 @@ type (
         FileName      string    `json:"fileName"`
     }
     GetAvatarUploadUrlReq {
-        ProfileName     string  `header:"profileName"`
+        ProfileName     string  `form:"profileName"`
     }
     GetAvatarUploadUrlResp {
         Code            int        `json:"code"`
@@ -115,7 +115,7 @@ type (
 
 type (
     GetAvatarReq {
-        ProfileName     string      `header:"profileName"`
+        ProfileName     string      `form:"profileName"`
     }
     GetAvatarResp {
         Code            int        `json:"code"`

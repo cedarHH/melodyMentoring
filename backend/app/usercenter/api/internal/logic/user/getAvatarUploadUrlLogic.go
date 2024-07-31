@@ -47,7 +47,7 @@ func (l *GetAvatarUploadUrlLogic) GetAvatarUploadUrl(
 	}
 
 	return &types.GetAvatarUploadUrlResp{
-		Code: 200,
+		Code: 0,
 		Data: respData,
 		Msg:  "😪😶‍🌫️",
 	}, nil

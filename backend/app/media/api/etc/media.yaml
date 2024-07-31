@@ -9,11 +9,20 @@ CognitoConf:
   AppClientId: 32a7ka2btgropvqe7u0lr7qr5k
   CognitoDomain: https://mygo.auth.ap-southeast-2.amazoncognito.com
 
+# RabbitMQConf
+RabbitMQConf:
+  User: admin
+  Password: password
+  Port: 5672
+
 # DynamoDBConf
 DynamoDBConf:
   RecordTable:
     Region: ap-southeast-2
     TableName: Record
+  ReferenceTable:
+    Region: ap-southeast-2
+    TableName: Reference
 
 # S3Conf
 S3Conf:

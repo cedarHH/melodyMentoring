@@ -2,31 +2,33 @@ import React, { useState,useCallback,useEffect }from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, FlatList, Image} from 'react-native';
 import CustomButton from '../../../components/MISC/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../../types';
+import { RootStackParamList } from '../../../contexts/types';
 import musicData from '../../../data/MusicData';
+import { RouteProp } from '@react-navigation/native';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
-
+type MainRouteProp = RouteProp<RootStackParamList, 'Main'>;
 type Props = {
     navigation: HomeScreenNavigationProp;
+    route:MainRouteProp;
 };
 
 
 
-const Main: React.FC<Props> = ({ navigation }) => {
+const Main: React.FC<Props> = ({ navigation,route }) => {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
-
+    
     useEffect(() => {
         const subscription = Dimensions.addEventListener('change', ({ window: { width } }) => {
             setScreenWidth(width);
         });
         return () => subscription.remove();
     }, []);
-
+    
     const onPressHandler = useCallback(({ item, index }: { item: typeof musicData[0], index: number }) => {
         if (selectedIndex === index) {
-            navigation.navigate('Music', { title: item.title, image: item.image });
+            navigation.navigate('Music', { title: item.title, image: item.image, profileName: route.params.profileName});
         } else {
             setSelectedIndex(index);
         }
@@ -61,7 +63,7 @@ const Main: React.FC<Props> = ({ navigation }) => {
             />
             <CustomButton
                 text="Upload Reference"
-                onPress={() => navigation.navigate('Upload',{title:'default'})}
+                onPress={() => navigation.navigate('Upload',{title:'default',profileName:route.params.profileName})}
             />
         </View>
     );

@@ -61,19 +61,19 @@
       "name": "/api/user/getAvatar",
       "request": {
         "method": "GET",
-        "header": [
-          {
-            "key": "profileName",
-            "value": "",
-            "description": ""
-          }
-        ],
         "url": {
-          "raw": "http://localhost:8888/api/user/getAvatar",
+          "raw": "http://localhost:8888/api/user/getAvatar?profileName=",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8888",
-          "path": ["api", "user", "getAvatar"]
+          "path": ["api", "user", "getAvatar"],
+          "query": [
+            {
+              "key": "profileName",
+              "value": "",
+              "description": "The profile name to get the avatar for"
+            }
+          ]
         },
         "description": "get avatar download url"
       },
@@ -83,19 +83,19 @@
       "name": "/api/user/getAvatarUploadUrl",
       "request": {
         "method": "GET",
-        "header": [
-          {
-            "key": "profileName",
-            "value": "",
-            "description": ""
-          }
-        ],
         "url": {
-          "raw": "http://localhost:8888/api/user/getAvatarUploadUrl",
+          "raw": "http://localhost:8888/api/user/getAvatarUploadUrl?profileName=",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8888",
-          "path": ["api", "user", "getAvatarUploadUrl"]
+          "path": ["api", "user", "getAvatarUploadUrl"],
+          "query": [
+            {
+              "key": "profileName",
+              "value": "",
+              "description": ""
+            }
+          ]
         },
         "description": "get avatar uploda url"
       },
@@ -105,19 +105,19 @@
       "name": "/api/user/getSubUserByName",
       "request": {
         "method": "GET",
-        "header": [
-          {
-            "key": "profileName",
-            "value": "",
-            "description": ""
-          }
-        ],
         "url": {
-          "raw": "http://localhost:8888/api/user/getSubUserByName",
+          "raw": "http://localhost:8888/api/user/getSubUserByName?profileName=",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8888",
-          "path": ["api", "user", "getSubUserByName"]
+          "path": ["api", "user", "getSubUserByName"],
+          "query": [
+            {
+              "key": "profileName",
+              "value": "",
+              "description": ""
+            }
+          ]
         },
         "description": "get sub-user by name"
       },

@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet,Text,FlatList,TouchableOpacity } from 'react-native';
 import { StackNavigationProp} from '@react-navigation/stack';
-import { RootStackParamList } from '../../../types';
+import { RootStackParamList } from '../../contexts/types';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AddForm from './AddForm';
+import { useApi } from '../../contexts/apiContext';
+import { CreateSubUserResp } from '../../contexts/apiParams/usercenterComponents';
 
 type SubUserNavigationProp = StackNavigationProp<RootStackParamList, 'SubUser'>;
 
@@ -21,12 +23,16 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
     const [data, setData] = useState<Item[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const api = useApi()
     const fetchData = async () => {
         try {
             const tokenStr = await AsyncStorage.getItem('Token');
             if (tokenStr) {
                 const tokenData = JSON.parse(tokenStr);
                 const idToken = tokenData.idToken;
+                api.setIdToken(idToken)
+                // const resp: CreateSubUserResp = await api.user.getSubUsers()
+            
                 const response = await axios.get('https://mygo.bar/api/user/getSubUsers', {
                     headers: {
                         Authorization: `Bearer ${idToken}`,
@@ -54,7 +60,7 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
 
     const onPressHandler = useCallback(({ item, index }: { item: typeof data[0], index: number }) => {
         if (selectedIndex === index) {
-            navigation.navigate('Home', { profileName: item.profileName });
+            navigation.navigate('Configure', { profileName: item.profileName });
             console.log('user login:', item.profileName)
         } else {
             setSelectedIndex(index);

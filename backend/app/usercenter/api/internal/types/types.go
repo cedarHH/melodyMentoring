@@ -27,7 +27,7 @@ type DeleteSubUserByNameResp struct {
 }
 
 type GetAvatarReq struct {
-	ProfileName string `header:"profileName"`
+	ProfileName string `form:"profileName"`
 }
 
 type GetAvatarResp struct {
@@ -37,7 +37,7 @@ type GetAvatarResp struct {
 }
 
 type GetAvatarUploadUrlReq struct {
-	ProfileName string `header:"profileName"`
+	ProfileName string `form:"profileName"`
 }
 
 type GetAvatarUploadUrlResp struct {
@@ -47,7 +47,7 @@ type GetAvatarUploadUrlResp struct {
 }
 
 type GetSubUserByNameReq struct {
-	ProfileName string `header:"profileName"`
+	ProfileName string `form:"profileName"`
 }
 
 type GetSubUserByNameResp struct {

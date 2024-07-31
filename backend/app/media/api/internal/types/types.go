@@ -12,6 +12,19 @@ type CreateRecordResp struct {
 	Msg      string `json:"msg"`
 }
 
+type CreateReferenceReq struct {
+	Title      string `json:"title"`
+	Style      string `json:"style"`
+	Composer   string `json:"composer"`
+	Instrument string `json:"instrument"`
+}
+
+type CreateReferenceResp struct {
+	Code  int64  `json:"code"`
+	RefId string `json:"refId"`
+	Msg   string `json:"msg"`
+}
+
 type DeleteRecordReq struct {
 	ProfileName string `json:"profileName"`
 	RecordId    int64  `json:"recordId"`
@@ -22,9 +35,28 @@ type DeleteRecordResp struct {
 	Msg  string `json:"msg"`
 }
 
+type DeleteReferenceReq struct {
+	RefId string `json:"refId"`
+}
+
+type DeleteReferenceResp struct {
+	Code int64  `json:"code"`
+	Msg  string `json:"msg"`
+}
+
 type FileDetails struct {
 	PresignedURL string `json:"presignedurl"`
 	FileName     string `json:"fileName"`
+}
+
+type GetAnalysisResultReq struct {
+	AnalysisId int64 `form:"analysisId"`
+}
+
+type GetAnalysisResultResp struct {
+	Code int64      `json:"code"`
+	Data ResultData `json:"data"`
+	Msg  string     `json:"msg"`
 }
 
 type GetAudioUrlReq struct {
@@ -129,6 +161,106 @@ type GetRecordResp struct {
 	Msg  string       `json:"msg"`
 }
 
+type GetRefAudioReq struct {
+	RefId string `json:"refId"`
+}
+
+type GetRefAudioResp struct {
+	Code         int64  `json:"code"`
+	PresignedURL string `json:"presignedurl"`
+	Msg          string `json:"msg"`
+}
+
+type GetRefAudioUrlReq struct {
+	RefId string `json:"refId"`
+}
+
+type GetRefAudioUrlResp struct {
+	Code int64      `json:"code"`
+	Data UrlDetails `json:"data"`
+	Msg  string     `json:"msg"`
+}
+
+type GetRefImgReq struct {
+	RefId string `json:"refId"`
+}
+
+type GetRefImgResp struct {
+	Code         int64  `json:"code"`
+	PresignedURL string `json:"presignedurl"`
+	Msg          string `json:"msg"`
+}
+
+type GetRefImgUrlReq struct {
+	RefId string `json:"refId"`
+}
+
+type GetRefImgUrlResp struct {
+	Code int64      `json:"code"`
+	Data UrlDetails `json:"data"`
+	Msg  string     `json:"msg"`
+}
+
+type GetRefMidiReq struct {
+	RefId string `json:"refId"`
+}
+
+type GetRefMidiResp struct {
+	Code         int64  `json:"code"`
+	PresignedURL string `json:"presignedurl"`
+	Msg          string `json:"msg"`
+}
+
+type GetRefSheetReq struct {
+	RefId string `json:"refId"`
+}
+
+type GetRefSheetResp struct {
+	Code         int64  `json:"code"`
+	PresignedURL string `json:"presignedurl"`
+	Msg          string `json:"msg"`
+}
+
+type GetRefVideoReq struct {
+	RefId string `json:"refId"`
+}
+
+type GetRefVideoResp struct {
+	Code         int64  `json:"code"`
+	PresignedURL string `json:"presignedurl"`
+	Msg          string `json:"msg"`
+}
+
+type GetRefVideoUrlReq struct {
+	RefId string `json:"refId"`
+}
+
+type GetRefVideoUrlResp struct {
+	Code int64      `json:"code"`
+	Data UrlDetails `json:"data"`
+	Msg  string     `json:"msg"`
+}
+
+type GetRefWaterfallReq struct {
+	RefId string `json:"refId"`
+}
+
+type GetRefWaterfallResp struct {
+	Code         int64  `json:"code"`
+	PresignedURL string `json:"presignedurl"`
+	Msg          string `json:"msg"`
+}
+
+type GetReferenceReq struct {
+	RefId string `json:"refId"`
+}
+
+type GetReferenceResp struct {
+	Code int64       `json:"code"`
+	Data QueryResult `json:"data"`
+	Msg  string      `json:"msg"`
+}
+
 type GetVideoUrlReq struct {
 	ProfileName string `json:"profileName"`
 	RecordId    int64  `json:"recordId"`
@@ -138,6 +270,38 @@ type GetVideoUrlResp struct {
 	Code int64       `json:"code"`
 	Data FileDetails `json:"data"`
 	Msg  string      `json:"msg"`
+}
+
+type PerformanceAnalysisReq struct {
+	ProfileName string `json:"profileName"`
+	RecordId    int64  `json:"recordId"`
+}
+
+type PerformanceAnalysisResp struct {
+	Code       int64  `json:"code"`
+	AnalysisId int64  `json:"analysisId"`
+	Msg        string `json:"msg"`
+}
+
+type QueryReferenceReq struct {
+	Title      string `json:"title"`
+	Style      string `json:"style"`
+	Composer   string `json:"composer"`
+	Instrument string `json:"instrument"`
+}
+
+type QueryReferenceResp struct {
+	Code int64         `json:"code"`
+	Data []QueryResult `json:"data"`
+	Msg  string        `json:"msg"`
+}
+
+type QueryResult struct {
+	RefId      string `json:"refId"`
+	Title      string `json:"title"`
+	Style      string `json:"style"`
+	Composer   string `json:"composer"`
+	Instrument string `json:"instrument"`
 }
 
 type Record struct {
@@ -162,6 +326,25 @@ type RecordInfo struct {
 	Reference   string `json:"reference"`
 }
 
+type Reference struct {
+	RefId      string `json:"refId"`
+	Title      string `json:"title"`
+	Style      string `json:"style"`
+	Composer   string `json:"composer"`
+	Instrument string `json:"instrument"`
+	Image      string `json:"image"`
+	Video      string `json:"video"`
+	Audio      string `json:"audio"`
+	Midi       string `json:"midi"`
+	Sheet      string `json:"sheet"`
+	Waterfall  string `json:"waterfall"`
+	Json       string `json:"json"`
+}
+
+type ResultData struct {
+	AnalysisRank int64 `json:"analysisRank"`
+}
+
 type SetAsReferenceReq struct {
 	ProfileName string `json:"profileName"`
 	RecordId    int64  `json:"recordId"`
@@ -180,9 +363,41 @@ type UploadAudioSuccessReq struct {
 }
 
 type UploadAudioSuccessResp struct {
-	Code        int64  `json:"code"`
-	ProfileName string `json:"profileName"`
-	Msg         string `json:"msg"`
+	Code int64  `json:"code"`
+	Msg  string `json:"msg"`
+}
+
+type UploadRefAudioSuccessReq struct {
+	RefId    string `json:"refId"`
+	FileName string `json:"fileName"`
+}
+
+type UploadRefAudioSuccessResp struct {
+	Code       int64  `json:"code"`
+	AnalysisId int64  `json:"analysisId"`
+	Msg        string `json:"msg"`
+}
+
+type UploadRefImgSuccessReq struct {
+	RefId    string `json:"refId"`
+	FileName string `json:"fileName"`
+}
+
+type UploadRefImgSuccessResp struct {
+	Code       int64  `json:"code"`
+	AnalysisId int64  `json:"analysisId"`
+	Msg        string `json:"msg"`
+}
+
+type UploadRefVideoSuccessReq struct {
+	RefId    string `json:"refId"`
+	FileName string `json:"fileName"`
+}
+
+type UploadRefVideoSuccessResp struct {
+	Code       int64  `json:"code"`
+	AnalysisId int64  `json:"analysisId"`
+	Msg        string `json:"msg"`
 }
 
 type UploadVideoSuccessReq struct {
@@ -194,4 +409,9 @@ type UploadVideoSuccessReq struct {
 type UploadVideoSuccessResp struct {
 	Code int64  `json:"code"`
 	Msg  string `json:"msg"`
+}
+
+type UrlDetails struct {
+	PresignedURL string `json:"presignedurl"`
+	FileName     string `json:"fileName"`
 }

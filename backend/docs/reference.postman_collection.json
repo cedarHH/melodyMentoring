@@ -1,0 +1,410 @@
+{
+  "info": {
+    "name": "reference",
+    "description": "reference",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "author": "xuesong huang"
+  },
+  "item": [
+    {
+      "name": "create a new reference",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/createReference",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "createReference"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\",\n  \"style\": \"\",\n  \"composer\": \"\",\n  \"instrument\": \"\"\n}"
+        },
+        "description": "create a new reference"
+      },
+      "response": []
+    },
+    {
+      "name": "delete a reference",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/deleteReference",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "deleteReference"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "delete a reference"
+      },
+      "response": []
+    },
+    {
+      "name": "query reference",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/queryReference",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "queryReference"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\",\n  \"style\": \"\",\n  \"composer\": \"\",\n  \"instrument\": \"\"\n}"
+        },
+        "description": "query reference"
+      },
+      "response": []
+    },
+    {
+      "name": "get reference list",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/getReference",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "getReference"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "get reference list"
+      },
+      "response": []
+    },
+    {
+      "name": "get reference video",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/getRefVideoUrl",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "getRefVideoUrl"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "get reference video"
+      },
+      "response": []
+    },
+    {
+      "name": "get reference img",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/getRefImgUrl",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "getRefImgUrl"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "get reference img"
+      },
+      "response": []
+    },
+    {
+      "name": "get reference audio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/getRefAudioUrl",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "getRefAudioUrl"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "get reference audio"
+      },
+      "response": []
+    },
+    {
+      "name": "upload audio success",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/uploadRefAudioSuccess",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "uploadRefAudioSuccess"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\",\n  \"fileName\": \"\"\n}"
+        },
+        "description": "upload audio success"
+      },
+      "response": []
+    },
+    {
+      "name": "upload image success",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/uploadRefImgSuccess",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "uploadRefImgSuccess"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\",\n  \"fileName\": \"\"\n}"
+        },
+        "description": "upload image success"
+      },
+      "response": []
+    },
+    {
+      "name": "upload video success",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/uploadRefVideoSuccess",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "uploadRefVideoSuccess"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\",\n  \"fileName\": \"\"\n}"
+        },
+        "description": "upload video success"
+      },
+      "response": []
+    },
+    {
+      "name": "get reference video",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/getRefVideo",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "getRefVideo"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "get reference video"
+      },
+      "response": []
+    },
+    {
+      "name": "get reference image",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/getRefImg",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "getRefImg"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "get reference image"
+      },
+      "response": []
+    },
+    {
+      "name": "get reference audio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/getRefAudio",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "getRefAudio"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "get reference audio"
+      },
+      "response": []
+    },
+    {
+      "name": "get reference midi",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/getRefMidi",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "getRefMidi"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "get reference midi"
+      },
+      "response": []
+    },
+    {
+      "name": "get reference sheet",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/getRefSheet",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "getRefSheet"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "get reference sheet"
+      },
+      "response": []
+    },
+    {
+      "name": "get reference waterfall image",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8889/api/media/reference/getRefWaterfall",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8889",
+          "path": ["api", "media", "reference", "getRefWaterfall"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refId\": \"\"\n}"
+        },
+        "description": "get reference waterfall image"
+      },
+      "response": []
+    }
+  ]
+}

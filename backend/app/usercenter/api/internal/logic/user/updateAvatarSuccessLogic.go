@@ -36,10 +36,18 @@ func (l *UpdateAvatarSuccessLogic) UpdateAvatarSuccess(
 	if err != nil {
 		return nil, fmt.Errorf("file %s does not exist: %w", fileName, err)
 	}
+	user, err := l.svcCtx.UserModel.FindOne(l.ctx, uuid, profileName)
+	if err != nil {
+		return nil, fmt.Errorf("user entry does not exist: %w", err)
+	}
+	if user == nil {
+		return nil, fmt.Errorf("user entry not found for uuid %s and profileName %s", uuid, profileName)
+	}
 
 	updates := map[string]interface{}{
 		"Avatar": fileName,
 	}
+
 	err = l.svcCtx.UserModel.UpdateAttributes(l.ctx, uuid, profileName, updates)
 	if err != nil {
 		return nil, fmt.Errorf("failed to update user attributes: %w", err)

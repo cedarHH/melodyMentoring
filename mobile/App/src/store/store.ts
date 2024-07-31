@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
 import notificationReducer from './notificationSlice';
+import firstLoginReducer from './firstLoginSlice';
 
 const store = configureStore({
     reducer: {
         auth: authReducer,
         notification: notificationReducer,
+        firstLogin: firstLoginReducer,
     },
 });
 

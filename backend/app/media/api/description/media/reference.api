@@ -1,0 +1,229 @@
+syntax = "v1"
+
+info(
+    title: "media"
+    desc: "media"
+    author: "xuesong huang"
+)
+
+type Reference {
+    RefId           string  `json:"refId"`
+    Title           string  `json:"title"`
+    Style           string  `json:"style"`
+    Composer        string  `json:"composer"`
+    Instrument      string  `json:"instrument"`
+    Image           string  `json:"image"`
+    Video           string  `json:"video"`
+    Audio           string  `json:"audio"`
+    Midi            string  `json:"midi"`
+    Sheet           string  `json:"sheet"`
+    Waterfall       string  `json:"waterfall"`
+    Json            string  `json:"json"`
+}
+
+type (
+    CreateReferenceReq {
+        Title           string  `json:"title"`
+        Style           string  `json:"style"`
+        Composer        string  `json:"composer"`
+        Instrument      string  `json:"instrument"`
+    }
+
+    CreateReferenceResp {
+        Code        int64    `json:"code"`
+        RefId           string  `json:"refId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    DeleteReferenceReq {
+        RefId       string  `json:"refId"`
+    }
+
+    DeleteReferenceResp {
+        Code        int64    `json:"code"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    QueryResult {
+        RefId           string  `json:"refId"`
+        Title           string  `json:"title"`
+        Style           string  `json:"style"`
+        Composer        string  `json:"composer"`
+        Instrument      string  `json:"instrument"`
+    }
+
+    QueryReferenceReq {
+        Title           string  `json:"title"`
+        Style           string  `json:"style"`
+        Composer        string  `json:"composer"`
+        Instrument      string  `json:"instrument"`
+    }
+
+    QueryReferenceResp {
+        Code        int64           `json:"code"`
+        Data        []QueryResult   `json:"data"`
+        Msg         string          `json:"msg"`
+    }
+)
+
+type (
+    GetReferenceReq {
+        RefId           string  `json:"refId"`
+    }
+
+    GetReferenceResp {
+        Code        int64           `json:"code"`
+        Data        QueryResult     `json:"data"`
+        Msg         string          `json:"msg"`
+    }
+)
+
+type UrlDetails {
+    PresignedURL  string    `json:"presignedurl"`
+    FileName      string    `json:"fileName"`
+}
+
+type (
+    GetRefVideoUrlReq {
+        RefId           string  `json:"refId"`
+    }
+
+    GetRefVideoUrlResp {
+        Code    int64       `json:"code"`
+        Data    UrlDetails  `json:"data"`
+        Msg     string      `json:"msg"`
+    }
+)
+
+type (
+    GetRefImgUrlReq {
+        RefId           string  `json:"refId"`
+    }
+
+    GetRefImgUrlResp {
+        Code    int64       `json:"code"`
+        Data    UrlDetails  `json:"data"`
+        Msg     string      `json:"msg"`
+    }
+)
+
+type (
+    GetRefAudioUrlReq {
+        RefId           string  `json:"refId"`
+    }
+
+    GetRefAudioUrlResp {
+        Code    int64       `json:"code"`
+        Data    UrlDetails  `json:"data"`
+        Msg     string      `json:"msg"`
+    }
+)
+
+type (
+    UploadRefVideoSuccessReq {
+        RefId           string  `json:"refId"`
+        FileName      string    `json:"fileName"`
+    }
+
+    UploadRefVideoSuccessResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    UploadRefImgSuccessReq {
+        RefId           string  `json:"refId"`
+        FileName      string    `json:"fileName"`
+    }
+
+    UploadRefImgSuccessResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    UploadRefAudioSuccessReq {
+        RefId         string  `json:"refId"`
+        FileName      string  `json:"fileName"`
+    }
+
+    UploadRefAudioSuccessResp {
+        Code        int64    `json:"code"`
+        AnalysisId  int64    `json:"analysisId"`
+        Msg         string   `json:"msg"`
+    }
+)
+
+type (
+    GetRefVideoReq {
+        RefId         string  `json:"refId"`
+    }
+    GetRefVideoResp {
+        Code    int64      `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetRefImgReq {
+        RefId         string  `json:"refId"`
+    }
+    GetRefImgResp {
+        Code    int64      `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetRefAudioReq {
+        RefId         string  `json:"refId"`
+    }
+    GetRefAudioResp {
+        Code    int64      `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetRefMidiReq {
+        RefId         string  `json:"refId"`
+    }
+    GetRefMidiResp {
+        Code    int64      `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetRefSheetReq {
+        RefId         string  `json:"refId"`
+    }
+    GetRefSheetResp {
+        Code    int64      `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
+
+type (
+    GetRefWaterfallReq {
+        RefId         string  `json:"refId"`
+    }
+    GetRefWaterfallResp {
+        Code    int64      `json:"code"`
+        PresignedURL  string    `json:"presignedurl"`
+        Msg     string     `json:"msg"`
+    }
+)
