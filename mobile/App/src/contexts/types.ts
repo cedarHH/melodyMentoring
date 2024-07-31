@@ -12,13 +12,17 @@ export type RootStackParamList = {
 
     Main: undefined;
     Search: undefined;
-    History: undefined;
+    History: {
+        profileName:string;
+    };
     Music: {
         title: string;
         image: string| undefined;
         // others
     }
-    Result: undefined;
+    Result: {
+       recordId: string;
+    };
     Feedback: undefined;
     Configure: {
         profileName:string;
