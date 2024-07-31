@@ -104,7 +104,7 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity
                         style={styles.playAgainButton}
-                        onPress={() => navigation.navigate('User')}
+                        onPress={() => navigation.navigate('Home', {profileName: profileName})}
                     >
                         <Text style={styles.playAgainButtonText}>Play again</Text>
                     </TouchableOpacity>
@@ -116,7 +116,7 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                     </View>
                     <TouchableOpacity
                         style={styles.continueButton}
-                        onPress={() => navigation.navigate('User')}
+                        onPress={() => navigation.navigate('Home', {profileName: profileName})}
                     >
                         <Text style={styles.continueButtonText}>Continue</Text>
                     </TouchableOpacity>
