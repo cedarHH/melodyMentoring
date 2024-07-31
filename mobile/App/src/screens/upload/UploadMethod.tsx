@@ -5,11 +5,12 @@ import { RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { RootStackParamList } from '../../contexts/types';
 import { styles } from './ui';
-import {  useState, useRef, useEffect } from 'react';
+import {  useState, useRef, useEffect,useContext  } from 'react';
 import { SelectVideo, UploadVideo,SelectAudio,UploadAudio } from './mediaUtils'; 
 import CameraRecorder from './CameraRecorder';
 import ChooseMethod from './methodChoose';
-
+import { UploadContext } from './UploadContext';
+import { useApi } from '../../contexts/apiContext';
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'UploadMethod'>;
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
@@ -22,13 +23,21 @@ type Props = {
 
 
 const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
-    const {title} = route.params;
+    
     const [videoUri, setVideoUri] = useState<string | null>(null);
     const [audioUri, setAudioUri] = useState<string | null>(null);
     const [reference, setReference] = useState(false);
     const [aov, setaov] = useState<string | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const context = useContext(UploadContext);
+    const api = useApi();
 
+    if (!context) {
+        throw new Error('UploadMethod must be used within an UploadProvider');
+    }
+    console.log(context)
+
+    const { title, profileName } = context;
     const handleChoose = () => {
         setIsModalVisible(true);
     };

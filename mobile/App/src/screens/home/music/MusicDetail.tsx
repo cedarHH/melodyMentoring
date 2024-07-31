@@ -13,8 +13,7 @@ type Props = {
 };
 
 const MusicDetail: React.FC<Props> = ({ route, navigation }) => {
-    console.log(route)
-    const { title, image } = route.params;
+    const { title, image, profileName } = route.params;
     if (!title || !image) return null;
 
     return (
@@ -23,7 +22,7 @@ const MusicDetail: React.FC<Props> = ({ route, navigation }) => {
             <Text style={styles.title}>{title}</Text>
             <CustomButton
                 text="Practice"
-                onPress={() => navigation.navigate('Upload', { title})}
+                onPress={() => navigation.navigate('Upload', { title, profileName})}
             />            
         </View>
 
