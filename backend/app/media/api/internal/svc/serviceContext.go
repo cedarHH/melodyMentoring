@@ -22,6 +22,7 @@ type ServiceContext struct {
 	AudioProcessingResult *messageQueue.RabbitMQClient
 	ResultConsumer        *consumer.AnalysisResultConsumer
 	RecordModel           dynamodb.RecordModel
+	ReferenceModel        dynamodb.ReferenceModel
 	ThumbnailModel        commonModel.IS3Model
 	AudioModel            commonModel.IS3Model
 	VideoModel            commonModel.IS3Model
@@ -41,8 +42,9 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic("Failed to load S3 config: " + err.Error())
 	}
 
-	recordDynamoDBClient := AwsDynamodb.NewFromConfig(recordTableConfig)
-	recordModel := dynamodb.NewRecordModel(recordDynamoDBClient, c.DynamoDBConf.RecordTable.TableName)
+	DynamoDBClient := AwsDynamodb.NewFromConfig(recordTableConfig)
+	recordModel := dynamodb.NewRecordModel(DynamoDBClient, c.DynamoDBConf.RecordTable.TableName)
+	referenceModel := dynamodb.NewReferenceModel(DynamoDBClient, c.DynamoDBConf.ReferenceTable.TableName)
 
 	s3Client := AwsS3.NewFromConfig(s3Config)
 	presignClient := AwsS3.NewPresignClient(s3Client)
@@ -84,6 +86,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		AudioProcessingResult: audioProcessingResultsClient,
 		ResultConsumer:        analysisResultConsumer,
 		RecordModel:           recordModel,
+		ReferenceModel:        referenceModel,
 		ThumbnailModel:        thumbnailModel,
 		AudioModel:            audioModel,
 		VideoModel:            videoModel,

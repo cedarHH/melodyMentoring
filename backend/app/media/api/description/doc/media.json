@@ -478,6 +478,438 @@
           "media"
         ]
       }
+    },
+    "/api/media/reference/createReference": {
+      "post": {
+        "summary": "create a new reference",
+        "operationId": "createReference",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateReferenceResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateReferenceReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/deleteReference": {
+      "post": {
+        "summary": "delete a reference",
+        "operationId": "deleteReference",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteReferenceResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteReferenceReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/getRefAudio": {
+      "post": {
+        "summary": "get reference audio",
+        "operationId": "getRefAudio",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRefAudioResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetRefAudioReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/getRefAudioUrl": {
+      "post": {
+        "summary": "get reference audio",
+        "operationId": "getRefAudioUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRefAudioUrlResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetRefAudioUrlReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/getRefImg": {
+      "post": {
+        "summary": "get reference image",
+        "operationId": "getRefImg",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRefImgResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetRefImgReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/getRefImgUrl": {
+      "post": {
+        "summary": "get reference img",
+        "operationId": "getRefImgUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRefImgUrlResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetRefImgUrlReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/getRefMidi": {
+      "post": {
+        "summary": "get reference midi",
+        "operationId": "getRefMidi",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRefMidiResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetRefMidiReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/getRefSheet": {
+      "post": {
+        "summary": "get reference sheet",
+        "operationId": "getRefSheet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRefSheetResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetRefSheetReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/getRefVideo": {
+      "post": {
+        "summary": "get reference video",
+        "operationId": "getRefVideo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRefVideoResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetRefVideoReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/getRefVideoUrl": {
+      "post": {
+        "summary": "get reference video",
+        "operationId": "getRefVideoUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRefVideoUrlResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetRefVideoUrlReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/getRefWaterfall": {
+      "post": {
+        "summary": "get reference waterfall image",
+        "operationId": "getRefWaterfall",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRefWaterfallResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetRefWaterfallReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/getReference": {
+      "post": {
+        "summary": "get reference list",
+        "operationId": "getReference",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetReferenceResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetReferenceReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/queryReference": {
+      "post": {
+        "summary": "query reference",
+        "operationId": "queryReference",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/QueryReferenceResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/QueryReferenceReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/uploadRefAudioSuccess": {
+      "post": {
+        "summary": "upload audio success",
+        "operationId": "uploadRefAudioSuccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UploadRefAudioSuccessResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UploadRefAudioSuccessReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/uploadRefImgSuccess": {
+      "post": {
+        "summary": "upload image success",
+        "operationId": "uploadRefImgSuccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UploadRefImgSuccessResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UploadRefImgSuccessReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/media/reference/uploadRefVideoSuccess": {
+      "post": {
+        "summary": "upload video success",
+        "operationId": "uploadRefVideoSuccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UploadRefVideoSuccessResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UploadRefVideoSuccessReq"
+            }
+          }
+        ],
+        "tags": [
+          "reference"
+        ]
+      }
     }
   },
   "definitions": {
@@ -519,6 +951,51 @@
         "msg"
       ]
     },
+    "CreateReferenceReq": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "style": {
+          "type": "string"
+        },
+        "composer": {
+          "type": "string"
+        },
+        "instrument": {
+          "type": "string"
+        }
+      },
+      "title": "CreateReferenceReq",
+      "required": [
+        "title",
+        "style",
+        "composer",
+        "instrument"
+      ]
+    },
+    "CreateReferenceResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "refId": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "CreateReferenceResp",
+      "required": [
+        "code",
+        "refId",
+        "msg"
+      ]
+    },
     "DeleteRecordReq": {
       "type": "object",
       "properties": {
@@ -548,6 +1025,35 @@
         }
       },
       "title": "DeleteRecordResp",
+      "required": [
+        "code",
+        "msg"
+      ]
+    },
+    "DeleteReferenceReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "DeleteReferenceReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "DeleteReferenceResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "DeleteReferenceResp",
       "required": [
         "code",
         "msg"
@@ -962,6 +1468,336 @@
         "msg"
       ]
     },
+    "GetRefAudioReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefAudioReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "GetRefAudioResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefAudioResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetRefAudioUrlReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefAudioUrlReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "GetRefAudioUrlResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "data": {
+          "$ref": "#/definitions/UrlDetails"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefAudioUrlResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
+    "GetRefImgReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefImgReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "GetRefImgResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefImgResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetRefImgUrlReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefImgUrlReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "GetRefImgUrlResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "data": {
+          "$ref": "#/definitions/UrlDetails"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefImgUrlResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
+    "GetRefMidiReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefMidiReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "GetRefMidiResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefMidiResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetRefSheetReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefSheetReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "GetRefSheetResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefSheetResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetRefVideoReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefVideoReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "GetRefVideoResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefVideoResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetRefVideoUrlReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefVideoUrlReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "GetRefVideoUrlResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "data": {
+          "$ref": "#/definitions/UrlDetails"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefVideoUrlResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
+    "GetRefWaterfallReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefWaterfallReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "GetRefWaterfallResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "presignedurl": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetRefWaterfallResp",
+      "required": [
+        "code",
+        "presignedurl",
+        "msg"
+      ]
+    },
+    "GetReferenceReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        }
+      },
+      "title": "GetReferenceReq",
+      "required": [
+        "refId"
+      ]
+    },
+    "GetReferenceResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "data": {
+          "$ref": "#/definitions/QueryResult"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "GetReferenceResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
     "GetVideoUrlReq": {
       "type": "object",
       "properties": {
@@ -1037,6 +1873,82 @@
         "code",
         "analysisId",
         "msg"
+      ]
+    },
+    "QueryReferenceReq": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "style": {
+          "type": "string"
+        },
+        "composer": {
+          "type": "string"
+        },
+        "instrument": {
+          "type": "string"
+        }
+      },
+      "title": "QueryReferenceReq",
+      "required": [
+        "title",
+        "style",
+        "composer",
+        "instrument"
+      ]
+    },
+    "QueryReferenceResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryResult"
+          }
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "QueryReferenceResp",
+      "required": [
+        "code",
+        "data",
+        "msg"
+      ]
+    },
+    "QueryResult": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "style": {
+          "type": "string"
+        },
+        "composer": {
+          "type": "string"
+        },
+        "instrument": {
+          "type": "string"
+        }
+      },
+      "title": "QueryResult",
+      "required": [
+        "refId",
+        "title",
+        "style",
+        "composer",
+        "instrument"
       ]
     },
     "Record": {
@@ -1120,6 +2032,62 @@
         "RecordId",
         "composition",
         "reference"
+      ]
+    },
+    "Reference": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "style": {
+          "type": "string"
+        },
+        "composer": {
+          "type": "string"
+        },
+        "instrument": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "video": {
+          "type": "string"
+        },
+        "audio": {
+          "type": "string"
+        },
+        "midi": {
+          "type": "string"
+        },
+        "sheet": {
+          "type": "string"
+        },
+        "waterfall": {
+          "type": "string"
+        },
+        "json": {
+          "type": "string"
+        }
+      },
+      "title": "Reference",
+      "required": [
+        "refId",
+        "title",
+        "style",
+        "composer",
+        "instrument",
+        "image",
+        "video",
+        "audio",
+        "midi",
+        "sheet",
+        "waterfall",
+        "json"
       ]
     },
     "ResultData": {
@@ -1212,6 +2180,120 @@
         "msg"
       ]
     },
+    "UploadRefAudioSuccessReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string"
+        }
+      },
+      "title": "UploadRefAudioSuccessReq",
+      "required": [
+        "refId",
+        "fileName"
+      ]
+    },
+    "UploadRefAudioSuccessResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "analysisId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UploadRefAudioSuccessResp",
+      "required": [
+        "code",
+        "analysisId",
+        "msg"
+      ]
+    },
+    "UploadRefImgSuccessReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string"
+        }
+      },
+      "title": "UploadRefImgSuccessReq",
+      "required": [
+        "refId",
+        "fileName"
+      ]
+    },
+    "UploadRefImgSuccessResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "analysisId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UploadRefImgSuccessResp",
+      "required": [
+        "code",
+        "analysisId",
+        "msg"
+      ]
+    },
+    "UploadRefVideoSuccessReq": {
+      "type": "object",
+      "properties": {
+        "refId": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string"
+        }
+      },
+      "title": "UploadRefVideoSuccessReq",
+      "required": [
+        "refId",
+        "fileName"
+      ]
+    },
+    "UploadRefVideoSuccessResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "analysisId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UploadRefVideoSuccessResp",
+      "required": [
+        "code",
+        "analysisId",
+        "msg"
+      ]
+    },
     "UploadVideoSuccessReq": {
       "type": "object",
       "properties": {
@@ -1248,6 +2330,22 @@
       "required": [
         "code",
         "msg"
+      ]
+    },
+    "UrlDetails": {
+      "type": "object",
+      "properties": {
+        "presignedurl": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string"
+        }
+      },
+      "title": "UrlDetails",
+      "required": [
+        "presignedurl",
+        "fileName"
       ]
     }
   },

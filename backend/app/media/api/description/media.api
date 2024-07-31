@@ -103,32 +103,69 @@ service media {
 	group:      reference
 	middleware: UserAuthMiddleware
 )
-service reference {
+service media {
 	@doc "create a new reference"
 	@handler createReference
 	post /createReference (CreateReferenceReq) returns (CreateReferenceResp)
 
 	@doc "delete a reference"
 	@handler deleteReference
-	post /deleteReference (DeleteReferenceReq) returns (DeleteRecordResp)
+	post /deleteReference (DeleteReferenceReq) returns (DeleteReferenceResp)
 
 	@doc "query reference"
 	@handler queryReference
 	post /queryReference (QueryReferenceReq) returns (QueryReferenceResp)
 
 	@doc "get reference list"
-	@handler getReferences
-	post /getReferences (GetReferencesReq) returns (GetReferencesResp)
+	@handler getReference
+	post /getReference (GetReferenceReq) returns (GetReferenceResp)
 
-	@doc "get a reference"
-	@handler getReferenceDetail
-	post /getReferenceDetail (GetReferenceDetailReq) returns (GetReferenceDetailResp)
+	@doc "get reference video"
+	@handler getRefVideoUrl
+	post /getRefVideoUrl (GetRefVideoUrlReq) returns (GetRefVideoUrlResp)
+
+	@doc "get reference img"
+	@handler getRefImgUrl
+	post /getRefImgUrl (GetRefImgUrlReq) returns (GetRefImgUrlResp)
+
+	@doc "get reference audio"
+	@handler getRefAudioUrl
+	post /getRefAudioUrl (GetRefAudioUrlReq) returns (GetRefAudioUrlResp)
 
 	@doc "upload audio success"
 	@handler uploadRefAudioSuccess
 	post /uploadRefAudioSuccess (UploadRefAudioSuccessReq) returns (UploadRefAudioSuccessResp)
 
+	@doc "upload image success"
+	@handler uploadRefImgSuccess
+	post /uploadRefImgSuccess (UploadRefImgSuccessReq) returns (UploadRefImgSuccessResp)
+
 	@doc "upload video success"
 	@handler uploadRefVideoSuccess
 	post /uploadRefVideoSuccess (UploadRefVideoSuccessReq) returns (UploadRefVideoSuccessResp)
+
+	@doc "get reference video"
+	@handler getRefVideo
+	post /getRefVideo (GetRefVideoReq) returns (GetRefVideoResp)
+
+	@doc "get reference image"
+	@handler getRefImg
+	post /getRefImg (GetRefImgReq) returns (GetRefImgResp)
+
+	@doc "get reference audio"
+	@handler getRefAudio
+	post /getRefAudio (GetRefAudioReq) returns (GetRefAudioResp)
+
+	@doc "get reference midi"
+	@handler getRefMidi
+	post /getRefMidi (GetRefMidiReq) returns (GetRefMidiResp)
+
+	@doc "get reference sheet"
+	@handler getRefSheet
+	post /getRefSheet (GetRefSheetReq) returns (GetRefSheetResp)
+
+	@doc "get reference waterfall image"
+	@handler getRefWaterfall
+	post /getRefWaterfall (GetRefWaterfallReq) returns (GetRefWaterfallResp)
 }
+

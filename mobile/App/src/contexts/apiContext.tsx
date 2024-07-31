@@ -19,34 +19,71 @@ import {CreateSubUserReq,
     VerifypinReq,
     VerifypinResp
 } from "./apiParams/usercenterComponents";
-import {CreateRecordReq, 
-    CreateRecordResp, 
-    DeleteRecordReq, 
-    DeleteRecordResp, 
-    GetAudioUrlReq, 
-    GetAudioUrlResp, 
-    GetPerformanceAudioReq, 
-    GetPerformanceAudioResp, 
-    GetPerformanceImgReq, 
-    GetPerformanceImgResp, 
-    GetPerformanceMidiReq, 
-    GetPerformanceMidiResp, 
-    GetPerformanceReportReq, 
-    GetPerformanceReportResp, 
-    GetPerformanceSheetReq, 
-    GetPerformanceSheetResp, 
-    GetPerformanceVideoReq, 
-    GetPerformanceVideoResp, 
-    GetPerformanceWaterfallReq, 
-    GetPerformanceWaterfallResp, 
-    GetRecordReq, 
-    GetRecordResp, 
-    GetVideoUrlReq, 
-    GetVideoUrlResp, 
-    SetAsReferenceReq, 
-    SetAsReferenceResp, 
-    UploadAudioSuccessReq, 
+import {
+    CreateRecordReq,
+    CreateRecordResp,
+    CreateReferenceReq,
+    CreateReferenceResp,
+    DeleteRecordReq,
+    DeleteRecordResp,
+    DeleteReferenceReq,
+    DeleteReferenceResp,
+    GetAnalysisResultReq,
+    GetAnalysisResultResp,
+    GetAudioUrlReq,
+    GetAudioUrlResp,
+    GetPerformanceAudioReq,
+    GetPerformanceAudioResp,
+    GetPerformanceImgReq,
+    GetPerformanceImgResp,
+    GetPerformanceMidiReq,
+    GetPerformanceMidiResp,
+    GetPerformanceReportReq,
+    GetPerformanceReportResp,
+    GetPerformanceSheetReq,
+    GetPerformanceSheetResp,
+    GetPerformanceVideoReq,
+    GetPerformanceVideoResp,
+    GetPerformanceWaterfallReq,
+    GetPerformanceWaterfallResp,
+    GetRecordReq,
+    GetRecordResp,
+    GetRefAudioReq,
+    GetRefAudioResp,
+    GetRefAudioUrlReq,
+    GetRefAudioUrlResp,
+    GetReferenceReq,
+    GetReferenceResp,
+    GetRefImgReq,
+    GetRefImgResp,
+    GetRefImgUrlReq,
+    GetRefImgUrlResp,
+    GetRefMidiReq,
+    GetRefMidiResp,
+    GetRefSheetReq,
+    GetRefSheetResp,
+    GetRefVideoReq,
+    GetRefVideoResp,
+    GetRefVideoUrlReq,
+    GetRefVideoUrlResp,
+    GetRefWaterfallReq,
+    GetRefWaterfallResp,
+    GetVideoUrlReq,
+    GetVideoUrlResp,
+    PerformanceAnalysisReq,
+    PerformanceAnalysisResp,
+    QueryReferenceReq,
+    QueryReferenceResp,
+    SetAsReferenceReq,
+    SetAsReferenceResp,
+    UploadAudioSuccessReq,
     UploadAudioSuccessResp,
+    UploadRefAudioSuccessReq,
+    UploadRefAudioSuccessResp,
+    UploadRefImgSuccessReq,
+    UploadRefImgSuccessResp,
+    UploadRefVideoSuccessReq,
+    UploadRefVideoSuccessResp,
     UploadVideoSuccessReq,
     UploadVideoSuccessResp
 } from "./apiParams/mediaComponents";
@@ -80,6 +117,28 @@ interface ApiContextType {
         setAsReference: (req: SetAsReferenceReq) => Promise<SetAsReferenceResp>;
         uploadAudioSuccess: (req: UploadAudioSuccessReq) => Promise<UploadAudioSuccessResp>;
         uploadVideoSuccess: (req: UploadVideoSuccessReq) => Promise<UploadVideoSuccessResp>;
+    };
+    reference: {
+        createReference: (req: CreateReferenceReq) => Promise<CreateReferenceResp>;
+        deleteReference: (req: DeleteReferenceReq) => Promise<DeleteReferenceResp>;
+        getRefAudio: (req: GetRefAudioReq) => Promise<GetRefAudioResp>;
+        getRefAudioUrl: (req: GetRefAudioUrlReq) => Promise<GetRefAudioUrlResp>;
+        getRefImg: (req: GetRefImgReq) => Promise<GetRefImgResp>;
+        getRefImgUrl: (req: GetRefImgUrlReq) => Promise<GetRefImgUrlResp>;
+        getRefMidi: (req: GetRefMidiReq) => Promise<GetRefMidiResp>;
+        getRefSheet: (req: GetRefSheetReq) => Promise<GetRefSheetResp>;
+        getRefVideo: (req: GetRefVideoReq) => Promise<GetRefVideoResp>;
+        getRefVideoUrl: (req: GetRefVideoUrlReq) => Promise<GetRefVideoUrlResp>;
+        getRefWaterfall: (req: GetRefWaterfallReq) => Promise<GetRefWaterfallResp>;
+        getReference: (req: GetReferenceReq) => Promise<GetReferenceResp>;
+        queryReference: (req: QueryReferenceReq) => Promise<QueryReferenceResp>;
+        uploadRefAudioSuccess: (req: UploadRefAudioSuccessReq) => Promise<UploadRefAudioSuccessResp>;
+        uploadRefImgSuccess: (req: UploadRefImgSuccessReq) => Promise<UploadRefImgSuccessResp>;
+        uploadRefVideoSuccess: (req: UploadRefVideoSuccessReq) => Promise<UploadRefVideoSuccessResp>;
+    };
+    analysis: {
+        performanceAnalysis: (req: PerformanceAnalysisReq) => Promise<PerformanceAnalysisResp>;
+        getAnalysisResult: (req: GetAnalysisResultReq) => Promise<GetAnalysisResultResp>;
     };
     setIdToken: (token:string) => void
 }
@@ -335,8 +394,175 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
         },
     };
 
+    const reference = {
+        /**
+         * @description "create new reference"
+         * @param req
+         */
+        createReference: async (req: CreateReferenceReq): Promise<CreateReferenceResp> => {
+            const response = await axiosInstance.post<CreateReferenceResp>('/api/media/reference/createReference', req);
+            return response.data;
+        },
+
+        /**
+         * @description "delete reference"
+         * @param req
+         */
+        deleteReference: async (req: DeleteReferenceReq): Promise<DeleteReferenceResp> => {
+            const response = await axiosInstance.post<DeleteReferenceResp>('/api/media/reference/deleteReference', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get reference audio"
+         * @param req
+         */
+        getRefAudio: async (req: GetRefAudioReq): Promise<GetRefAudioResp> => {
+            const response = await axiosInstance.post<GetRefAudioResp>('/api/media/reference/getAudio', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get reference audio URL"
+         * @param req
+         */
+        getRefAudioUrl: async (req: GetRefAudioUrlReq): Promise<GetRefAudioUrlResp> => {
+            const response = await axiosInstance.post<GetRefAudioUrlResp>('/api/media/reference/getAudioUrl', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get reference image"
+         * @param req
+         */
+        getRefImg: async (req: GetRefImgReq): Promise<GetRefImgResp> => {
+            const response = await axiosInstance.post<GetRefImgResp>('/api/media/reference/getImg', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get reference image URL"
+         * @param req
+         */
+        getRefImgUrl: async (req: GetRefImgUrlReq): Promise<GetRefImgUrlResp> => {
+            const response = await axiosInstance.post<GetRefImgUrlResp>('/api/media/reference/getImgUrl', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get reference MIDI"
+         * @param req
+         */
+        getRefMidi: async (req: GetRefMidiReq): Promise<GetRefMidiResp> => {
+            const response = await axiosInstance.post<GetRefMidiResp>('/api/media/reference/getMidi', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get reference sheet"
+         * @param req
+         */
+        getRefSheet: async (req: GetRefSheetReq): Promise<GetRefSheetResp> => {
+            const response = await axiosInstance.post<GetRefSheetResp>('/api/media/reference/getSheet', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get reference video"
+         * @param req
+         */
+        getRefVideo: async (req: GetRefVideoReq): Promise<GetRefVideoResp> => {
+            const response = await axiosInstance.post<GetRefVideoResp>('/api/media/reference/getVideo', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get reference video URL"
+         * @param req
+         */
+        getRefVideoUrl: async (req: GetRefVideoUrlReq): Promise<GetRefVideoUrlResp> => {
+            const response = await axiosInstance.post<GetRefVideoUrlResp>('/api/media/reference/getVideoUrl', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get reference waterfall"
+         * @param req
+         */
+        getRefWaterfall: async (req: GetRefWaterfallReq): Promise<GetRefWaterfallResp> => {
+            const response = await axiosInstance.post<GetRefWaterfallResp>('/api/media/reference/getWaterfall', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get reference"
+         * @param req
+         */
+        getReference: async (req: GetReferenceReq): Promise<GetReferenceResp> => {
+            const response = await axiosInstance.post<GetReferenceResp>('/api/media/reference/getReference', req);
+            return response.data;
+        },
+
+        /**
+         * @description "query reference"
+         * @param req
+         */
+        queryReference: async (req: QueryReferenceReq): Promise<QueryReferenceResp> => {
+            const response = await axiosInstance.post<QueryReferenceResp>('/api/media/reference/query', req);
+            return response.data;
+        },
+
+        /**
+         * @description "upload reference audio success"
+         * @param req
+         */
+        uploadRefAudioSuccess: async (req: UploadRefAudioSuccessReq): Promise<UploadRefAudioSuccessResp> => {
+            const response = await axiosInstance.post<UploadRefAudioSuccessResp>('/api/media/reference/uploadAudioSuccess', req);
+            return response.data;
+        },
+
+        /**
+         * @description "upload reference image success"
+         * @param req
+         */
+        uploadRefImgSuccess: async (req: UploadRefImgSuccessReq): Promise<UploadRefImgSuccessResp> => {
+            const response = await axiosInstance.post<UploadRefImgSuccessResp>('/api/media/reference/uploadImgSuccess', req);
+            return response.data;
+        },
+
+        /**
+         * @description "upload reference video success"
+         * @param req
+         */
+        uploadRefVideoSuccess: async (req: UploadRefVideoSuccessReq): Promise<UploadRefVideoSuccessResp> => {
+            const response = await axiosInstance.post<UploadRefVideoSuccessResp>('/api/media/reference/uploadVideoSuccess', req);
+            return response.data;
+        },
+
+    };
+
+    const analysis = {
+        /**
+         * @description "performance analysis"
+         * @param req
+         */
+        performanceAnalysis: async (req: PerformanceAnalysisReq): Promise<PerformanceAnalysisResp> => {
+            const response = await axiosInstance.post<PerformanceAnalysisResp>('/api/media/analysis/performance', req);
+            return response.data;
+        },
+
+        /**
+         * @description "get analysis result"
+         * @param req
+         */
+        getAnalysisResult: async (req: GetAnalysisResultReq): Promise<GetAnalysisResultResp> => {
+            const response = await axiosInstance.post<GetAnalysisResultResp>('/api/media/analysis/getResult', req);
+            return response.data;
+        },
+    };
+
     return (
-        <ApiContext.Provider value={{ user, record, setIdToken}}>
+        <ApiContext.Provider value={{ user, record, reference, analysis, setIdToken}}>
             {children}
         </ApiContext.Provider>
     );

@@ -195,3 +195,225 @@ export interface UploadVideoSuccessResp {
 	msg: string
 }
 
+export interface CreateReferenceReq {
+	title: string
+	style: string
+	composer: string
+	instrument: string
+}
+
+export interface CreateReferenceResp {
+	code: number
+	refId: string
+	msg: string
+}
+
+export interface DeleteReferenceReq {
+	refId: string
+}
+
+export interface DeleteReferenceResp {
+	code: number
+	msg: string
+}
+
+export interface GetAnalysisResultReq {
+}
+export interface GetAnalysisResultReqParams {
+	analysisId: number
+}
+
+export interface GetAnalysisResultResp {
+	code: number
+	data: ResultData
+	msg: string
+}
+
+export interface GetRefAudioReq {
+	refId: string
+}
+
+export interface GetRefAudioResp {
+	code: number
+	presignedurl: string
+	msg: string
+}
+
+export interface GetRefAudioUrlReq {
+	refId: string
+}
+
+export interface GetRefAudioUrlResp {
+	code: number
+	data: UrlDetails
+	msg: string
+}
+
+export interface GetRefImgReq {
+	refId: string
+}
+
+export interface GetRefImgResp {
+	code: number
+	presignedurl: string
+	msg: string
+}
+
+export interface GetRefImgUrlReq {
+	refId: string
+}
+
+export interface GetRefImgUrlResp {
+	code: number
+	data: UrlDetails
+	msg: string
+}
+
+export interface GetRefMidiReq {
+	refId: string
+}
+
+export interface GetRefMidiResp {
+	code: number
+	presignedurl: string
+	msg: string
+}
+
+export interface GetRefSheetReq {
+	refId: string
+}
+
+export interface GetRefSheetResp {
+	code: number
+	presignedurl: string
+	msg: string
+}
+
+export interface GetRefVideoReq {
+	refId: string
+}
+
+export interface GetRefVideoResp {
+	code: number
+	presignedurl: string
+	msg: string
+}
+
+export interface GetRefVideoUrlReq {
+	refId: string
+}
+
+export interface GetRefVideoUrlResp {
+	code: number
+	data: UrlDetails
+	msg: string
+}
+
+export interface GetRefWaterfallReq {
+	refId: string
+}
+
+export interface GetRefWaterfallResp {
+	code: number
+	presignedurl: string
+	msg: string
+}
+
+export interface GetReferenceReq {
+	refId: string
+}
+
+export interface GetReferenceResp {
+	code: number
+	data: QueryResult
+	msg: string
+}
+
+export interface PerformanceAnalysisReq {
+	profileName: string
+	recordId: number
+}
+
+export interface PerformanceAnalysisResp {
+	code: number
+	analysisId: number
+	msg: string
+}
+
+export interface QueryReferenceReq {
+	title: string
+	style: string
+	composer: string
+	instrument: string
+}
+
+export interface QueryReferenceResp {
+	code: number
+	data: Array<QueryResult>
+	msg: string
+}
+
+export interface QueryResult {
+	refId: string
+	title: string
+	style: string
+	composer: string
+	instrument: string
+}
+
+export interface Reference {
+	refId: string
+	title: string
+	style: string
+	composer: string
+	instrument: string
+	image: string
+	video: string
+	audio: string
+	midi: string
+	sheet: string
+	waterfall: string
+	json: string
+}
+
+export interface ResultData {
+	analysisRank: number
+}
+
+export interface UploadRefAudioSuccessReq {
+	refId: string
+	fileName: string
+}
+
+export interface UploadRefAudioSuccessResp {
+	code: number
+	analysisId: number
+	msg: string
+}
+
+export interface UploadRefImgSuccessReq {
+	refId: string
+	fileName: string
+}
+
+export interface UploadRefImgSuccessResp {
+	code: number
+	analysisId: number
+	msg: string
+}
+
+export interface UploadRefVideoSuccessReq {
+	refId: string
+	fileName: string
+}
+
+export interface UploadRefVideoSuccessResp {
+	code: number
+	analysisId: number
+	msg: string
+}
+
+export interface UrlDetails {
+	presignedurl: string
+	fileName: string
+}
