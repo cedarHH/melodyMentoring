@@ -32,7 +32,13 @@ export type RootStackParamList = {
         profileName: string;
         recordId: number;
     };
-    Feedback: undefined;
+    Feedback: {
+        profileName: string;
+        comment: string,
+        Errors: string,
+        feedback: string
+        recommendations: string
+    };
     Configure: {
         profileName: string;
     };
