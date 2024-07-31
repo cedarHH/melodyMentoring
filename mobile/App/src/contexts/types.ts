@@ -7,6 +7,7 @@ export type RootStackParamList = {
     };
     Upload: {
         title: string;
+        refId: string;
         profileName:string;
     };
 
@@ -24,6 +25,7 @@ export type RootStackParamList = {
     };
     Music: {
         title: string;
+        refId: string;
         image: string | undefined;
         profileName: string;
         // others

@@ -5,24 +5,24 @@ import { RootStackParamList } from '../../../contexts/types';
 import { RouteProp } from '@react-navigation/native';
 import CustomButton from '../../../components/MISC/Button';
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
+type MusicDetailNavigationProp = StackNavigationProp<RootStackParamList, 'Music'>;
 type MusicDetailRouteProp = RouteProp<RootStackParamList, 'Music'>;
 type Props = {
-    navigation: HomeScreenNavigationProp;
+    navigation: MusicDetailNavigationProp;
     route: MusicDetailRouteProp;
 };
 
 const MusicDetail: React.FC<Props> = ({ route, navigation }) => {
-    const { title, image, profileName } = route.params;
+    const { title, refId, image, profileName } = route.params;
     if (!title || !image) return null;
 
     return (
         <View style={styles.container}>
-            <Image source={image} style={styles.image} />
+            <Image source={{uri:image}} style={styles.image} />
             <Text style={styles.title}>{title}</Text>
             <CustomButton
                 text="Practice"
-                onPress={() => navigation.navigate('Upload', { title, profileName})}
+                onPress={() => navigation.navigate('Upload', { title, refId, profileName})}
             />            
         </View>
 

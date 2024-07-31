@@ -19,10 +19,10 @@ type Props = {
 
 
 const UploadScreen: React.FC<Props> = ({ navigation,route }) => {
-    const {title,profileName }= route.params
+    const {title, refId, profileName }= route.params
     return (
         <View style={styles.container}>
-            <UploadProvider title={title} profileName={profileName}>
+            <UploadProvider title={title} refId={refId} profileName={profileName} >
                 <UploadStack.Navigator initialRouteName='UploadMethod'
                     screenOptions={{
                         headerShown: false, 

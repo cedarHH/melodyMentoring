@@ -16,7 +16,7 @@ export const SelectVideo = async (): Promise<string | null> => {
     }
 };
 
-export const UploadVideo = async (videoUri: string, title: string): Promise<void> => {
+export const UploadVideo = async (videoUri: string, title: string|null): Promise<void> => {
     const formData = new FormData();
     formData.append('video', {
         uri: videoUri,
@@ -59,7 +59,7 @@ export const SelectAudio = async (): Promise<string | null> => {
     }
 };
 
-export const UploadAudio = async (audioUri: string, title: string): Promise<void> => {
+export const UploadAudio = async (audioUri: string, title: string|null ): Promise<void> => {
     const formData = new FormData();
     formData.append('audio', {
         uri: audioUri,
