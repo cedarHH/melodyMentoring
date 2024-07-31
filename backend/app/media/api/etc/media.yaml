@@ -14,6 +14,7 @@ RabbitMQConf:
   User: admin
   Password: password
   Port: 5672
+  Host: rabbitmq
 
 # DynamoDBConf
 DynamoDBConf:

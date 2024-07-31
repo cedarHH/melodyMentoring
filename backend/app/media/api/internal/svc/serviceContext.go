@@ -59,7 +59,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	audioProcessingQueueClient := messageQueue.GetRabbitMQClient(
 		c.RabbitMQConf.User,
 		c.RabbitMQConf.Password,
-		"localhost",
+		c.RabbitMQConf.Host,
 		"audio_processing_queue",
 		c.RabbitMQConf.Port,
 	)
@@ -67,7 +67,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	audioProcessingResultsClient := messageQueue.GetRabbitMQClient(
 		c.RabbitMQConf.User,
 		c.RabbitMQConf.Password,
-		"localhost",
+		c.RabbitMQConf.Host,
 		"audio_processing_results",
 		c.RabbitMQConf.Port,
 	)
@@ -76,6 +76,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		context.Background(),
 		audioProcessingResultsClient,
 		recordModel,
+		referenceModel,
 	)
 	analysisResultConsumer.StartConsuming()
 
