@@ -20,7 +20,7 @@ type Props = {
 
 const UploadScreen: React.FC<Props> = ({ navigation,route }) => {
 
-    
+    const title = route.params
     return (
         <View style={styles.container}>
             <UploadStack.Navigator initialRouteName='UploadMethod'
@@ -32,7 +32,7 @@ const UploadScreen: React.FC<Props> = ({ navigation,route }) => {
                       },
                     cardStyle: { backgroundColor: '#2d2d2d' },
                     }} >
-                <UploadStack.Screen name="UploadMethod" component={UploadMethod} initialParams={{ title: 'default'}}/>
+                <UploadStack.Screen name="UploadMethod" component={UploadMethod} initialParams={title}/>
                 <UploadStack.Screen name="CameraRecorder" component={CameraRecorder}/>
                 <UploadStack.Screen name="Practice" component={Practice}/>
             </UploadStack.Navigator>

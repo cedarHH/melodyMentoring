@@ -6,7 +6,7 @@ import { Audio,ResizeMode,Video } from 'expo-av';
 import * as MediaLibrary from 'expo-media-library';
 import Button from '../../components/MISC/Button';
 import { StackNavigationProp,createStackNavigator } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../types';
+import { RootStackParamList } from '../../contexts/types';
 import { RouteProp } from '@react-navigation/native';
 import * as Permissions from 'expo-permissions';
 import { PermissionsAndroid } from 'react-native';

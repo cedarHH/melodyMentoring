@@ -8,6 +8,7 @@ import { styles } from './ui';
 import {  useState, useRef, useEffect } from 'react';
 import { SelectVideo, UploadVideo,SelectAudio,UploadAudio } from './mediaUtils'; 
 import CameraRecorder from './CameraRecorder';
+import ChooseMethod from './methodChoose';
 
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'UploadMethod'>;
@@ -24,7 +25,17 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
     const {title} = route.params;
     const [videoUri, setVideoUri] = useState<string | null>(null);
     const [audioUri, setAudioUri] = useState<string | null>(null);
+    const [reference, setReference] = useState(false);
     const [aov, setaov] = useState<string | null>(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const handleChoose = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+    };
 
     const handleSelectVideo = async () => {
         const uri = await SelectVideo();
@@ -72,11 +83,16 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
         }
     };
 
-    const handleRecording = async () => {
-        navigation.navigate('CameraRecorder')
-    };
-    
-    
+    useEffect(() => {
+        if (title === 'default') {
+            setReference(true);
+            
+        } else {
+            setReference(false);
+        }
+    }, [title]);
+
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -107,11 +123,14 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
 
                 
             </View>
-
-            <TouchableOpacity onPress={handleRecording} style={styles.recordSection}>
-                <Image source={require('../../assets/icon/music-circle.png')} style={styles.recordButton}/>
-                <Text style={styles.recordButtonText}>'Record Now!'</Text>
-            </TouchableOpacity>
+            { !reference && (
+                <TouchableOpacity onPress={handleChoose} style={styles.recordSection}>
+                    <Image source={require('../../assets/icon/music-circle.png')} style={styles.recordButton}/>
+                    <Text style={styles.recordButtonText}>Record Now!</Text>
+                </TouchableOpacity>
+            )}
+            
+            <ChooseMethod visible={isModalVisible} onClose={handleCloseModal} navigation={navigation} route={route} />
             
         </View>
     );
