@@ -60,8 +60,3 @@ list1 = [{'id': 1, 'value': 'a'}, {'id': 2, 'value': 'b'}, {'id': 3, 'value': 'c
          {'id': 5, 'value': 'e'}, {'id': 6, 'value': 'f'}]
 list2 = [{'id': 1, 'value': 'a'}, {'id': 2, 'value': 'b'}, {'id': 7, 'value': 'g'}, {'id': 8, 'value': 'h'},
          {'id': 9, 'value': 'i'}, {'id': 5, 'value': 'e'}, {'id': 6, 'value': 'f'}]
-
-
-if __name__ == "__main__":
-    result = diff("../data/data1_2.json", "../data/data1_4.json")
-    write2json(result, "../data/data1_2_data1_4.json")

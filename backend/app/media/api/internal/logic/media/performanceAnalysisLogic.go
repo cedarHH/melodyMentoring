@@ -14,7 +14,7 @@ import (
 var jobIdCounter int64 = 0
 var mu sync.Mutex
 
-func generateJobId() int64 {
+func GenerateJobId() int64 {
 	mu.Lock()
 	defer mu.Unlock()
 	jobIdCounter++
@@ -76,12 +76,22 @@ func (l *PerformanceAnalysisLogic) PerformanceAnalysis(
 	if err != nil {
 		return nil, fmt.Errorf("failed to get presigned URL: %w", err)
 	}
+	jsonURL, err := l.svcCtx.ReportModel.GetPresignedDownloadURL(
+		l.ctx, record.Reference+".json", 3600)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get presigned URL: %w", err)
+	}
 
-	jobId := generateJobId()
+	jobId := GenerateJobId()
 
 	message := fmt.Sprintf(
-		`{"jobId":%d, "subUserId":"%s", "recordId":%d, "fileName":"%s", "audioURL":"%s", "midiURL":"%s", "sheetURL":"%s", "waterfallURL":"%s", "reportURL":"%s"}`,
-		jobId, subUserId, recordId, fileName, audioURL, midiURL, sheetURL, waterfallURL, reportURL)
+		`{"isRef":"%s", "jobId":%d, "subUserId":"%s",
+				 "recordId":%d, "refId":"%s", "fileName":"%s", 
+				"audioURL":"%s", "midiURL":"%s", "sheetURL":"%s", 
+				"waterfallURL":"%s", "reportURL":"%s", "jsonURL":"%s"}`,
+		"FALSE", jobId, subUserId, recordId, "", fileName,
+		audioURL, midiURL, sheetURL, waterfallURL, reportURL, jsonURL)
+
 	err = l.svcCtx.AudioProcessingQueue.SendMessage(message)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send message to RabbitMQ: %w", err)

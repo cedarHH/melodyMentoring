@@ -131,7 +131,6 @@ type (
 
     UploadRefVideoSuccessResp {
         Code        int64    `json:"code"`
-        AnalysisId  int64    `json:"analysisId"`
         Msg         string   `json:"msg"`
     }
 )
@@ -144,7 +143,6 @@ type (
 
     UploadRefImgSuccessResp {
         Code        int64    `json:"code"`
-        AnalysisId  int64    `json:"analysisId"`
         Msg         string   `json:"msg"`
     }
 )
@@ -157,7 +155,6 @@ type (
 
     UploadRefAudioSuccessResp {
         Code        int64    `json:"code"`
-        AnalysisId  int64    `json:"analysisId"`
         Msg         string   `json:"msg"`
     }
 )
