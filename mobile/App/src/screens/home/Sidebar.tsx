@@ -1,13 +1,13 @@
-import React,{useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity,Image,Alert } from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Image, Alert} from 'react-native';
 import CustomButton from '../../components/MISC/Button';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../contexts/types';
-import { signOut } from '../../libs/cognito';
-import { RouteProp } from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../contexts/types';
+import {signOut} from '../../libs/cognito';
+import {RouteProp} from '@react-navigation/native';
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'History'>;
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 type SidebarRouteProp = RouteProp<RootStackParamList, 'Home'>;
 
 interface Props {
@@ -17,18 +17,18 @@ interface Props {
     route: SidebarRouteProp;
 }
 
-const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent,route }) => {
-    const handleMain = () =>  {
+const Sidebar: React.FC<Props> = ({navigation, setActiveContent, activeContent, route}) => {
+    const handleMain = () => {
         setActiveContent('main');
-        navigation.navigate('Main',{ profileName: route.params.profileName });
+        navigation.navigate('Main', {profileName: route.params.profileName});
     };
     const handleSearch = () => {
         setActiveContent('search');
-        navigation.navigate('Search',{ profileName: route.params.profileName });
+        navigation.navigate('Search', {profileName: route.params.profileName});
     };
     const handleHistory = () => {
         setActiveContent('history');
-        navigation.navigate('History',{ profileName: route.params.profileName });
+        navigation.navigate('History', {profileName: route.params.profileName});
     };
 
     const changeUser = async () => {
@@ -39,7 +39,7 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent,
     };
 
     return (
-        <View style={styles.sidebar} >
+        <View style={styles.sidebar}>
             <TouchableOpacity onPress={() => navigation.navigate('User')}
                               style={styles.avatar}>
                 <Image source={require('../../assets/img/welcome/anime7.png')} style={styles.Avatarimage}/>
@@ -90,16 +90,16 @@ const styles = StyleSheet.create({
         width: '10%',
         height: '100%',
         paddingTop: "4%",
-        alignItems:'center',
-        marginStart:"-4%",
+        alignItems: 'center',
+        marginStart: "-4%",
     },
     link: {
         fontSize: 8,
-        color:'white'
+        color: 'white'
     },
     activelink: {
         fontSize: 8,
-        color:'#05fdfd'
+        color: '#05fdfd'
     },
     avatar: {
         width: '70%',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     button: {
         width: '60%',
         aspectRatio: 1,
-        borderRadius:10,
+        borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: '20%',
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     flippedIcon: {
-        transform: [{ scaleX: -1 }]
+        transform: [{scaleX: -1}]
     }
 });
 

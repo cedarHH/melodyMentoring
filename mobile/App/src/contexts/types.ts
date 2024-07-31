@@ -1,6 +1,6 @@
 export type RootStackParamList = {
     Home: {
-        profileName:string;
+        profileName: string;
     };
     User: undefined;
     Upload: {
@@ -11,28 +11,29 @@ export type RootStackParamList = {
     SubUser: undefined;
 
     Main: {
-        profileName:string;
+        profileName: string;
     };
     Search: {
-        profileName:string;
+        profileName: string;
     };
     History: {
-        profileName:string;
+        profileName: string;
     };
     Music: {
         title: string;
-        image: string| undefined;
+        image: string | undefined;
         profileName: string;
         // others
     }
     Result: {
-       recordId: string;
+        profileName: string;
+        recordId: number;
     };
     Feedback: undefined;
     Configure: {
-        profileName:string;
+        profileName: string;
     };
-    
+
     UploadMethod: {
         title: string;
     };

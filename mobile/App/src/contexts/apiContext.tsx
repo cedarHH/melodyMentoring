@@ -1,16 +1,17 @@
 // ApiContext.tsx
 import React, {createContext, ReactNode, useContext, useState} from 'react';
-import axios, { AxiosInstance } from 'axios';
-import {CreateSubUserReq, 
-    CreateSubUserResp, 
-    DeleteSubUserByNameReq, 
-    DeleteSubUserByNameResp, 
-    GetAvatarReqParams, 
-    GetAvatarResp, 
-    GetAvatarUploadUrlReqParams, 
-    GetAvatarUploadUrlResp, 
-    GetSubUserByNameReqParams, 
-    GetSubUserByNameResp, 
+import axios, {AxiosInstance} from 'axios';
+import {
+    CreateSubUserReq,
+    CreateSubUserResp,
+    DeleteSubUserByNameReq,
+    DeleteSubUserByNameResp,
+    GetAvatarReqParams,
+    GetAvatarResp,
+    GetAvatarUploadUrlReqParams,
+    GetAvatarUploadUrlResp,
+    GetSubUserByNameReqParams,
+    GetSubUserByNameResp,
     GetSubUsersResp,
     UpdateAvatarSuccessReq,
     UpdateAvatarSuccessResp,
@@ -19,33 +20,34 @@ import {CreateSubUserReq,
     VerifypinReq,
     VerifypinResp
 } from "./apiParams/usercenterComponents";
-import {CreateRecordReq, 
-    CreateRecordResp, 
-    DeleteRecordReq, 
-    DeleteRecordResp, 
-    GetAudioUrlReq, 
-    GetAudioUrlResp, 
-    GetPerformanceAudioReq, 
-    GetPerformanceAudioResp, 
-    GetPerformanceImgReq, 
-    GetPerformanceImgResp, 
-    GetPerformanceMidiReq, 
-    GetPerformanceMidiResp, 
-    GetPerformanceReportReq, 
-    GetPerformanceReportResp, 
-    GetPerformanceSheetReq, 
-    GetPerformanceSheetResp, 
-    GetPerformanceVideoReq, 
-    GetPerformanceVideoResp, 
-    GetPerformanceWaterfallReq, 
-    GetPerformanceWaterfallResp, 
-    GetRecordReq, 
-    GetRecordResp, 
-    GetVideoUrlReq, 
-    GetVideoUrlResp, 
-    SetAsReferenceReq, 
-    SetAsReferenceResp, 
-    UploadAudioSuccessReq, 
+import {
+    CreateRecordReq,
+    CreateRecordResp,
+    DeleteRecordReq,
+    DeleteRecordResp,
+    GetAudioUrlReq,
+    GetAudioUrlResp,
+    GetPerformanceAudioReq,
+    GetPerformanceAudioResp,
+    GetPerformanceImgReq,
+    GetPerformanceImgResp,
+    GetPerformanceMidiReq,
+    GetPerformanceMidiResp,
+    GetPerformanceReportReq,
+    GetPerformanceReportResp,
+    GetPerformanceSheetReq,
+    GetPerformanceSheetResp,
+    GetPerformanceVideoReq,
+    GetPerformanceVideoResp,
+    GetPerformanceWaterfallReq,
+    GetPerformanceWaterfallResp,
+    GetRecordReq,
+    GetRecordResp,
+    GetVideoUrlReq,
+    GetVideoUrlResp,
+    SetAsReferenceReq,
+    SetAsReferenceResp,
+    UploadAudioSuccessReq,
     UploadAudioSuccessResp,
     UploadVideoSuccessReq,
     UploadVideoSuccessResp
@@ -81,7 +83,7 @@ interface ApiContextType {
         uploadAudioSuccess: (req: UploadAudioSuccessReq) => Promise<UploadAudioSuccessResp>;
         uploadVideoSuccess: (req: UploadVideoSuccessReq) => Promise<UploadVideoSuccessResp>;
     };
-    setIdToken: (token:string) => void
+    setIdToken: (token: string) => void
 }
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
@@ -90,7 +92,7 @@ interface ApiProviderProps {
     children: ReactNode;
 }
 
-export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
+export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
     const [token, setToken] = useState<string | null>(null);
 
     const axiosInstance: AxiosInstance = axios.create({
@@ -336,7 +338,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
     };
 
     return (
-        <ApiContext.Provider value={{ user, record, setIdToken}}>
+        <ApiContext.Provider value={{user, record, setIdToken}}>
             {children}
         </ApiContext.Provider>
     );

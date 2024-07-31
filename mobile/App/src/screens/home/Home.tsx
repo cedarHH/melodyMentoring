@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { View, StyleSheet,Dimensions } from 'react-native';
-import { StackNavigationProp,createStackNavigator } from '@react-navigation/stack';
-import { RootStackParamList } from '../../contexts/types';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../contexts/types';
 import Sidebar from './Sidebar';
 import Content from './Content';
 import ContentContext from './Context';
-import { RouteProp } from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
@@ -16,16 +16,22 @@ type Props = {
 };
 
 
-const HomeScreen: React.FC<Props> = ({ navigation,route }) => {
-    
+const HomeScreen: React.FC<Props> = ({navigation, route}) => {
+
     const [activeContent, setActiveContent] = useState('main');
+    useEffect(() => {
+        if (route.params && route.params.profileName) {
+            setActiveContent('main');
+            navigation.navigate('Main', {profileName: route.params.profileName});
+        }
+    }, [navigation, route.params, setActiveContent]);
     return (
-        <ContentContext.Provider value={{ activeContent, setActiveContent }}>
+        <ContentContext.Provider value={{activeContent, setActiveContent}}>
             <View style={styles.container}>
                 <Sidebar
                     navigation={navigation}
                     setActiveContent={setActiveContent}
-                    activeContent={activeContent} 
+                    activeContent={activeContent}
                     route={route}
                 />
                 <Content navigation={navigation}/>
@@ -36,7 +42,7 @@ const HomeScreen: React.FC<Props> = ({ navigation,route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        width:'100%',
+        width: '100%',
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
