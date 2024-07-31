@@ -5,6 +5,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../contexts/types';
 import musicData from '../../../data/MusicData';
 import { RouteProp } from '@react-navigation/native';
+import { GetRefImgReq, GetRefImgResp, QueryReferenceReq, QueryReferenceResp } from '../../../contexts/apiParams/mediaComponents';
+import { useApi } from '../../../contexts/apiContext';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 type MainRouteProp = RouteProp<RootStackParamList, 'Main'>;
@@ -13,11 +15,25 @@ type Props = {
     route:MainRouteProp;
 };
 
+interface Details {
+    refId: string;
+    title: string;
+    style: string;
+    composer: string;
+    instrument: string;
+}
 
+interface Img {
+    imguri: string;
+}
+
+interface Item extends Details, Img {}
 
 const Main: React.FC<Props> = ({ navigation,route }) => {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
+    const [musicData, setData] = useState<Item[]>([]);
+    const api = useApi();
     
     useEffect(() => {
         const subscription = Dimensions.addEventListener('change', ({ window: { width } }) => {
@@ -25,14 +41,46 @@ const Main: React.FC<Props> = ({ navigation,route }) => {
         });
         return () => subscription.remove();
     }, []);
+
+    useEffect(()=> {
+        fetchData()
+    }, [])
     
     const onPressHandler = useCallback(({ item, index }: { item: typeof musicData[0], index: number }) => {
         if (selectedIndex === index) {
-            navigation.navigate('Music', { title: item.title, image: item.image, profileName: route.params.profileName});
+            navigation.navigate('Music', { title: item.title, refId: item.refId, image: item.imguri, profileName: route.params.profileName});
         } else {
             setSelectedIndex(index);
         }
     }, [selectedIndex, navigation]);
+
+    const fetchData = async () => {
+        try {
+            const reqParams: QueryReferenceReq = {
+                title: 'string',
+                style: 'Folk',
+                composer: 'string',
+                instrument: 'string'
+            }
+            const resp: QueryReferenceResp = await api.reference.queryReference(reqParams)
+            if(resp.code === 0) {
+                const data = resp.data;
+                const music = await Promise.all(data.map(async (item) => {
+                    const imgReq: GetRefImgReq = { refId: item.refId };
+                    const imgResp: GetRefImgResp = await api.reference.getRefImg(imgReq);
+                    if (imgResp.code === 0) {
+                        return { ...item, imguri: imgResp.presignedurl };
+                    } else {
+                        return { ...item, imguri: '' };
+                    }
+                }));
+                setData(music)
+            }
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
 
     const renderItem = useCallback(({ item, index }: { item: typeof musicData[0], index: number }) => {
         const isSelected = selectedIndex === index;
@@ -43,7 +91,7 @@ const Main: React.FC<Props> = ({ navigation,route }) => {
                 onPress={() => onPressHandler({ item, index })}
                 activeOpacity={0.7}
             >
-                <Image source={item.image} style={styles.cardImage} />
+                <Image source={{uri:item.imguri}} style={styles.cardImage} />
                 <Text style={styles.cardTitle}>{item.title}</Text>
             </TouchableOpacity>
         );
@@ -55,7 +103,7 @@ const Main: React.FC<Props> = ({ navigation,route }) => {
             <FlatList
                 data={musicData}
                 renderItem={renderItem}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.refId}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.listContent}
@@ -63,7 +111,7 @@ const Main: React.FC<Props> = ({ navigation,route }) => {
             />
             <CustomButton
                 text="Upload Reference"
-                onPress={() => navigation.navigate('Upload',{title:'default',profileName:route.params.profileName})}
+                onPress={() => navigation.navigate('Upload',{title:'default',refId:'default',profileName:route.params.profileName})}
             />
         </View>
     );

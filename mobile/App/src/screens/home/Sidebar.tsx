@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity,Image,Alert } from 'react-native';
 import CustomButton from '../../components/MISC/Button';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -6,6 +6,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../contexts/types';
 import { signOut } from '../../libs/cognito';
 import { RouteProp } from '@react-navigation/native';
+import { GetAvatarReqParams, GetAvatarResp } from '../../contexts/apiParams/usercenterComponents';
+import { useApi } from '../../contexts/apiContext';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 type SidebarRouteProp = RouteProp<RootStackParamList, 'Home'>;
@@ -18,6 +20,8 @@ interface Props {
 }
 
 const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent,route }) => {
+    const [avatarUri, setAvatarUri] = useState<string | undefined>(undefined);
+    const api = useApi();
     const handleMain = () =>  {
         setActiveContent('main');
         navigation.navigate('Main',{ profileName: route.params.profileName });
@@ -30,6 +34,25 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent,
         setActiveContent('history');
         navigation.navigate('History',{ profileName: route.params.profileName });
     };
+    const handleAvatar = async () => {
+        try {
+            const reqParams: GetAvatarReqParams = {
+                profileName: route.params.profileName,
+            }
+        const resp: GetAvatarResp = await api.user.getAvatar(reqParams)
+        
+        if(resp.code === 0) {
+            setAvatarUri(resp.presignedurl);
+        }
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'An error occurred';
+            Alert.alert('Error', errorMessage);
+        }
+    };
+
+    useEffect(() => {
+        handleAvatar()
+    }, []);
 
     const changeUser = async () => {
         try {
@@ -42,7 +65,8 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent,
         <View style={styles.sidebar} >
             <TouchableOpacity onPress={() => navigation.navigate('User',{ profileName: route.params.profileName })}
                               style={styles.avatar}>
-                <Image source={require('../../assets/img/welcome/anime7.png')} style={styles.Avatarimage}/>
+                <Image source={require('../../assets/icon/loading.png')} style={styles.loading} />
+                <Image source={{ uri: avatarUri }} style={styles.Avatarimage} />
             </TouchableOpacity>
             <TouchableOpacity onPress={handleMain}
                               style={[styles.button, activeContent === 'main' && styles.activeButton]}>
@@ -124,6 +148,14 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         borderRadius: 50,
+        position: 'absolute',
+    },
+    loading: {
+        width: '70%',
+        height: '70%',
+        borderRadius: 50,
+        opacity:0.5,
+        position: 'absolute',
     },
     flippedIcon: {
         transform: [{ scaleX: -1 }]

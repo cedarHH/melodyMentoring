@@ -69,7 +69,10 @@ const Practice: React.FC<Props> = ({ navigation }) => {
         }
     };
     const handleBack = async () => {
-        navigation.navigate('UploadMethod')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'UploadMethod' }],
+        });
     }
 
     return (
@@ -145,7 +148,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#32CD32',
         padding: 10,
         borderRadius: 5,
-        marginTop: 10,
+        marginBottom: 20,
     },
     playButtonText: {
         color: '#fff',
