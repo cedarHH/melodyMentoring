@@ -25,7 +25,9 @@ export type RootStackParamList = {
         profileName: string;
         // others
     }
-    Result: undefined;
+    Result: {
+       recordId: string;
+    };
     Feedback: undefined;
     Configure: {
         profileName:string;

@@ -2,16 +2,21 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../contexts/types';
+import { RouteProp } from '@react-navigation/native';
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions';
 
 const { width } = Dimensions.get('window');
 type ResultScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Result'>;
+type ResultScreenRouteProp = RouteProp<RootStackParamList, 'Result'>;
 
 type Props = {
     navigation: ResultScreenNavigationProp;
+    route: ResultScreenRouteProp;
 };
 
-const ResultScreen: React.FC<Props> = ({ navigation }) => {
+const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
+    const { recordId } = route.params;
+
     return (
         <View style={styles.container}>
             {/* 第一部分：AI Support */}
