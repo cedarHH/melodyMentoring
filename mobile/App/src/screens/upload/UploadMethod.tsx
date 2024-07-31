@@ -35,8 +35,6 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
     if (!context) {
         throw new Error('UploadMethod must be used within an UploadProvider');
     }
-    console.log(context)
-
     const { title, profileName } = context;
     const handleChoose = () => {
         setIsModalVisible(true);
