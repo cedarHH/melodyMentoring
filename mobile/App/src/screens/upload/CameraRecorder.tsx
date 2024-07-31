@@ -97,7 +97,7 @@ const CameraRecorder: React.FC<Props> = ({ navigation,route }) => {
     };
 
     const handleBack = async () => {
-        navigation.navigate('UploadMethod', { title: "your title here" })
+        navigation.navigate('UploadMethod')
     }
 
     return (

@@ -37,10 +37,7 @@ export type RootStackParamList = {
         profileName: string;
     };
 
-    UploadMethod: {
-        title: string;
-        profileName:string;
-    };
+    UploadMethod: undefined;
     CameraRecorder: undefined;
     Practice: undefined;
 };

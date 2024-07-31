@@ -1,9 +1,10 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React ,{ useState, useRef } from "react";
+import React ,{ useState, useRef,useContext } from "react";
 import { View, Button, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Audio } from 'expo-av';
 import { RootStackParamList } from "../../contexts/types";
 import { RouteProp } from "@react-navigation/native";
+import { UploadContext } from './UploadContext';
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Practice'>;
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
@@ -14,11 +15,16 @@ type Props = {
     route: UploadScreenRouteProp;
 };
 
-const Practice: React.FC<Props> = () => {
+const Practice: React.FC<Props> = ({ navigation }) => {
     const [recording, setRecording] = useState<Audio.Recording | null>(null);
     const [permissionResponse, requestPermission] = Audio.usePermissions();
     const [recordingUri, setRecordingUri] = useState<string | null>(null);
     const [sound, setSound] = useState<Audio.Sound | null>(null);
+    const context = useContext(UploadContext);
+    if (!context) {
+        throw new Error('UploadMethod must be used within an UploadProvider');
+    }
+    console.log(context)
 
     const handleStartRecording = async () => {
         try {
@@ -62,6 +68,9 @@ const Practice: React.FC<Props> = () => {
             await sound.playAsync();
         }
     };
+    const handleBack = async () => {
+        navigation.navigate('UploadMethod')
+    }
 
     return (
         <View style={styles.container}>
@@ -69,14 +78,17 @@ const Practice: React.FC<Props> = () => {
 
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    onPress={recording ? handleStopRecording : handleStartRecording}
-                    style={styles.recordButton}
-                >
+                
+                <TouchableOpacity onPress={recording ? handleStopRecording : handleStartRecording} style={styles.recordButton}>
                     <Text style={styles.recordButtonText}>
                         {recording ? 'Stop Recording' : 'Start Recording'}
                     </Text>
                 </TouchableOpacity>
+                
+                <TouchableOpacity onPress={handleBack} style={styles.backButton}>         
+                    <Text style={styles.recordButtonText}>Back</Text>
+                </TouchableOpacity>
+
                 {recordingUri && (
                     <TouchableOpacity onPress={handlePlaySound} style={styles.playButton}>
                         <Text style={styles.playButtonText}>Play Recording</Text>
@@ -97,21 +109,33 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     musicContainer: {
-        
+        flex:0.7
     },
+    
     title: {
         fontSize: 24,
         marginBottom: 20,
     },
     buttonContainer: {
-        flexDirection: 'column',
+        flexDirection: 'row',
+        flex:0.3,
+        justifyContent: 'space-around',
         alignItems: 'center',
+        width:'80%'
     },
     recordButton: {
+        backgroundColor: '#1E90FF',
+        
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 20,
+    },
+    backButton: {
         backgroundColor: '#1E90FF',
         padding: 10,
         borderRadius: 5,
         marginBottom: 20,
+        justifyContent:'flex-end'
     },
     recordButtonText: {
         color: '#fff',
@@ -131,6 +155,3 @@ const styles = StyleSheet.create({
 
 export default Practice;
 
-function requestPermission() {
-    throw new Error("Function not implemented.");
-}

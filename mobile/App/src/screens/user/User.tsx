@@ -91,8 +91,8 @@ const styles = StyleSheet.create({
         transform: [{ scaleX: -1 }]
     },
     avatarImage: {
-        width: responsiveHeight(20),
-        height: responsiveHeight(20),
+        width: '10%',
+        aspectRatio:1,
         borderRadius: 50,
         marginBottom: 24,
     },
