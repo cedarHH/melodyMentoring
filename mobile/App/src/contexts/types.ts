@@ -2,9 +2,12 @@ export type RootStackParamList = {
     Home: {
         profileName:string;
     };
-    User: undefined;
+    User: {
+        profileName:string;
+    };
     Upload: {
         title: string;
+        profileName:string;
     };
 
     Welcome: undefined;
@@ -35,6 +38,7 @@ export type RootStackParamList = {
     
     UploadMethod: {
         title: string;
+        profileName:string;
     };
     CameraRecorder: undefined;
     Practice: undefined;
