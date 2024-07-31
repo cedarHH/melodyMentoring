@@ -12,12 +12,12 @@ import {
     GetRecordReq, RecordInfo
 } from '../../../contexts/apiParams/mediaComponents';
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'History'>;
 type HistoryRoute = RouteProp<RootStackParamList, 'History'>;
 
 type Props = {
     navigation: HomeScreenNavigationProp;
-    route: HomeScreenRouteProp;
+    route: HistoryRoute;
 };
 
 const History: React.FC<Props> = ({ navigation,route }) => {

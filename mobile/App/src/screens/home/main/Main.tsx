@@ -16,20 +16,19 @@ type Props = {
 
 
 const Main: React.FC<Props> = ({ navigation,route }) => {
-    const name = route.params.profileName
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
-
+    
     useEffect(() => {
         const subscription = Dimensions.addEventListener('change', ({ window: { width } }) => {
             setScreenWidth(width);
         });
         return () => subscription.remove();
     }, []);
-
+    
     const onPressHandler = useCallback(({ item, index }: { item: typeof musicData[0], index: number }) => {
         if (selectedIndex === index) {
-            navigation.navigate('Music', { title: item.title, image: item.image, profileName: name});
+            navigation.navigate('Music', { title: item.title, image: item.image, profileName: route.params.profileName});
         } else {
             setSelectedIndex(index);
         }
@@ -64,7 +63,7 @@ const Main: React.FC<Props> = ({ navigation,route }) => {
             />
             <CustomButton
                 text="Upload Reference"
-                onPress={() => navigation.navigate('Upload',{title:'default'})}
+                onPress={() => navigation.navigate('Upload',{title:'default',profileName:route.params.profileName})}
             />
         </View>
     );

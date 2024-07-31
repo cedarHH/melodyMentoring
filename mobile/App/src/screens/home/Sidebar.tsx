@@ -7,7 +7,7 @@ import { RootStackParamList } from '../../contexts/types';
 import { signOut } from '../../libs/cognito';
 import { RouteProp } from '@react-navigation/native';
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'History'>;
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 type SidebarRouteProp = RouteProp<RootStackParamList, 'Home'>;
 
 interface Props {
@@ -40,7 +40,7 @@ const Sidebar: React.FC<Props> = ({ navigation, setActiveContent, activeContent,
 
     return (
         <View style={styles.sidebar} >
-            <TouchableOpacity onPress={() => navigation.navigate('User')}
+            <TouchableOpacity onPress={() => navigation.navigate('User',{ profileName: route.params.profileName })}
                               style={styles.avatar}>
                 <Image source={require('../../assets/img/welcome/anime7.png')} style={styles.Avatarimage}/>
             </TouchableOpacity>
