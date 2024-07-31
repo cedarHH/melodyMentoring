@@ -6,7 +6,7 @@ import { RootStackParamList } from '../../contexts/types';
 import UploadMethod from './UploadMethod';
 import Practice from './Practice';
 import CameraRecorder from './CameraRecorder';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { UploadProvider } from './UploadContext';
 
 const UploadStack = createStackNavigator<RootStackParamList>();
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
@@ -19,23 +19,25 @@ type Props = {
 
 
 const UploadScreen: React.FC<Props> = ({ navigation,route }) => {
-
-    const title = route.params
+    const {title,profileName }= route.params
     return (
         <View style={styles.container}>
-            <UploadStack.Navigator initialRouteName='UploadMethod'
-                screenOptions={{
-                    headerShown: false, 
-                    headerTintColor:'white',
-                    headerStyle: {
-                        height: 0,
-                      },
-                    cardStyle: { backgroundColor: '#2d2d2d' },
-                    }} >
-                <UploadStack.Screen name="UploadMethod" component={UploadMethod} initialParams={title}/>
-                <UploadStack.Screen name="CameraRecorder" component={CameraRecorder}/>
-                <UploadStack.Screen name="Practice" component={Practice}/>
-            </UploadStack.Navigator>
+            <UploadProvider title={title} profileName={profileName}>
+                <UploadStack.Navigator initialRouteName='UploadMethod'
+                    screenOptions={{
+                        headerShown: false, 
+                        headerTintColor:'white',
+                        headerStyle: {
+                            height: 0,
+                        },
+                        cardStyle: { backgroundColor: '#2d2d2d' },
+                        }} >
+                    <UploadStack.Screen name="UploadMethod" component={UploadMethod}/>
+                    <UploadStack.Screen name="CameraRecorder" component={CameraRecorder}/>
+                    <UploadStack.Screen name="Practice" component={Practice}/>
+                </UploadStack.Navigator>
+            </UploadProvider>
+
             
         </View>
     );

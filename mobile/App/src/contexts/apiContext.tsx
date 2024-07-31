@@ -1,16 +1,17 @@
 // ApiContext.tsx
 import React, {createContext, ReactNode, useContext, useState} from 'react';
-import axios, { AxiosInstance } from 'axios';
-import {CreateSubUserReq, 
-    CreateSubUserResp, 
-    DeleteSubUserByNameReq, 
-    DeleteSubUserByNameResp, 
-    GetAvatarReqParams, 
-    GetAvatarResp, 
-    GetAvatarUploadUrlReqParams, 
-    GetAvatarUploadUrlResp, 
-    GetSubUserByNameReqParams, 
-    GetSubUserByNameResp, 
+import axios, {AxiosInstance} from 'axios';
+import {
+    CreateSubUserReq,
+    CreateSubUserResp,
+    DeleteSubUserByNameReq,
+    DeleteSubUserByNameResp,
+    GetAvatarReqParams,
+    GetAvatarResp,
+    GetAvatarUploadUrlReqParams,
+    GetAvatarUploadUrlResp,
+    GetSubUserByNameReqParams,
+    GetSubUserByNameResp,
     GetSubUsersResp,
     UpdateAvatarSuccessReq,
     UpdateAvatarSuccessResp,
@@ -149,7 +150,7 @@ interface ApiProviderProps {
     children: ReactNode;
 }
 
-export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
+export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
     const [token, setToken] = useState<string | null>(null);
 
     const axiosInstance: AxiosInstance = axios.create({

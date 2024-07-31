@@ -1,11 +1,13 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+// ResultScreen.tsx
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../contexts/types';
 import { RouteProp } from '@react-navigation/native';
-import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions';
+import { useApi } from '../../contexts/apiContext';
+import { styles } from './ui';
+import {GetPerformanceMidiResp, GetPerformanceReportReq} from "../../contexts/apiParams/mediaComponents";
 
-const { width } = Dimensions.get('window');
 type ResultScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Result'>;
 type ResultScreenRouteProp = RouteProp<RootStackParamList, 'Result'>;
 
@@ -15,11 +17,47 @@ type Props = {
 };
 
 const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
-    const { recordId } = route.params;
+    const { profileName, recordId } = route.params;
+    const [noteAccuracy, setNoteAccuracy] = useState<string>('Loading...');
+    const [velocityAccuracy, setVelocityAccuracy] = useState<string>('Loading...');
+    const [durationAccuracy, setDurationAccuracy] = useState<string>('Loading...');
+    const api = useApi();
+
+    useEffect(() => {
+        const fetchPerformanceReport = async () => {
+            try {
+                const performanceParams: GetPerformanceReportReq = {
+                    profileName,
+                    recordId
+                };
+                const performanceResponse: GetPerformanceMidiResp = await api.record.getPerformanceReport(performanceParams);
+
+                if (performanceResponse.code === 0) {
+                    const response = await fetch(performanceResponse.presignedurl);
+                    const data = await response.json();
+
+                    setNoteAccuracy(data['Note accuracy']);
+                    setVelocityAccuracy(data['Velocity accuracy']);
+                    setDurationAccuracy(data['Duration accuracy']);
+                } else {
+                    console.error('Error fetching performance report:', performanceResponse.msg);
+                    setNoteAccuracy('Error');
+                    setVelocityAccuracy('Error');
+                    setDurationAccuracy('Error');
+                }
+            } catch (error) {
+                console.error('Error fetching performance report:', error);
+                setNoteAccuracy('Error');
+                setVelocityAccuracy('Error');
+                setDurationAccuracy('Error');
+            }
+        };
+
+        fetchPerformanceReport();
+    }, [recordId]);
 
     return (
         <View style={styles.container}>
-            {/* 第一部分：AI Support */}
             <View style={styles.section}>
                 <Text style={styles.headerText}>AI Support</Text>
                 <TouchableOpacity
@@ -31,7 +69,6 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* 第二部分：Score和Notes */}
             <View style={styles.scoreSection}>
                 <View style={styles.scoreWrapper}>
                     <View style={styles.scoreContainer}>
@@ -50,25 +87,24 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                                 <Text style={styles.songName}>青春コンプレックス</Text>
                             </View>
                             <View style={styles.lowerContainer}>
-                                <Text style={styles.tp}>TP 100%</Text>
+                                <Text style={styles.tp}>TP {noteAccuracy}</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.scoreContainer}>
                         <View style={styles.scoreInnerContainer}>
-                            <Text style={styles.notesText}>Wrong notes 0</Text>
-                            <Text style={styles.notesText}>Missed notes 0</Text>
+                            <Text style={styles.notesText}>Velocity Accuracy: {velocityAccuracy}</Text>
+                            <Text style={styles.notesText}>Duration Accuracy: {durationAccuracy}</Text>
                         </View>
                     </View>
                 </View>
             </View>
 
-            {/* 第三部分：Play Again, Details和Continue */}
             <View style={styles.section}>
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity
                         style={styles.playAgainButton}
-                        onPress={() => navigation.navigate('User')}
+                        onPress={() => navigation.navigate('Home', {profileName: profileName})}
                     >
                         <Text style={styles.playAgainButtonText}>Play again</Text>
                     </TouchableOpacity>
@@ -80,7 +116,7 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                     </View>
                     <TouchableOpacity
                         style={styles.continueButton}
-                        onPress={() => navigation.navigate('User')}
+                        onPress={() => navigation.navigate('Home', {profileName: profileName})}
                     >
                         <Text style={styles.continueButtonText}>Continue</Text>
                     </TouchableOpacity>
@@ -89,146 +125,5 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#1B1C1E',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-    },
-    section: {
-        width: '90%',
-        alignItems: 'center',
-    },
-    headerText: {
-        color: '#fff',
-        fontSize: responsiveFontSize(3),
-    },
-    aiSupportButton: {
-        backgroundColor: '#000',
-        padding: responsiveWidth(2),
-        borderRadius: responsiveWidth(2),
-        alignItems: 'center',
-        marginTop: responsiveHeight(2),
-    },
-    aiSupportButtonText: {
-        color: '#fff',
-        fontSize: responsiveFontSize(2.2),
-    },
-    aiSupportButtonSubText: {
-        color: '#fff',
-        fontSize: responsiveFontSize(1.8),
-    },
-    scoreSection: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '100%',
-        alignItems: 'center',
-    },
-    scoreWrapper: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-    },
-    scoreContainer: {
-        alignItems: 'center',
-        borderTopWidth: 0,
-        borderBottomWidth: 0,
-        paddingHorizontal: responsiveWidth(2),
-    },
-    scoreInnerContainer: {
-        alignItems: 'center',
-    },
-    scoreText: {
-        color: '#fff',
-        fontSize: responsiveFontSize(2.2),
-    },
-    scoreValue: {
-        color: '#FFD700',
-        fontSize: responsiveFontSize(6),
-    },
-    circleContainer: {
-        width: responsiveWidth(25),
-        height: responsiveWidth(25),
-        borderRadius: responsiveWidth(12.5),
-        borderWidth: 1,
-        borderColor: '#00BFFF',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    circleInnerContainer: {
-        width: '90%',
-        height: '90%',
-        borderRadius: (responsiveWidth(25) * 0.9) / 2,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    upperContainer: {
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#00BFFF',
-        paddingBottom: responsiveHeight(1),
-    },
-    profileImage: {
-        width: responsiveWidth(5),
-        height: responsiveWidth(5),
-        borderRadius: responsiveWidth(2.5),
-    },
-    songName: {
-        color: '#00BFFF',
-        fontSize: responsiveFontSize(2.2),
-    },
-    lowerContainer: {
-        marginTop: responsiveHeight(1),
-    },
-    tp: {
-        color: '#00BFFF',
-        fontSize: responsiveFontSize(2.2),
-    },
-    notesContainer: {
-        alignItems: 'center',
-        marginTop: responsiveHeight(2),
-    },
-    notesText: {
-        color: '#fff',
-        fontSize: responsiveFontSize(2.2),
-    },
-    buttonsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-        alignItems: 'center',
-    },
-    playAgainButton: {
-        backgroundColor: '#444',
-        padding: responsiveWidth(2),
-        borderRadius: responsiveWidth(2),
-    },
-    playAgainButtonText: {
-        color: '#fff',
-        fontSize: responsiveFontSize(2.2),
-    },
-    continueButton: {
-        backgroundColor: '#00BFFF',
-        padding: responsiveWidth(2),
-        borderRadius: responsiveWidth(2),
-    },
-    continueButtonText: {
-        color: '#fff',
-        fontSize: responsiveFontSize(2.2),
-    },
-    detailsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '50%',
-    },
-    detailsText: {
-        color: '#fff',
-        fontSize: responsiveFontSize(2.2),
-        textAlign: 'center',
-        marginHorizontal: responsiveWidth(2),
-    },
-});
 
 export default ResultScreen;
