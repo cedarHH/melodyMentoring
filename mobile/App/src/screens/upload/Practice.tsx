@@ -30,22 +30,22 @@ const Practice: React.FC<Props> = ({ navigation }) => {
     const handleStartRecording = async () => {
         try {
             if (permissionResponse?.status !== 'granted') {
-              console.log('Requesting permission..');
-              await requestPermission();
+                console.log('Requesting permission..');
+                await requestPermission();
             }
             await Audio.setAudioModeAsync({
-              allowsRecordingIOS: true,
-              playsInSilentModeIOS: true,
+                allowsRecordingIOS: true,
+                playsInSilentModeIOS: true,
             });
-      
+
             console.log('Starting recording..');
             const { recording } = await Audio.Recording.createAsync( Audio.RecordingOptionsPresets.HIGH_QUALITY
             );
             setRecording(recording);
             console.log('Recording started');
-          } catch (err) {
+        } catch (err) {
             console.error('Failed to start recording', err);
-          }
+        }
     };
     const handleStopRecording = async () => {
         if (recording) {
@@ -66,16 +66,13 @@ const Practice: React.FC<Props> = ({ navigation }) => {
         if (recordingUri){
             try {
                 const [analysisId, recordId] = await UploadAudio(recordingUri, context.profileName, context.refId);
-                navigation.navigate('Result',{profileName:context.profileName, recordId: recordId} ); //, refId: context.refId, analysisId: analysisId
+                navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, referenceId: context.refId} ); //  analysisId: analysisId
             } catch (error) {
                 console.error('Upload failed:', error);
                 Alert.alert('Error', 'Failed to upload audio.');
             }
         }
-
-       
     };
-    
     const handleBack = async () => {
         navigation.reset({
             index: 0,
@@ -89,14 +86,14 @@ const Practice: React.FC<Props> = ({ navigation }) => {
 
             </View>
             <View style={styles.buttonContainer}>
-                
+
                 <TouchableOpacity onPress={recording ? handleStopRecording : handleStartRecording} style={styles.recordButton}>
                     <Text style={styles.recordButtonText}>
                         {recording ? 'Stop Recording' : 'Start Recording'}
                     </Text>
                 </TouchableOpacity>
-                
-                <TouchableOpacity onPress={handleBack} style={styles.backButton}>         
+
+                <TouchableOpacity onPress={handleBack} style={styles.backButton}>
                     <Text style={styles.recordButtonText}>Back</Text>
                 </TouchableOpacity>
 
@@ -107,9 +104,9 @@ const Practice: React.FC<Props> = ({ navigation }) => {
                 )}
             </View>
         </View>
-        )
-        
-    
+    )
+
+
 }
 
 const styles = StyleSheet.create({
@@ -122,7 +119,7 @@ const styles = StyleSheet.create({
     musicContainer: {
         flex:0.7
     },
-    
+
     title: {
         fontSize: 24,
         marginBottom: 20,
@@ -136,7 +133,7 @@ const styles = StyleSheet.create({
     },
     recordButton: {
         backgroundColor: '#1E90FF',
-        
+
         padding: 10,
         borderRadius: 5,
         marginBottom: 20,
