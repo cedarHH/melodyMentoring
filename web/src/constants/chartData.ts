@@ -62,7 +62,28 @@ export const chartDataMap: Record<string, any> = {
             ],
         }
     },
-    Zeka: {
+    Bob: {
+        practiceData: {
+            labels: ['07/25', '07/26', '07/27', '07/28', '07/29', '07/30', '07/31'],
+            datasets: [
+                {
+                    label: 'Zeka (min)',
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                    tension: 0.1,
+                },
+            ],
+        },
+        accuracyData: {
+            labels: ['07/25', '07/26', '07/27', '07/28', '07/29', '07/30', '07/31'],
+            datasets: [
+                {
+                    label: 'Zeka (%)',
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                },
+            ],
+        }
+    },
+    Mike: {
         practiceData: {
             labels: ['07/25', '07/26', '07/27', '07/28', '07/29', '07/30', '07/31'],
             datasets: [

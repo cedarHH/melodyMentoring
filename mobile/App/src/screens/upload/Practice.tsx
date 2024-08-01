@@ -72,10 +72,7 @@ const Practice: React.FC<Props> = ({ navigation }) => {
                 Alert.alert('Error', 'Failed to upload audio.');
             }
         }
-
-
     };
-
     const handleBack = async () => {
         navigation.reset({
             index: 0,

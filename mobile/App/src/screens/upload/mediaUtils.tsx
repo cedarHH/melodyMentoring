@@ -24,6 +24,7 @@ export const SelectVideo = async (): Promise<string | null> => {
 
 export const UploadVideo = async (videoUri: string, profileName: string, refId:string): Promise<number> => {
 
+
     const api = useApi();
     try {
         const reqRecord: CreateRecordReq = {
@@ -82,6 +83,7 @@ export const SelectAudio = async (): Promise<string | null> => {
     }
 };
 
+
 export const UploadAudio = async (api: any, audioUri: string, profileName: string, refId: string): Promise<[number, number]> => {
     try {
         const reqRecord: CreateRecordReq = {
@@ -105,6 +107,7 @@ export const UploadAudio = async (api: any, audioUri: string, profileName: strin
                     method: 'PUT',
                     body: await fetch(audioUri).then(res => res.blob()),
                 });
+
                 if (response.ok) {
                     Alert.alert('Success', 'Audio uploaded successfully!');
                     const UploadAudioSuccessReq: UploadAudioSuccessReq = {
@@ -121,6 +124,7 @@ export const UploadAudio = async (api: any, audioUri: string, profileName: strin
                         const analysisResp = await api.analysis.performanceAnalysis(analysisReq)
                         if( analysisResp.code === 0) {
                             console.log(`${analysisResp.analysisId} !! ${id}`);
+
                             return [analysisResp.analysisId,id]
                         }
                     }
@@ -137,6 +141,8 @@ export const UploadAudio = async (api: any, audioUri: string, profileName: strin
         const errorMessage = error instanceof Error ? error.message : 'An error occurred';
         Alert.alert('Error', errorMessage);
     }
+
+
 
     return [1,1];
 };
