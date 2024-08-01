@@ -66,7 +66,7 @@ const Practice: React.FC<Props> = ({ navigation }) => {
         if (recordingUri){
             try {
                 const [analysisId, recordId] = await UploadAudio(recordingUri, context.profileName, context.refId);
-                navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, refId: context.refId, analysisId: analysisId} );
+                navigation.navigate('Result',{profileName:context.profileName, recordId: recordId} ); //, refId: context.refId, analysisId: analysisId
             } catch (error) {
                 console.error('Upload failed:', error);
                 Alert.alert('Error', 'Failed to upload audio.');
@@ -75,6 +75,7 @@ const Practice: React.FC<Props> = ({ navigation }) => {
 
        
     };
+    
     const handleBack = async () => {
         navigation.reset({
             index: 0,
