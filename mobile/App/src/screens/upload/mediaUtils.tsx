@@ -4,6 +4,8 @@ import { CreateRecordReq, CreateRecordResp, CreateReferenceReq, CreateReferenceR
 import { useApi } from '../../contexts/apiContext';
 import { Alert } from 'react-native';
 import { useState } from 'react';
+import result from "../result/Result";
+import {ApiContext} from "@reduxjs/toolkit/query";
 
 
 export const SelectVideo = async (): Promise<string | null> => {
@@ -21,6 +23,8 @@ export const SelectVideo = async (): Promise<string | null> => {
 };
 
 export const UploadVideo = async (videoUri: string, profileName: string, refId:string): Promise<number> => {
+
+
     const api = useApi();
     try {
         const reqRecord: CreateRecordReq = {
@@ -33,7 +37,7 @@ export const UploadVideo = async (videoUri: string, profileName: string, refId:s
             const id = respRecord.recordId;
             const reqUri: GetVideoUrlReq = {
                 profileName: profileName,
-	            recordId: id
+                recordId: id
             }
             const respUri: GetVideoUrlResp = await api.record.getVideoUrl(reqUri);
             if (respUri.code === 0) {
@@ -66,7 +70,7 @@ export const SelectAudio = async (): Promise<string | null> => {
         const result = await DocumentPicker.getDocumentAsync({
             type: 'audio/*',
         });
-        
+
         if (!result.canceled) {
             console.log('Audio selected:', result);
             return result.assets[0].uri;
@@ -79,14 +83,14 @@ export const SelectAudio = async (): Promise<string | null> => {
     }
 };
 
-export const UploadAudio = async (audioUri: string, profileName: string, refId: string): Promise<[number, number]> => {
-    const api = useApi();
+
+export const UploadAudio = async (api: any, audioUri: string, profileName: string, refId: string): Promise<[number, number]> => {
     try {
         const reqRecord: CreateRecordReq = {
             profileName: profileName,
             reference: refId
         };
-        
+
         const respRecord: CreateRecordResp = await api.record.createRecord(reqRecord);
 
         if (respRecord.code === 0) {
@@ -95,19 +99,13 @@ export const UploadAudio = async (audioUri: string, profileName: string, refId: 
                 profileName: profileName,
                 recordId: id
             };
-            
-            const respUri: GetAudioUrlResp = await api.record.getAudioUrl(reqUri);
 
+            const respUri: GetAudioUrlResp = await api.record.getAudioUrl(reqUri);
+            console.log(respUri);
             if (respUri.code === 0) {
-                const audioFile = await fetch(audioUri);
-                const audioBlob = await audioFile.blob();
-                
                 const response = await fetch(respUri.data.presignedurl, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'audio/mp3',
-                    },
-                    body: audioBlob,
+                    body: await fetch(audioUri).then(res => res.blob()),
                 });
 
                 if (response.ok) {
@@ -125,6 +123,8 @@ export const UploadAudio = async (audioUri: string, profileName: string, refId: 
                         }
                         const analysisResp = await api.analysis.performanceAnalysis(analysisReq)
                         if( analysisResp.code === 0) {
+                            console.log(`${analysisResp.analysisId} !! ${id}`);
+
                             return [analysisResp.analysisId,id]
                         }
                     }
@@ -141,7 +141,9 @@ export const UploadAudio = async (audioUri: string, profileName: string, refId: 
         const errorMessage = error instanceof Error ? error.message : 'An error occurred';
         Alert.alert('Error', errorMessage);
     }
-    
+
+
+
     return [1,1];
 };
 
@@ -160,7 +162,7 @@ export const UploadRefVideo = async (videoUri: string, profileName: string, recI
         if(respRef.code === 0) {
             const id = respRef.refId;
             const reqUri: GetRefVideoUrlReq = {
-	            refId: id
+                refId: id
             }
             const respUri: GetRefVideoUrlResp = await api.reference.getRefVideoUrl(reqUri);
             if (respUri.code === 0) {
@@ -200,7 +202,7 @@ export const UploadRefAudio = async (audioUri: string, profileName: string, recI
         if(respRef.code === 0) {
             const id = respRef.refId;
             const reqUri: GetRefAudioUrlReq = {
-	            refId: id
+                refId: id
             }
             const respUri: GetRefAudioUrlResp = await api.reference.getRefAudioUrl(reqUri);
             if (respUri.code === 0) {
