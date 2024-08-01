@@ -1,10 +1,11 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React ,{ useState, useRef,useContext } from "react";
-import { View, Button, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, Button, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { Audio } from 'expo-av';
 import { RootStackParamList } from "../../contexts/types";
 import { RouteProp } from "@react-navigation/native";
 import { UploadContext } from './UploadContext';
+import { UploadAudio, UploadRefAudio } from "./mediaUtils";
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Practice'>;
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
@@ -18,7 +19,7 @@ type Props = {
 const Practice: React.FC<Props> = ({ navigation }) => {
     const [recording, setRecording] = useState<Audio.Recording | null>(null);
     const [permissionResponse, requestPermission] = Audio.usePermissions();
-    const [recordingUri, setRecordingUri] = useState<string | null>(null);
+    const [recordingUri, setRecordingUri] = useState<string|null>('');
     const [sound, setSound] = useState<Audio.Sound | null>(null);
     const context = useContext(UploadContext);
     if (!context) {
@@ -61,13 +62,20 @@ const Practice: React.FC<Props> = ({ navigation }) => {
         }
     };
 
-    const handlePlaySound = async () => {
-        if (recordingUri) {
-            const { sound } = await Audio.Sound.createAsync({ uri: recordingUri });
-            setSound(sound);
-            await sound.playAsync();
+    const handleUpAudio = async () => {
+        if (recordingUri){
+            try {
+                const [analysisId, recordId] = await UploadAudio(recordingUri, context.profileName, context.refId);
+                navigation.navigate('Result',{profileName:context.profileName, recordId: recordId} ); //, refId: context.refId, analysisId: analysisId
+            } catch (error) {
+                console.error('Upload failed:', error);
+                Alert.alert('Error', 'Failed to upload audio.');
+            }
         }
+
+       
     };
+    
     const handleBack = async () => {
         navigation.reset({
             index: 0,
@@ -93,8 +101,8 @@ const Practice: React.FC<Props> = ({ navigation }) => {
                 </TouchableOpacity>
 
                 {recordingUri && (
-                    <TouchableOpacity onPress={handlePlaySound} style={styles.playButton}>
-                        <Text style={styles.playButtonText}>Play Recording</Text>
+                    <TouchableOpacity onPress={handleUpAudio} style={styles.playButton}>
+                        <Text style={styles.playButtonText}>upload</Text>
                     </TouchableOpacity>
                 )}
             </View>

@@ -1,11 +1,11 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
-import { CreateRecordReq, CreateRecordResp, CreateReferenceReq, CreateReferenceResp, GetAudioUrlReq, GetAudioUrlResp, GetRefAudioUrlReq, GetRefAudioUrlResp, GetRefVideoUrlReq, GetRefVideoUrlResp, GetVideoUrlReq, GetVideoUrlResp } from '../../contexts/apiParams/mediaComponents';
+import { CreateRecordReq, CreateRecordResp, CreateReferenceReq, CreateReferenceResp, GetAudioUrlReq, GetAudioUrlResp, GetRefAudioUrlReq, GetRefAudioUrlResp, GetRefVideoUrlReq, GetRefVideoUrlResp, GetVideoUrlReq, GetVideoUrlResp, PerformanceAnalysisReq, UploadAudioSuccessReq } from '../../contexts/apiParams/mediaComponents';
 import { useApi } from '../../contexts/apiContext';
 import { Alert } from 'react-native';
 import { useState } from 'react';
 
-const api = useApi();
+
 export const SelectVideo = async (): Promise<string | null> => {
     const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
@@ -20,8 +20,8 @@ export const SelectVideo = async (): Promise<string | null> => {
     }
 };
 
-export const UploadVideo = async (videoUri: string, profileName: string, refId:string): Promise<void> => {
-
+export const UploadVideo = async (videoUri: string, profileName: string, refId:string): Promise<number> => {
+    const api = useApi();
     try {
         const reqRecord: CreateRecordReq = {
             profileName: profileName,
@@ -47,6 +47,7 @@ export const UploadVideo = async (videoUri: string, profileName: string, refId:s
                     body: videoBlob,
                 });
                 if (response.ok) {
+                    return id;
                     Alert.alert('Success', 'Video uploaded successfully!');
                 } else {
                     Alert.alert('Error', 'Failed to upload video.');
@@ -57,6 +58,7 @@ export const UploadVideo = async (videoUri: string, profileName: string, refId:s
         const errorMessage = error instanceof Error ? error.message : 'An error occurred';
         Alert.alert('Error', errorMessage);
     }
+    return 1;
 };
 
 export const SelectAudio = async (): Promise<string | null> => {
@@ -77,25 +79,29 @@ export const SelectAudio = async (): Promise<string | null> => {
     }
 };
 
-export const UploadAudio = async (audioUri: string, profileName: string, refId:string): Promise<void> => {
-
+export const UploadAudio = async (audioUri: string, profileName: string, refId: string): Promise<[number, number]> => {
+    const api = useApi();
     try {
         const reqRecord: CreateRecordReq = {
             profileName: profileName,
             reference: refId
-        }
-        const respRecord: CreateRecordResp = await api.record.createRecord(reqRecord)
+        };
+        
+        const respRecord: CreateRecordResp = await api.record.createRecord(reqRecord);
 
-        if(respRecord.code === 0) {
+        if (respRecord.code === 0) {
             const id = respRecord.recordId;
             const reqUri: GetAudioUrlReq = {
                 profileName: profileName,
-	            recordId: id
-            }
+                recordId: id
+            };
+            
             const respUri: GetAudioUrlResp = await api.record.getAudioUrl(reqUri);
+
             if (respUri.code === 0) {
                 const audioFile = await fetch(audioUri);
                 const audioBlob = await audioFile.blob();
+                
                 const response = await fetch(respUri.data.presignedurl, {
                     method: 'PUT',
                     headers: {
@@ -103,21 +109,45 @@ export const UploadAudio = async (audioUri: string, profileName: string, refId:s
                     },
                     body: audioBlob,
                 });
+
                 if (response.ok) {
-                    Alert.alert('Success', 'audio uploaded successfully!');
+                    Alert.alert('Success', 'Audio uploaded successfully!');
+                    const UploadAudioSuccessReq: UploadAudioSuccessReq = {
+                        profileName: profileName,
+                        recordId: id,
+                        fileName: respUri.data.fileName,
+                    }
+                    const respSuccess = await api.record.uploadAudioSuccess(UploadAudioSuccessReq)
+                    if( respSuccess.code === 0) {
+                        const analysisReq:PerformanceAnalysisReq = {
+                            profileName: profileName,
+                            recordId: id
+                        }
+                        const analysisResp = await api.analysis.performanceAnalysis(analysisReq)
+                        if( analysisResp.code === 0) {
+                            return [analysisResp.analysisId,id]
+                        }
+                    }
                 } else {
                     Alert.alert('Error', 'Failed to upload audio.');
                 }
+            } else {
+                Alert.alert('Error', 'Failed to get presigned URL.');
             }
+        } else {
+            Alert.alert('Error', 'Failed to create record.');
         }
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'An error occurred';
         Alert.alert('Error', errorMessage);
     }
+    
+    return [1,1];
 };
 
-export const UploadRefVideo = async (videoUri: string, profileName: string, recId: string, title: string, style: string, composer: string, instrument: string): Promise<void> => {
 
+export const UploadRefVideo = async (videoUri: string, profileName: string, recId: string, title: string, style: string, composer: string, instrument: string): Promise<void> => {
+    const api = useApi();
     try {
         const reqRef: CreateReferenceReq = {
             title: title,
@@ -157,7 +187,7 @@ export const UploadRefVideo = async (videoUri: string, profileName: string, recI
 };
 
 export const UploadRefAudio = async (audioUri: string, profileName: string, recId: string, title: string, style: string, composer: string, instrument: string): Promise<void> => {
-
+    const api = useApi();
     try {
         const reqRef: CreateReferenceReq = {
             title: title,
