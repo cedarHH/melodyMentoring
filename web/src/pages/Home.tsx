@@ -6,7 +6,7 @@ import MusicHistory from '../components/Homepage/MusicHistory';
 import MusicPracticeChart from '../components/Homepage/MusicPracticeChart';
 import AccuracyRateChart from '../components/Homepage/AccuracyRateChart';
 import { AuthContext } from "../contexts/AuthContext";
-import { practiceData, accuracyData, practiceData1, accuracyData1, practiceData2, accuracyData2, options } from '../constants/chartData';
+import { chartDataMap, options } from '../constants/chartData';
 import { getMusicDataByKid, MusicItem } from '../constants/musicData';
 import { childrenData } from '../constants/childrenData';
 import { Pie, Bar } from 'react-chartjs-2';
@@ -269,7 +269,7 @@ const Home = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
     const [activeChartData, setActiveChartData] = useState<'practice' | 'accuracy' | 'musicHistory'>('practice');
-    const [chartType, setChartType] = useState<'line' | 'bar' | 'pie'>('bar');
+    const [chartType, setChartType] = useState<'line' | 'bar' | 'pie'>('line'); // 优先展示折线图
     const [resizeKey, setResizeKey] = useState(0); // State to manage the resize key
     const [markedPracticePoints, setMarkedPracticePoints] = useState<number[]>([]);
     const [markedAccuracyPoints, setMarkedAccuracyPoints] = useState<number[]>([]);
@@ -303,7 +303,7 @@ const Home = () => {
         if (type === 'musicHistory') {
             setChartType('pie');
         } else {
-            setChartType('bar');
+            setChartType('line'); // 修改为优先展示折线图
         }
         setIsModalOpen(true);
     };
@@ -341,14 +341,13 @@ const Home = () => {
                 <Bar data={chartData} options={options} />
             );
         } else {
-            const data = activeChartData === 'practice' ? practiceData : accuracyData;
-            const compareDataSets = activeChartData === 'practice' ? [
-                { label: 'Amy', data: practiceData1 },
-                { label: 'Tom', data: practiceData2 }
-            ] : [
-                { label: 'Amy', data: accuracyData1 },
-                { label: 'Tom', data: accuracyData2 }
+            // 根据 activeKid 选择假数据
+            const data = chartDataMap[activeKid || 'Daniel'].practiceData;
+            const compareDataSets = [
+                { label: 'Amy', data: chartDataMap['Amy'].practiceData },
+                { label: 'Tom', data: chartDataMap['Tom'].practiceData }
             ];
+
             const ChartComponent = activeChartData === 'practice' ? MusicPracticeChart : AccuracyRateChart;
             const chartOptions = {
                 ...options,
@@ -407,10 +406,10 @@ const Home = () => {
                 <ChartsContainer>
                     <ChartWrapper>
                         <MusicPracticeChart
-                            data={practiceData}
+                            data={chartDataMap[activeKid || 'Daniel'].practiceData}
                             compareDataSets={[
-                                { label: 'Amy', data: practiceData1 },
-                                { label: 'Tom', data: practiceData2 }
+                                { label: 'Amy', data: chartDataMap['Amy'].practiceData },
+                                { label: 'Tom', data: chartDataMap['Tom'].practiceData }
                             ]} // Pass the compareDataSets to the component
                             options={{
                                 ...options,
@@ -427,10 +426,10 @@ const Home = () => {
                     </ChartWrapper>
                     <ChartWrapper>
                         <AccuracyRateChart
-                            data={accuracyData}
+                            data={chartDataMap[activeKid || 'Daniel'].accuracyData}
                             compareDataSets={[
-                                { label: 'Amy', data: accuracyData1 },
-                                { label: 'Tom', data: accuracyData2 }
+                                { label: 'Amy', data: chartDataMap['Amy'].accuracyData },
+                                { label: 'Tom', data: chartDataMap['Tom'].accuracyData }
                             ]} // Pass the compareDataSets to the component
                             options={{
                                 ...options,
