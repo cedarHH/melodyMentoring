@@ -419,7 +419,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefAudio: async (req: GetRefAudioReq): Promise<GetRefAudioResp> => {
-            const response = await axiosInstance.post<GetRefAudioResp>('/api/media/reference/getAudio', req);
+            const response = await axiosInstance.post<GetRefAudioResp>('/api/media/reference/getRefAudio', req);
             return response.data;
         },
 
@@ -428,7 +428,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefAudioUrl: async (req: GetRefAudioUrlReq): Promise<GetRefAudioUrlResp> => {
-            const response = await axiosInstance.post<GetRefAudioUrlResp>('/api/media/reference/getAudioUrl', req);
+            const response = await axiosInstance.post<GetRefAudioUrlResp>('/api/media/reference/getRefAudioUrl', req);
             return response.data;
         },
 

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../contexts/types';
 import { RouteProp } from '@react-navigation/native';
 import { useApi } from '../../contexts/apiContext';
 import { styles } from './ui';
-import {GetPerformanceMidiResp, GetPerformanceReportReq} from "../../contexts/apiParams/mediaComponents";
+import { GetPerformanceMidiResp, GetPerformanceReportReq } from "../../contexts/apiParams/mediaComponents";
+import { GetReferenceReq, GetReferenceResp } from "../../contexts/apiParams/mediaComponents";
 
 type ResultScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Result'>;
 type ResultScreenRouteProp = RouteProp<RootStackParamList, 'Result'>;
@@ -24,12 +25,17 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
     const [Errors, setErrors] = useState<string>('Loading...');
     const [feedback, setFeedback] = useState<string>('Loading...');
     const [recommendations, setRecommendations] = useState<string>('Loading...');
+    const [loading, setLoading] = useState<boolean>(true);
+    const [songName, setSongName] = useState<string>('Loading...'); // 新增状态
 
     const api = useApi();
 
     useEffect(() => {
         const fetchPerformanceReport = async () => {
             try {
+                setLoading(true); // 开始请求时设置为true
+
+                // 获取Performance Report
                 const performanceParams: GetPerformanceReportReq = {
                     profileName,
                     recordId
@@ -39,8 +45,6 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                 if (performanceResponse.code === 0) {
                     const response = await fetch(performanceResponse.presignedurl);
                     const data = await response.json();
-
-                    // console.log(data);
 
                     setNoteAccuracy(data['Note accuracy']);
                     setVelocityAccuracy(data['Velocity accuracy']);
@@ -59,8 +63,21 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                     setFeedback('Error');
                     setRecommendations('Error');
                 }
+
+                // 获取Reference信息
+                const referenceParams: GetReferenceReq = {
+                    refId: referenceId
+                };
+                const referenceResponse: GetReferenceResp = await api.reference.getReference(referenceParams);
+
+                if (referenceResponse.code === 0) {
+                    setSongName(referenceResponse.data.title);
+                } else {
+                    console.error('Error fetching reference:', referenceResponse.msg);
+                    setSongName('Error');
+                }
             } catch (error) {
-                console.error('Error fetching performance report:', error);
+                console.error('Error:', error);
                 setNoteAccuracy('Error');
                 setVelocityAccuracy('Error');
                 setDurationAccuracy('Error');
@@ -68,11 +85,23 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                 setErrors('Error');
                 setFeedback('Error');
                 setRecommendations('Error');
+                setSongName('Error');
+            } finally {
+                setLoading(false); // 请求完成时设置为false
             }
         };
 
         fetchPerformanceReport();
-    }, [recordId]);
+    }, [recordId, referenceId]);
+
+    if (loading) {
+        return (
+            <View style={[styles.container, styles.loadingContainer]}>
+                <ActivityIndicator size="large" color="#05fdfd" />
+                <Text style={styles.loadingText}>Loading performance report...</Text>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -88,8 +117,8 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                         recommendations,
                     })}
                 >
-                    <Text style={styles.aiSupportButtonText}>Waiting for AI...</Text>
-                    <Text style={styles.aiSupportButtonSubText}>{'>.<'}</Text>
+                    <Text style={styles.aiSupportButtonText}>Get your AI feedback</Text>
+                    <Text style={styles.aiSupportButtonSubText}>＾▽＾</Text>
                 </TouchableOpacity>
             </View>
 
@@ -97,8 +126,8 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                 <View style={styles.scoreWrapper}>
                     <View style={styles.scoreContainer}>
                         <View style={styles.scoreInnerContainer}>
-                            <Text style={styles.scoreText}>SCORE</Text>
-                            <Text style={styles.scoreValue}>114514</Text>
+                            {/*<Text style={styles.scoreText}>SCORE</Text>*/}
+                            {/*<Text style={styles.scoreValue}>114514</Text>*/}
                         </View>
                     </View>
                     <View style={styles.circleContainer}>
@@ -108,7 +137,7 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                                     style={styles.profileImage}
                                     source={require('../../assets/img/logo/mygo.png')}
                                 />
-                                <Text style={styles.songName}>青春コンプレックス</Text>
+                                <Text style={styles.songName}>{songName}</Text>
                             </View>
                             <View style={styles.lowerContainer}>
                                 <Text style={styles.tp}>TP {noteAccuracy}</Text>
@@ -133,10 +162,10 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                         <Text style={styles.playAgainButtonText}>Play again</Text>
                     </TouchableOpacity>
                     <View style={styles.detailsContainer}>
-                        <Text style={styles.detailsText}>Pitch SSS</Text>
-                        <Text style={styles.detailsText}>Rhythm SSS</Text>
-                        <Text style={styles.detailsText}>Volume SSS</Text>
-                        <Text style={styles.detailsText}>Timbre SSS</Text>
+                        {/*<Text style={styles.detailsText}>Pitch SSS</Text>*/}
+                        {/*<Text style={styles.detailsText}>Rhythm SSS</Text>*/}
+                        {/*<Text style={styles.detailsText}>Volume SSS</Text>*/}
+                        {/*<Text style={styles.detailsText}>Timbre SSS</Text>*/}
                     </View>
                     <TouchableOpacity
                         style={styles.continueButton}

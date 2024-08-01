@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         margin: responsiveWidth(1),
         width: responsiveWidth(15),
-        height: responsiveWidth(5),
+        height: responsiveWidth(6),
     },
     bottomSection: {
         flexDirection: 'row',

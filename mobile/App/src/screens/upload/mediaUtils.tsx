@@ -5,7 +5,7 @@ import { useApi } from '../../contexts/apiContext';
 import { Alert } from 'react-native';
 import { useState } from 'react';
 
-const api = useApi();
+
 export const SelectVideo = async (): Promise<string | null> => {
     const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
@@ -21,7 +21,7 @@ export const SelectVideo = async (): Promise<string | null> => {
 };
 
 export const UploadVideo = async (videoUri: string, profileName: string, refId:string): Promise<void> => {
-
+    const api = useApi();
     try {
         const reqRecord: CreateRecordReq = {
             profileName: profileName,
@@ -78,7 +78,7 @@ export const SelectAudio = async (): Promise<string | null> => {
 };
 
 export const UploadAudio = async (audioUri: string, profileName: string, refId:string): Promise<void> => {
-
+    const api = useApi();
     try {
         const reqRecord: CreateRecordReq = {
             profileName: profileName,
@@ -117,7 +117,7 @@ export const UploadAudio = async (audioUri: string, profileName: string, refId:s
 };
 
 export const UploadRefVideo = async (videoUri: string, profileName: string, recId: string, title: string, style: string, composer: string, instrument: string): Promise<void> => {
-
+    const api = useApi();
     try {
         const reqRef: CreateReferenceReq = {
             title: title,
@@ -157,7 +157,7 @@ export const UploadRefVideo = async (videoUri: string, profileName: string, recI
 };
 
 export const UploadRefAudio = async (audioUri: string, profileName: string, recId: string, title: string, style: string, composer: string, instrument: string): Promise<void> => {
-
+    const api = useApi();
     try {
         const reqRef: CreateReferenceReq = {
             title: title,
