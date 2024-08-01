@@ -1,4 +1,3 @@
-// ResultScreen.tsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -41,12 +40,14 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                     const response = await fetch(performanceResponse.presignedurl);
                     const data = await response.json();
 
+                    // console.log(data);
+
                     setNoteAccuracy(data['Note accuracy']);
                     setVelocityAccuracy(data['Velocity accuracy']);
                     setDurationAccuracy(data['Duration accuracy']);
                     setComment(data['Comment']);
                     setErrors(data['Errors']);
-                    setFeedback(data['Feedback']);
+                    setFeedback(data['Detailed_Feedback']);
                     setRecommendations(data['Recommendations']);
                 } else {
                     console.error('Error fetching performance report:', performanceResponse.msg);
