@@ -39,7 +39,7 @@ const History: React.FC<Props> = ({ navigation, route }) => {
                     };
                     const response = await api.record.getRecord(params);
                     if (response.code === 0) {
-                        console.log('Records:', response.data);
+                        // console.log(response);
                         setRecords(response.data);
                     } else {
                         setError(response.msg);
@@ -110,7 +110,7 @@ const History: React.FC<Props> = ({ navigation, route }) => {
                 <TouchableOpacity
                     key={record.RecordId}
                     style={styles.recordContainer}
-                    onPress={() => navigation.navigate('Result', {profileName: profileName ,recordId: record.RecordId })}
+                    onPress={() => navigation.navigate('Result', {profileName: profileName ,recordId: record.RecordId, referenceId: record.reference })}
                 >
                     <Text style={styles.recordText}>ID: {record.RecordId}</Text>
                     <Text style={styles.recordText}>Time: {convertRecordIdToDate(record.RecordId)}</Text>

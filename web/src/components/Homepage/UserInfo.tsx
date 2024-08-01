@@ -9,6 +9,7 @@ import {
     UpdateAvatarSuccessReq,
     UpdateSubUserAttrReq
 } from "../../contexts/api/usercenterComponents";
+import { CreateRecordReq, GetRecordReq } from "../../contexts/api/mediaComponents";
 
 interface UserInfoProps {
     activeKid: string | null;
@@ -89,8 +90,8 @@ const EditButton = styled.button`
     font-style: italic;
     font-size: 18px;
     font-family: 'Cambria', serif;
-    top: 5px;
-    right: 10px;
+    top: 15px;
+    right: 20px;
     &:hover {
         background-color: #777;
     }
@@ -250,33 +251,33 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
     const [tempGender, setTempGender] = useState('');
     const [tempDob, setTempDob] = useState('');
     const [tempInstrument, setTempInstrument] = useState('');
-    const [tempBadge, setTempBadge] = useState('');
+    const [tempBadge, setTempBadge] = useState<string[]>([]);
     const [tempLevel, setTempLevel] = useState('');
     const [tempAvatar, setTempAvatar] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                if(apiContext && activeKid){
-                    const reqParams:GetSubUserByNameReqParams = {
-                        profileName: activeKid
-                    }
-                    const response = await apiContext.user.getSubUserByName(reqParams)
-                    if(response.code === 0){
+                if (apiContext && activeKid) {
+                    const reqParams: GetSubUserByNameReqParams = {
+                        profileName: activeKid,
+                    };
+                    const response = await apiContext.user.getSubUserByName(reqParams);
+                    if (response.code === 0) {
                         const data = response.data;
                         setProfileName(data.profileName);
                         setGender(data.gender);
                         setDob(data.dob);
                         setInstrument(data.instrument);
-                        setBadges(data.badges);
-                        setBadge(data.badges && data.badges.length > 0 ? data.badges[0] : ''); // 从 badges 数组中提取 badge
+                        setBadges(data.badges); // 保留整个数组
+                        setBadge(data.badges && data.badges.length > 0 ? data.badges[data.badges.length - 1] : ''); // 只取最后一项
                         setLevel(data.level);
 
                         const getAvatarReq: GetAvatarReqParams = {
-                            profileName: activeKid
-                        }
-                        const avatarResp = await apiContext.user.getAvatar(getAvatarReq)
-                        if(avatarResp.code === 0) {
+                            profileName: activeKid,
+                        };
+                        const avatarResp = await apiContext.user.getAvatar(getAvatarReq);
+                        if (avatarResp.code === 0) {
                             setAvatar(avatarResp.presignedurl);
                         }
                     }
@@ -295,10 +296,10 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
         setTempGender(gender);
         setTempDob(dob);
         setTempInstrument(instrument);
-        setTempBadge(badge); // 添加这行
+        setTempBadge([...badges]); // 更新时，清空旧的 badge 内容
         setTempLevel(level);
         setTempAvatar(avatar);
-    }, [profileName, gender, dob, instrument, badge, level, avatar]);
+    }, [profileName, gender, dob, instrument, badges, level, avatar]);
 
     const handleSave = async () => {
         try {
@@ -308,17 +309,16 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
                 dob: tempDob,
                 level: tempLevel,
                 instrument: tempInstrument,
-                badge: tempBadge, // 使用 badge
+                badge: tempBadge.join(''), // 将 badge 数组转换为字符串形式保存
             };
             if(apiContext){
                 const response = await apiContext.user.updateSubUserAttr(updateSubUserAttrReq);
                 if(response.code === 0){
-                    // Update the main states after saving to the database
                     setProfileName(tempProfileName);
                     setGender(tempGender);
                     setDob(tempDob);
                     setInstrument(tempInstrument);
-                    setBadge(tempBadge); // 更新主状态
+                    setBadge(tempBadge.join('')); // 更新主状态
                     setLevel(tempLevel);
                     setAvatar(tempAvatar);
                     setIsEditing(false);
@@ -398,7 +398,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
         setTempGender(gender);
         setTempDob(dob);
         setTempInstrument(instrument);
-        setTempBadge(badge); // 添加这行
+        setTempBadge([...badges]); // 重置时，清空旧的 badge 内容
         setTempLevel(level);
         setTempAvatar(avatar);
         setIsEditing(false);
@@ -480,12 +480,17 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
                             <option value="Cello">Cello</option>
                             <option value="Clarinet">Clarinet</option>
                         </Select>
-                        <Input
-                            type="text"
-                            placeholder="Badge"
-                            value={tempBadge}
-                            onChange={(e) => setTempBadge(e.target.value)}
-                        />
+                        <Select
+                            value={tempBadge[0] || ''} // 确保显示数组中的第一个值
+                            onChange={(e) => setTempBadge([e.target.value])} // 将选择项保存为新的数组
+                        >
+                            <option value="">Select Badge</option>
+                            <option value="★★★★★">★★★★★</option>
+                            <option value="★★★★☆">★★★★☆</option>
+                            <option value="★★★☆☆">★★★☆☆</option>
+                            <option value="★★☆☆☆">★★☆☆☆</option>
+                            <option value="★☆☆☆☆">★☆☆☆☆</option>
+                        </Select>
                         <Input type="file" accept="image/*" onChange={handleAvatarChange} />
                         {isUploading && <ProgressBar><Progress progress={uploadProgress} /></ProgressBar>}
                         <ModalActions>

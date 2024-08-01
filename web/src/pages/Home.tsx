@@ -6,8 +6,8 @@ import MusicHistory from '../components/Homepage/MusicHistory';
 import MusicPracticeChart from '../components/Homepage/MusicPracticeChart';
 import AccuracyRateChart from '../components/Homepage/AccuracyRateChart';
 import { AuthContext } from "../contexts/AuthContext";
-import { practiceData, accuracyData, practiceData1, accuracyData1, practiceData2, accuracyData2, options } from '../constants/chartData';
-import { musicData, MusicItem } from '../constants/musicData';
+import { chartDataMap, options } from '../constants/chartData';
+import { getMusicDataByKid, MusicItem } from '../constants/musicData';
 import { childrenData } from '../constants/childrenData';
 import { Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -164,6 +164,37 @@ const Button1 = styled.button`
     }
 `;
 
+const Button2 = styled.button`
+    background-color: #292A2C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    position: absolute;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    top: 20px;
+    right: 20px;
+    &:hover {
+        background-color: #777;
+    }
+
+    @media (max-height: 824px) {
+        font-size: 17px;
+    }
+    @media (max-width: 1380px) {
+        font-size: 15px;
+        padding: 4px 8px;
+    }
+    @media (max-width: 768px) {
+        font-size: 17px;
+        padding: 5px 10px;
+    }
+`;
+
 const ModalContent = styled.div`
     background: #333;
     padding: 20px;
@@ -300,17 +331,14 @@ const Home = () => {
 
     const handleChartClick = (type: 'practice' | 'accuracy' | 'musicHistory') => {
         setActiveChartData(type);
-        if (type === 'musicHistory') {
-            setChartType('pie');
-        } else {
-            setChartType('bar');
-        }
+        setChartType('bar'); // 设置为优先展示柱形图
         setIsModalOpen(true);
     };
 
     const renderChart = () => {
         if (activeChartData === 'musicHistory') {
-            const levelCounts: LevelCounts = musicData.reduce((acc: LevelCounts, curr: MusicItem) => {
+            const currentMusicData = getMusicDataByKid(activeKid || ''); // 使用 activeKid 获取当前子用户的音乐数据
+            const levelCounts: LevelCounts = currentMusicData.reduce((acc: LevelCounts, curr: MusicItem) => {
                 acc[curr.level] = (acc[curr.level] || 0) + 1;
                 return acc;
             }, {});
@@ -340,14 +368,17 @@ const Home = () => {
                 <Bar data={chartData} options={options} />
             );
         } else {
-            const data = activeChartData === 'practice' ? practiceData : accuracyData;
-            const compareDataSets = activeChartData === 'practice' ? [
-                { label: 'Amy', data: practiceData1 },
-                { label: 'Tom', data: practiceData2 }
-            ] : [
-                { label: 'Amy', data: accuracyData1 },
-                { label: 'Tom', data: accuracyData2 }
-            ];
+            const currentChartData = chartDataMap[activeKid || ''] || chartDataMap['Amy'];
+            const data = activeChartData === 'practice' ? currentChartData.practiceData : currentChartData.accuracyData;
+
+            // 生成可供选择的子用户列表，用于对比
+            const compareDataSets = Object.keys(chartDataMap).filter(kid => kid !== activeKid).map(kid => {
+                return {
+                    label: kid,
+                    data: activeChartData === 'practice' ? chartDataMap[kid].practiceData : chartDataMap[kid].accuracyData
+                };
+            });
+
             const ChartComponent = activeChartData === 'practice' ? MusicPracticeChart : AccuracyRateChart;
             const chartOptions = {
                 ...options,
@@ -358,7 +389,7 @@ const Home = () => {
             return (
                 <ChartComponent
                     data={data}
-                    compareDataSets={compareDataSets} // Pass the compareDataSets to the component
+                    compareDataSets={compareDataSets} // 使用动态生成的 compareDataSets
                     options={chartOptions}
                     chartType={validChartType}
                     openModal={() => setIsModalOpen(true)}
@@ -393,7 +424,7 @@ const Home = () => {
         <MainContainer>
             <Header>
                 <Logo>MyGO!!!</Logo>
-                <Button1 onClick={handleSignOutClick}>Log Out</Button1>
+                <Button2 onClick={handleSignOutClick}>Log Out</Button2>
             </Header>
             <Content key={resizeKey}>
                 <SidebarContainer>
@@ -401,16 +432,16 @@ const Home = () => {
                 </SidebarContainer>
                 <MainView>
                     <UserInfo activeKid={activeKid} setActiveKid={setActiveKid} />
-                    <MusicHistory onClick={() => handleChartClick('musicHistory')} />
+                    <MusicHistory activeKid={activeKid} onClick={() => handleChartClick('musicHistory')} />
                 </MainView>
                 <ChartsContainer>
                     <ChartWrapper>
                         <MusicPracticeChart
-                            data={practiceData}
-                            compareDataSets={[
-                                { label: 'Amy', data: practiceData1 },
-                                { label: 'Tom', data: practiceData2 }
-                            ]} // Pass the compareDataSets to the component
+                            data={chartDataMap[activeKid || 'Amy'].practiceData}
+                            compareDataSets={Object.keys(chartDataMap).filter(kid => kid !== activeKid).map(kid => ({
+                                label: kid,
+                                data: chartDataMap[kid].practiceData
+                            }))}
                             options={{
                                 ...options,
                                 maintainAspectRatio: false,
@@ -426,11 +457,11 @@ const Home = () => {
                     </ChartWrapper>
                     <ChartWrapper>
                         <AccuracyRateChart
-                            data={accuracyData}
-                            compareDataSets={[
-                                { label: 'Amy', data: accuracyData1 },
-                                { label: 'Tom', data: accuracyData2 }
-                            ]} // Pass the compareDataSets to the component
+                            data={chartDataMap[activeKid || 'Amy'].accuracyData}
+                            compareDataSets={Object.keys(chartDataMap).filter(kid => kid !== activeKid).map(kid => ({
+                                label: kid,
+                                data: chartDataMap[kid].accuracyData
+                            }))} // 动态生成 compareDataSets
                             options={{
                                 ...options,
                                 maintainAspectRatio: false,

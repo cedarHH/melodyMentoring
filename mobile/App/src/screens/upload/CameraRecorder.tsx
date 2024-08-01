@@ -1,5 +1,5 @@
 // CameraRecorder.tsx
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Text, TouchableOpacity, View, Alert, StyleSheet, Image, Platform } from 'react-native';
 import { Camera,CameraView } from 'expo-camera';
 import { Audio,ResizeMode,Video } from 'expo-av';
@@ -11,6 +11,8 @@ import { RouteProp } from '@react-navigation/native';
 import * as Permissions from 'expo-permissions';
 import { PermissionsAndroid } from 'react-native';
 import UploadMethod from './UploadMethod';
+import { UploadVideo } from './mediaUtils';
+import { UploadContext } from './UploadContext';
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CameraRecorder'>;
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
@@ -25,9 +27,15 @@ const CameraRecorder: React.FC<Props> = ({ navigation,route }) => {
     const [hasPermission, setHasPermission] = useState<boolean | null>(null);
     const [isRecording, setIsRecording] = useState(false);
     const [showCamera, setShowCamera] = useState(true);
-    const [videoUri, setVideoUri] = useState<string | null>(null);
+    const [videoUri, setVideoUri] = useState<string>('');
     // @ts-ignore
     const cameraRef = useRef<Camera>(null);
+    
+    const context = useContext(UploadContext);
+    if (!context) {
+        throw new Error('UploadMethod must be used within an UploadProvider');
+    }
+    const { title,refId, profileName } = context;
 
     useEffect(() => {
         (async () => {
@@ -66,11 +74,10 @@ const CameraRecorder: React.FC<Props> = ({ navigation,route }) => {
         }
     };
 
-    const handleUploadVideo = () => {
+    const handleUploadVideo = async () => {
         console.log(videoUri)
-        // 处理视频上传逻辑
         Alert.alert('Upload', 'Uploading video...');
-        // 假设上传函数在此处
+        await UploadVideo(videoUri, profileName, refId);
     };
     
     const handleBackToCamera = () => {

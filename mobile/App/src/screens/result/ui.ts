@@ -1,4 +1,3 @@
-// ui.ts
 import { StyleSheet, Dimensions } from 'react-native';
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions';
 
@@ -10,6 +9,15 @@ export const styles = StyleSheet.create({
         backgroundColor: '#1B1C1E',
         alignItems: 'center',
         justifyContent: 'space-around',
+    },
+    loadingContainer: {
+        justifyContent: 'center', // 居中显示加载指示器
+        alignItems: 'center', // 居中显示加载指示器
+    },
+    loadingText: {
+        marginTop: responsiveHeight(2),
+        color: '#00BFFF',
+        fontSize: responsiveFontSize(2.2),
     },
     section: {
         width: '90%',
