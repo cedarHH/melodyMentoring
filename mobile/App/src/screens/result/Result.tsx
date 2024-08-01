@@ -16,7 +16,7 @@ type Props = {
 };
 
 const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
-    const { profileName, recordId } = route.params;
+    const { profileName, recordId, referenceId } = route.params;
     const [noteAccuracy, setNoteAccuracy] = useState<string>('Loading...');
     const [velocityAccuracy, setVelocityAccuracy] = useState<string>('Loading...');
     const [durationAccuracy, setDurationAccuracy] = useState<string>('Loading...');

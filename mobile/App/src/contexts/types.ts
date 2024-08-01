@@ -33,6 +33,7 @@ export type RootStackParamList = {
     Result: {
         profileName: string;
         recordId: number;
+        referenceId: string;
     };
     Feedback: {
         profileName: string;
