@@ -9,6 +9,7 @@ import {
     UpdateAvatarSuccessReq,
     UpdateSubUserAttrReq
 } from "../../contexts/api/usercenterComponents";
+import {CreateRecordReq, GetRecordReq} from "../../contexts/api/mediaComponents";
 
 interface UserInfoProps {
     activeKid: string | null;
@@ -89,8 +90,8 @@ const EditButton = styled.button`
     font-style: italic;
     font-size: 18px;
     font-family: 'Cambria', serif;
-    top: 5px;
-    right: 10px;
+    top: 15px;
+    right: 20px;
     &:hover {
         background-color: #777;
     }
@@ -258,6 +259,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
         const fetchUserData = async () => {
             try {
                 if(apiContext && activeKid){
+                    
                     const reqParams:GetSubUserByNameReqParams = {
                         profileName: activeKid
                     }

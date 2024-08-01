@@ -7,7 +7,7 @@ import MusicPracticeChart from '../components/Homepage/MusicPracticeChart';
 import AccuracyRateChart from '../components/Homepage/AccuracyRateChart';
 import { AuthContext } from "../contexts/AuthContext";
 import { practiceData, accuracyData, practiceData1, accuracyData1, practiceData2, accuracyData2, options } from '../constants/chartData';
-import { musicData, MusicItem } from '../constants/musicData';
+import { getMusicDataByKid, MusicItem } from '../constants/musicData';
 import { childrenData } from '../constants/childrenData';
 import { Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -310,7 +310,8 @@ const Home = () => {
 
     const renderChart = () => {
         if (activeChartData === 'musicHistory') {
-            const levelCounts: LevelCounts = musicData.reduce((acc: LevelCounts, curr: MusicItem) => {
+            const currentMusicData = getMusicDataByKid(activeKid || ''); // 使用 activeKid 获取当前子用户的音乐数据
+            const levelCounts: LevelCounts = currentMusicData.reduce((acc: LevelCounts, curr: MusicItem) => {
                 acc[curr.level] = (acc[curr.level] || 0) + 1;
                 return acc;
             }, {});
@@ -401,7 +402,7 @@ const Home = () => {
                 </SidebarContainer>
                 <MainView>
                     <UserInfo activeKid={activeKid} setActiveKid={setActiveKid} />
-                    <MusicHistory onClick={() => handleChartClick('musicHistory')} />
+                    <MusicHistory activeKid={activeKid} onClick={() => handleChartClick('musicHistory')} />
                 </MainView>
                 <ChartsContainer>
                     <ChartWrapper>
