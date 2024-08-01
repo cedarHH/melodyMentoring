@@ -34,6 +34,7 @@ export type RootStackParamList = {
         profileName: string;
         recordId: number;
         referenceId: string;
+        analysisId: number;
     };
     Feedback: {
         profileName: string;

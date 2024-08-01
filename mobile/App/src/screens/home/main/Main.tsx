@@ -58,7 +58,7 @@ const Main: React.FC<Props> = ({ navigation,route }) => {
         try {
             const reqParams: QueryReferenceReq = {
                 title: 'string',
-                style: 'Folk',
+                style: 'Classic',
                 composer: 'string',
                 instrument: 'string'
             }
