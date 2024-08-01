@@ -164,6 +164,37 @@ const Button1 = styled.button`
     }
 `;
 
+const Button2 = styled.button`
+    background-color: #292A2C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    position: absolute;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 18px;
+    font-family: 'Cambria', serif;
+    top: 20px;
+    right: 20px;
+    &:hover {
+        background-color: #777;
+    }
+
+    @media (max-height: 824px) {
+        font-size: 17px;
+    }
+    @media (max-width: 1380px) {
+        font-size: 15px;
+        padding: 4px 8px;
+    }
+    @media (max-width: 768px) {
+        font-size: 17px;
+        padding: 5px 10px;
+    }
+`;
+
 const ModalContent = styled.div`
     background: #333;
     padding: 20px;
@@ -269,7 +300,7 @@ const Home = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
     const [activeChartData, setActiveChartData] = useState<'practice' | 'accuracy' | 'musicHistory'>('practice');
-    const [chartType, setChartType] = useState<'line' | 'bar' | 'pie'>('line'); // 优先展示折线图
+    const [chartType, setChartType] = useState<'line' | 'bar' | 'pie'>('bar');
     const [resizeKey, setResizeKey] = useState(0); // State to manage the resize key
     const [markedPracticePoints, setMarkedPracticePoints] = useState<number[]>([]);
     const [markedAccuracyPoints, setMarkedAccuracyPoints] = useState<number[]>([]);
@@ -300,11 +331,7 @@ const Home = () => {
 
     const handleChartClick = (type: 'practice' | 'accuracy' | 'musicHistory') => {
         setActiveChartData(type);
-        if (type === 'musicHistory') {
-            setChartType('pie');
-        } else {
-            setChartType('line'); // 修改为优先展示折线图
-        }
+        setChartType('bar'); // 设置为优先展示柱形图
         setIsModalOpen(true);
     };
 
@@ -341,12 +368,16 @@ const Home = () => {
                 <Bar data={chartData} options={options} />
             );
         } else {
-            // 根据 activeKid 选择假数据
-            const data = chartDataMap[activeKid || 'Daniel'].practiceData;
-            const compareDataSets = [
-                { label: 'Amy', data: chartDataMap['Amy'].practiceData },
-                { label: 'Tom', data: chartDataMap['Tom'].practiceData }
-            ];
+            const currentChartData = chartDataMap[activeKid || ''] || chartDataMap['Amy'];
+            const data = activeChartData === 'practice' ? currentChartData.practiceData : currentChartData.accuracyData;
+
+            // 生成可供选择的子用户列表，用于对比
+            const compareDataSets = Object.keys(chartDataMap).filter(kid => kid !== activeKid).map(kid => {
+                return {
+                    label: kid,
+                    data: activeChartData === 'practice' ? chartDataMap[kid].practiceData : chartDataMap[kid].accuracyData
+                };
+            });
 
             const ChartComponent = activeChartData === 'practice' ? MusicPracticeChart : AccuracyRateChart;
             const chartOptions = {
@@ -358,7 +389,7 @@ const Home = () => {
             return (
                 <ChartComponent
                     data={data}
-                    compareDataSets={compareDataSets} // Pass the compareDataSets to the component
+                    compareDataSets={compareDataSets} // 使用动态生成的 compareDataSets
                     options={chartOptions}
                     chartType={validChartType}
                     openModal={() => setIsModalOpen(true)}
@@ -393,7 +424,7 @@ const Home = () => {
         <MainContainer>
             <Header>
                 <Logo>MyGO!!!</Logo>
-                <Button1 onClick={handleSignOutClick}>Log Out</Button1>
+                <Button2 onClick={handleSignOutClick}>Log Out</Button2>
             </Header>
             <Content key={resizeKey}>
                 <SidebarContainer>
@@ -406,11 +437,11 @@ const Home = () => {
                 <ChartsContainer>
                     <ChartWrapper>
                         <MusicPracticeChart
-                            data={chartDataMap[activeKid || 'Daniel'].practiceData}
-                            compareDataSets={[
-                                { label: 'Amy', data: chartDataMap['Amy'].practiceData },
-                                { label: 'Tom', data: chartDataMap['Tom'].practiceData }
-                            ]} // Pass the compareDataSets to the component
+                            data={chartDataMap[activeKid || 'Amy'].practiceData}
+                            compareDataSets={Object.keys(chartDataMap).filter(kid => kid !== activeKid).map(kid => ({
+                                label: kid,
+                                data: chartDataMap[kid].practiceData
+                            }))}
                             options={{
                                 ...options,
                                 maintainAspectRatio: false,
@@ -426,11 +457,11 @@ const Home = () => {
                     </ChartWrapper>
                     <ChartWrapper>
                         <AccuracyRateChart
-                            data={chartDataMap[activeKid || 'Daniel'].accuracyData}
-                            compareDataSets={[
-                                { label: 'Amy', data: chartDataMap['Amy'].accuracyData },
-                                { label: 'Tom', data: chartDataMap['Tom'].accuracyData }
-                            ]} // Pass the compareDataSets to the component
+                            data={chartDataMap[activeKid || 'Amy'].accuracyData}
+                            compareDataSets={Object.keys(chartDataMap).filter(kid => kid !== activeKid).map(kid => ({
+                                label: kid,
+                                data: chartDataMap[kid].accuracyData
+                            }))} // 动态生成 compareDataSets
                             options={{
                                 ...options,
                                 maintainAspectRatio: false,
