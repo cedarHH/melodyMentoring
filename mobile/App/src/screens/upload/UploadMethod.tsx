@@ -24,7 +24,7 @@ type Props = {
 
 
 const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
-    
+    const [recordingUri, setRecordingUri] = useState<string|null>('');
     const [videoUri, setVideoUri] = useState<string | null>(null);
     const [audioUri, setAudioUri] = useState<string | null>(null);
     const [reference, setReference] = useState(false);
@@ -69,13 +69,19 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
 
     const handleUpload = async () => {
         if (aov=='video' && videoUri) {
-            await UploadVideo(videoUri, profileName,refId);
+            const recordId = await UploadVideo(videoUri, profileName,refId);
+            navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, refId: context.refId} );
             Alert.alert('Video uploaded successfully');
         } 
 
-        if (aov=='audio' && audioUri) {
-            await UploadAudio(audioUri, title,refId);
-            Alert.alert('Audio uploaded successfully');
+        if (aov=='audio' && audioUri) { 
+            try {
+                const [analysisId, recordId] = await UploadAudio(audioUri, context.profileName, context.refId);
+                navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, refId: context.refId, analysisId: analysisId} );
+            } catch (error) {
+                console.error('Upload failed:', error);
+                Alert.alert('Error', 'Failed to upload audio.');
+            }
         }
 
         else {
