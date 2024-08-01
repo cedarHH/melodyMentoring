@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { RootStackParamList } from '../../contexts/types';
 import { styles } from './ui';
 import {  useState, useRef, useEffect,useContext  } from 'react';
-import { SelectVideo, UploadVideo,SelectAudio,UploadAudio } from './mediaUtils'; 
+import { SelectVideo, UploadVideo,SelectAudio,UploadAudio, UploadRefVideo, UploadRefAudio } from './mediaUtils'; 
 import CameraRecorder from './CameraRecorder';
 import ChooseMethod from './methodChoose';
 import { UploadContext } from './UploadContext';
@@ -28,7 +28,7 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
     const [videoUri, setVideoUri] = useState<string | null>(null);
     const [audioUri, setAudioUri] = useState<string | null>(null);
     const [reference, setReference] = useState(false);
-    const [refid, setrefid] = useState<string | null>(null);
+    const [refid, setrefid] = useState<string>('');
     const [aov, setaov] = useState<string | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const context = useContext(UploadContext);
@@ -43,7 +43,7 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
     if (!context) {
         throw new Error('UploadMethod must be used within an UploadProvider');
     }
-    const { title, profileName } = context;
+    const { title,refId, profileName } = context;
     const handleChoose = () => {
         setIsModalVisible(true);
     };
@@ -69,12 +69,12 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
 
     const handleUpload = async () => {
         if (aov=='video' && videoUri) {
-            await UploadVideo(videoUri, title);
+            await UploadVideo(videoUri, profileName,refId);
             Alert.alert('Video uploaded successfully');
         } 
 
         if (aov=='audio' && audioUri) {
-            await UploadAudio(audioUri, title);
+            await UploadAudio(audioUri, title,refId);
             Alert.alert('Audio uploaded successfully');
         }
 
@@ -119,12 +119,12 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
         }
 
         if (aov=='video' && videoUri) {
-            await UploadVideo(videoUri, refid);
+            await UploadRefVideo(videoUri,profileName, refid,form.title, form.style, form.composer, form.instrument);
             Alert.alert('Video uploaded successfully');
         } 
 
         if (aov=='audio' && audioUri) {
-            await UploadAudio(audioUri, refid);
+            await UploadRefAudio(audioUri,profileName, refid,form.title, form.style, form.composer, form.instrument);
             Alert.alert('Audio uploaded successfully');
         }
 
