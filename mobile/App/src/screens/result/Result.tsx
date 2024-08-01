@@ -5,7 +5,12 @@ import { RootStackParamList } from '../../contexts/types';
 import { RouteProp } from '@react-navigation/native';
 import { useApi } from '../../contexts/apiContext';
 import { styles } from './ui';
-import { GetPerformanceMidiResp, GetPerformanceReportReq } from "../../contexts/apiParams/mediaComponents";
+import {
+    GetPerformanceMidiResp,
+    GetPerformanceReportReq,
+    GetAnalysisResultReqParams,
+    GetAnalysisResultResp
+} from "../../contexts/apiParams/mediaComponents";
 import { GetReferenceReq, GetReferenceResp } from "../../contexts/apiParams/mediaComponents";
 
 type ResultScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Result'>;
@@ -26,56 +31,73 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
     const [feedback, setFeedback] = useState<string>('Loading...');
     const [recommendations, setRecommendations] = useState<string>('Loading...');
     const [loading, setLoading] = useState<boolean>(true);
-    const [songName, setSongName] = useState<string>('Loading...'); // 新增状态
+    const [songName, setSongName] = useState<string>('Loading...');
+    const [waitMessage, setWaitMessage] = useState<string>('Please wait...');
 
     const api = useApi();
 
     useEffect(() => {
-        const fetchPerformanceReport = async () => {
+        // 声明 intervalId 变量
+        let intervalId: NodeJS.Timeout;
+
+        const fetchAnalysisResult = async () => {
             try {
-                setLoading(true); // 开始请求时设置为true
+                setLoading(true);
 
-                // 获取Performance Report
-                const performanceParams: GetPerformanceReportReq = {
-                    profileName,
-                    recordId
+                const analysisParams: GetAnalysisResultReqParams = {
+                    analysisId: recordId
                 };
-                const performanceResponse: GetPerformanceMidiResp = await api.record.getPerformanceReport(performanceParams);
 
-                if (performanceResponse.code === 0) {
-                    const response = await fetch(performanceResponse.presignedurl);
-                    const data = await response.json();
+                intervalId = setInterval(async () => {
+                    const analysisResponse: GetAnalysisResultResp = await api.analysis.getAnalysisResult(analysisParams);
 
-                    setNoteAccuracy(data['Note accuracy']);
-                    setVelocityAccuracy(data['Velocity accuracy']);
-                    setDurationAccuracy(data['Duration accuracy']);
-                    setComment(data['Comment']);
-                    setErrors(data['Errors']);
-                    setFeedback(data['Detailed_Feedback']);
-                    setRecommendations(data['Recommendations']);
-                } else {
-                    console.error('Error fetching performance report:', performanceResponse.msg);
-                    setNoteAccuracy('Error');
-                    setVelocityAccuracy('Error');
-                    setDurationAccuracy('Error');
-                    setComment('Error');
-                    setErrors('Error');
-                    setFeedback('Error');
-                    setRecommendations('Error');
-                }
+                    if (analysisResponse.code === 0) {
+                        clearInterval(intervalId); // 如果成功，停止轮询
 
-                // 获取Reference信息
-                const referenceParams: GetReferenceReq = {
-                    refId: referenceId
-                };
-                const referenceResponse: GetReferenceResp = await api.reference.getReference(referenceParams);
+                        const performanceParams: GetPerformanceReportReq = {
+                            profileName,
+                            recordId
+                        };
+                        const performanceResponse: GetPerformanceMidiResp = await api.record.getPerformanceReport(performanceParams);
 
-                if (referenceResponse.code === 0) {
-                    setSongName(referenceResponse.data.title);
-                } else {
-                    console.error('Error fetching reference:', referenceResponse.msg);
-                    setSongName('Error');
-                }
+                        if (performanceResponse.code === 0) {
+                            const response = await fetch(performanceResponse.presignedurl);
+                            const data = await response.json();
+
+                            setNoteAccuracy(data['Note accuracy']);
+                            setVelocityAccuracy(data['Velocity accuracy']);
+                            setDurationAccuracy(data['Duration accuracy']);
+                            setComment(data['Comment']);
+                            setErrors(data['Errors']);
+                            setFeedback(data['Detailed_Feedback']);
+                            setRecommendations(data['Recommendations']);
+                        } else {
+                            console.error('Error fetching performance report:', performanceResponse.msg);
+                            setNoteAccuracy('Error');
+                            setVelocityAccuracy('Error');
+                            setDurationAccuracy('Error');
+                            setComment('Error');
+                            setErrors('Error');
+                            setFeedback('Error');
+                            setRecommendations('Error');
+                        }
+
+                        const referenceParams: GetReferenceReq = {
+                            refId: referenceId
+                        };
+                        const referenceResponse: GetReferenceResp = await api.reference.getReference(referenceParams);
+
+                        if (referenceResponse.code === 0) {
+                            setSongName(referenceResponse.data.title);
+                        } else {
+                            console.error('Error fetching reference:', referenceResponse.msg);
+                            setSongName('Error');
+                        }
+                    } else {
+                        setWaitMessage(`Please wait... ${analysisResponse.msg}`);
+                    }
+                }, 500);
+
             } catch (error) {
                 console.error('Error:', error);
                 setNoteAccuracy('Error');
@@ -87,18 +109,21 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                 setRecommendations('Error');
                 setSongName('Error');
             } finally {
-                setLoading(false); // 请求完成时设置为false
+                setLoading(false);
             }
         };
 
-        fetchPerformanceReport();
+        fetchAnalysisResult();
+
+        // 在组件卸载时清除定时器
+        return () => clearInterval(intervalId);
     }, [recordId, referenceId]);
 
     if (loading) {
         return (
             <View style={[styles.container, styles.loadingContainer]}>
                 <ActivityIndicator size="large" color="#05fdfd" />
-                <Text style={styles.loadingText}>Loading performance report...</Text>
+                <Text style={styles.loadingText}>{waitMessage}</Text>
             </View>
         );
     }
@@ -157,7 +182,7 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity
                         style={styles.playAgainButton}
-                        onPress={() => navigation.navigate('Home', {profileName: profileName})}
+                        onPress={() => navigation.navigate('Main', {profileName: profileName})}
                     >
                         <Text style={styles.playAgainButtonText}>Play again</Text>
                     </TouchableOpacity>
