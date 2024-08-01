@@ -39,7 +39,6 @@ const History: React.FC<Props> = ({ navigation, route }) => {
                     };
                     const response = await api.record.getRecord(params);
                     if (response.code === 0) {
-                        console.log('Records:', response.data);
                         setRecords(response.data);
                     } else {
                         setError(response.msg);

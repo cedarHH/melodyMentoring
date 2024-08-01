@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         marginBottom: responsiveHeight(10),
     },
     buttonText: {
-        fontSize: responsiveFontSize(2),
+        fontSize: responsiveFontSize(1.8),
     },
     button_1: {
         width: responsiveWidth(40),

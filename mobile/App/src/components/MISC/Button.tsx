@@ -26,7 +26,7 @@ const StyledTouchableOpacity = styled.TouchableOpacity<{}>`
 const StyledText = styled.Text<{ textStyle?: TextStyle }>`
     color: white;
     font-size: ${responsiveFontSize(1.5)}px;
-    ${(props: { textStyle: any; }) => props.textStyle && { ...props.textStyle }}
+    ${(props: { textStyle?: TextStyle }) => props.textStyle && { ...props.textStyle }}
 `;
 
 const Button: React.FC<ButtonProps> = ({ text, textStyle, onPress, style }) => (
