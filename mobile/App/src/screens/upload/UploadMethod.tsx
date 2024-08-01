@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { RootStackParamList } from '../../contexts/types';
 import { styles } from './ui';
 import {  useState, useRef, useEffect,useContext  } from 'react';
-import { SelectVideo, UploadVideo,SelectAudio,UploadAudio, UploadRefVideo, UploadRefAudio } from './mediaUtils'; 
+import { SelectVideo, UploadVideo,SelectAudio,UploadAudio, UploadRefVideo, UploadRefAudio } from './mediaUtils';
 import CameraRecorder from './CameraRecorder';
 import ChooseMethod from './methodChoose';
 import { UploadContext } from './UploadContext';
@@ -24,7 +24,7 @@ type Props = {
 
 
 const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
-    
+    const [recordingUri, setRecordingUri] = useState<string|null>('');
     const [videoUri, setVideoUri] = useState<string | null>(null);
     const [audioUri, setAudioUri] = useState<string | null>(null);
     const [reference, setReference] = useState(false);
@@ -69,13 +69,19 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
 
     const handleUpload = async () => {
         if (aov=='video' && videoUri) {
-            await UploadVideo(videoUri, profileName,refId);
+            const recordId = await UploadVideo(videoUri, profileName,refId);
+            navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, referenceId: context.refId, analysisId: 0} ); //, refId: context.refId, analysisId: analysisId
             Alert.alert('Video uploaded successfully');
-        } 
+        }
 
         if (aov=='audio' && audioUri) {
-            await UploadAudio(audioUri, title,refId);
-            Alert.alert('Audio uploaded successfully');
+            try {
+                const [analysisId, recordId] = await UploadAudio(api, audioUri, context.profileName, context.refId);
+                navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, referenceId: context.refId, analysisId: analysisId} ); //, refId: context.refId, analysisId: analysisId
+            } catch (error) {
+                console.error('Upload failed:', error);
+                Alert.alert('Error', 'Failed to upload audio.');
+            }
         }
 
         else {
@@ -113,7 +119,7 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
                 const refid = resp.refId;
                 setrefid(refid)
             }
-            
+
         } catch(error) {
             console.error('Error create ref:', error);
         }
@@ -121,7 +127,7 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
         if (aov=='video' && videoUri) {
             await UploadRefVideo(videoUri,profileName, refid,form.title, form.style, form.composer, form.instrument);
             Alert.alert('Video uploaded successfully');
-        } 
+        }
 
         if (aov=='audio' && audioUri) {
             await UploadRefAudio(audioUri,profileName, refid,form.title, form.style, form.composer, form.instrument);
@@ -136,7 +142,7 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
     useEffect(() => {
         if (title === 'default') {
             setReference(true);
-            
+
         } else {
             setReference(false);
         }
@@ -152,25 +158,25 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
 
                 <TouchableOpacity onPress={handleSelectVideo}>
                     <Image source={require('../../assets/icon/gallery.png')}
-                        style={styles.uploadButton}
-                        />
+                           style={styles.uploadButton}
+                    />
                     <Text style={styles.buttonText}>Select Video</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={reference ? handleRefUpload : handleUpload}>
                     <Image source={videoUri || audioUri ? require('../../assets/img/logo/mygo1.png') : require('../../assets/icon/music-playlist.png')}
-                    style={styles.uploadButton}
+                           style={styles.uploadButton}
                     />
                     <Text style={styles.buttonText}>Upload Practice</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={handleSelectAudeo}>
                     <Image source={require('../../assets/icon/music-playlist.png')}
-                        style={styles.uploadButton}
+                           style={styles.uploadButton}
                     />
                     <Text style={styles.buttonText}>Select Audio</Text>
                 </TouchableOpacity>
-                
+
             </View>
             { !reference && (
                 <TouchableOpacity onPress={handleChoose} style={styles.recordSection}>
@@ -207,9 +213,9 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
                     />
                 </View>
             )}
-            
+
             <ChooseMethod visible={isModalVisible} onClose={handleCloseModal} navigation={navigation} route={route} />
-            
+
         </View>
     );
 };

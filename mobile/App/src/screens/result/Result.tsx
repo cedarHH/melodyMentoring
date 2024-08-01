@@ -22,7 +22,7 @@ type Props = {
 };
 
 const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
-    const { profileName, recordId, referenceId } = route.params;
+    const { profileName, recordId, referenceId, analysisId } = route.params;
     const [noteAccuracy, setNoteAccuracy] = useState<string>('Loading...');
     const [velocityAccuracy, setVelocityAccuracy] = useState<string>('Loading...');
     const [durationAccuracy, setDurationAccuracy] = useState<string>('Loading...');
@@ -45,12 +45,15 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                 setLoading(true);
 
                 const analysisParams: GetAnalysisResultReqParams = {
-                    analysisId: recordId
+                    analysisId: analysisId
                 };
+                console.log(analysisParams);
 
                 intervalId = setInterval(async () => {
                     const analysisResponse: GetAnalysisResultResp = await api.analysis.getAnalysisResult(analysisParams);
 
+                    console.log(123213);
+                    console.log(analysisResponse);
                     if (analysisResponse.code === 0) {
                         clearInterval(intervalId); // 如果成功，停止轮询
 
@@ -58,6 +61,7 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                             profileName,
                             recordId
                         };
+                        console.log("111")
                         const performanceResponse: GetPerformanceMidiResp = await api.record.getPerformanceReport(performanceParams);
 
                         if (performanceResponse.code === 0) {
@@ -96,7 +100,7 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                     } else {
                         setWaitMessage(`Please wait... ${analysisResponse.msg}`);
                     }
-                }, 500);
+                }, 1000);
 
             } catch (error) {
                 console.error('Error:', error);

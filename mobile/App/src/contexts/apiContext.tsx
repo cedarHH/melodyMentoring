@@ -29,7 +29,7 @@ import {
     DeleteRecordResp,
     DeleteReferenceReq,
     DeleteReferenceResp,
-    GetAnalysisResultReq,
+    GetAnalysisResultReq, GetAnalysisResultReqParams,
     GetAnalysisResultResp,
     GetAudioUrlReq,
     GetAudioUrlResp,
@@ -139,7 +139,7 @@ interface ApiContextType {
     };
     analysis: {
         performanceAnalysis: (req: PerformanceAnalysisReq) => Promise<PerformanceAnalysisResp>;
-        getAnalysisResult: (req: GetAnalysisResultReq) => Promise<GetAnalysisResultResp>;
+        getAnalysisResult: (req: GetAnalysisResultReqParams) => Promise<GetAnalysisResultResp>;
     };
     setIdToken: (token:string) => void
 }
@@ -548,7 +548,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         performanceAnalysis: async (req: PerformanceAnalysisReq): Promise<PerformanceAnalysisResp> => {
-            const response = await axiosInstance.post<PerformanceAnalysisResp>('/api/media/analysis/performance', req);
+            const response = await axiosInstance.post<PerformanceAnalysisResp>('/api/media/analysis/performanceAnalysis', req);
             return response.data;
         },
 
@@ -556,8 +556,8 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @description "get analysis result"
          * @param req
          */
-        getAnalysisResult: async (req: GetAnalysisResultReq): Promise<GetAnalysisResultResp> => {
-            const response = await axiosInstance.post<GetAnalysisResultResp>('/api/media/analysis/getResult', req);
+        getAnalysisResult: async (req: GetAnalysisResultReqParams): Promise<GetAnalysisResultResp> => {
+            const response = await axiosInstance.get<GetAnalysisResultResp>(`/api/media/analysis/getAnalysisResult?analysisResult=analysisId=${req.analysisId}`);
             return response.data;
         },
     };
