@@ -6,6 +6,7 @@ import { RootStackParamList } from "../../contexts/types";
 import { RouteProp } from "@react-navigation/native";
 import { UploadContext } from './UploadContext';
 import { UploadAudio, UploadRefAudio } from "./mediaUtils";
+import {useApi} from "../../contexts/apiContext";
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Practice'>;
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
@@ -22,6 +23,8 @@ const Practice: React.FC<Props> = ({ navigation }) => {
     const [recordingUri, setRecordingUri] = useState<string|null>('');
     const [sound, setSound] = useState<Audio.Sound | null>(null);
     const context = useContext(UploadContext);
+    const api = useApi();
+
     if (!context) {
         throw new Error('UploadMethod must be used within an UploadProvider');
     }
@@ -65,7 +68,7 @@ const Practice: React.FC<Props> = ({ navigation }) => {
     const handleUpAudio = async () => {
         if (recordingUri){
             try {
-                const [analysisId, recordId] = await UploadAudio(recordingUri, context.profileName, context.refId);
+                const [analysisId, recordId] = await UploadAudio(api, recordingUri, context.profileName, context.refId);
                 navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, referenceId: context.refId} ); //  analysisId: analysisId
             } catch (error) {
                 console.error('Upload failed:', error);
