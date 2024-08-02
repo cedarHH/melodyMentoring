@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import CustomButton from '../../../components/MISC/Button';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../contexts/types';
-import { RouteProp, useFocusEffect } from '@react-navigation/native';
-import { responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions';
-import { useApi } from '../../../contexts/apiContext';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../../contexts/types';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
+import {responsiveHeight, responsiveFontSize} from 'react-native-responsive-dimensions';
+import {useApi} from '../../../contexts/apiContext';
 import {
     GetPerformanceReportReq,
     GetPerformanceReportResp,
@@ -20,9 +20,9 @@ type Props = {
     route: HistoryRoute;
 };
 
-const History: React.FC<Props> = ({ navigation, route }) => {
+const History: React.FC<Props> = ({navigation, route}) => {
     const api = useApi();
-    const { profileName } = route.params;
+    const {profileName} = route.params;
     const [records, setRecords] = useState<Array<RecordInfo>>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -83,7 +83,7 @@ const History: React.FC<Props> = ({ navigation, route }) => {
                 <Text style={styles.errorText}>{error}</Text>
                 <CustomButton
                     text="Go Home"
-                    onPress={() => navigation.navigate('Home', { profileName: profileName })}
+                    onPress={() => navigation.navigate('Home', {profileName: profileName})}
                     style={styles.button}
                 />
             </View>
@@ -96,7 +96,7 @@ const History: React.FC<Props> = ({ navigation, route }) => {
                 <Text style={styles.text}>No history available.</Text>
                 <CustomButton
                     text="Go Home"
-                    onPress={() => navigation.navigate('Home', { profileName: 'DefaultProfile' })}
+                    onPress={() => navigation.navigate('Home', {profileName: 'DefaultProfile'})}
                     style={styles.button}
                 />
             </View>
@@ -110,7 +110,11 @@ const History: React.FC<Props> = ({ navigation, route }) => {
                 <TouchableOpacity
                     key={record.RecordId}
                     style={styles.recordContainer}
-                    onPress={() => navigation.navigate('Result', {profileName: profileName ,recordId: record.RecordId, referenceId: record.reference })}
+                    onPress={() => navigation.navigate('Result', {
+                        profileName: profileName,
+                        recordId: record.RecordId,
+                        referenceId: record.reference,
+                    })}
                 >
                     <Text style={styles.recordText}>ID: {record.RecordId}</Text>
                     <Text style={styles.recordText}>Time: {convertRecordIdToDate(record.RecordId)}</Text>
@@ -119,7 +123,7 @@ const History: React.FC<Props> = ({ navigation, route }) => {
             ))}
             <CustomButton
                 text="Go Home"
-                onPress={() => navigation.navigate('Home', { profileName: 'DefaultProfile' })}
+                onPress={() => navigation.navigate('Home', {profileName: 'DefaultProfile'})}
                 style={styles.button}
             />
         </ScrollView>

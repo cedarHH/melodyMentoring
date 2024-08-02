@@ -8,7 +8,7 @@ import Button from '../../components/MISC/Button';
 import { StackNavigationProp,createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from '../../contexts/types';
 import { RouteProp } from '@react-navigation/native';
-import * as Permissions from 'expo-permissions';
+
 import { PermissionsAndroid } from 'react-native';
 import UploadMethod from './UploadMethod';
 import { UploadVideo } from './mediaUtils';

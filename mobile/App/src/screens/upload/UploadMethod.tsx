@@ -11,7 +11,11 @@ import CameraRecorder from './CameraRecorder';
 import ChooseMethod from './methodChoose';
 import { UploadContext } from './UploadContext';
 import { useApi } from '../../contexts/apiContext';
-import { CreateReferenceReq, CreateReferenceResp } from '../../contexts/apiParams/mediaComponents';
+import {
+    CreateReferenceReq,
+    CreateReferenceResp,
+    GetAnalysisResultReqParams, GetAnalysisResultResp
+} from '../../contexts/apiParams/mediaComponents';
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'UploadMethod'>;
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
