@@ -89,84 +89,50 @@ const ResultScreen: React.FC<Props> = ({navigation, route}) => {
         // 声明 intervalId 变量
         let intervalId: NodeJS.Timeout;
 
-        const fetchAnalysisResult = async () => {
-            try {
-                setLoading(true);
-
-                const analysisParams: GetAnalysisResultReqParams = {
-                    analysisId: analysisId
-                };
-                console.log(analysisParams);
-
-                intervalId = setInterval(async () => {
-                    const analysisResponse: GetAnalysisResultResp = await api.analysis.getAnalysisResult(analysisParams);
-
-                    console.log(123213);
-                    console.log(analysisResponse);
-                    if (analysisResponse.code === 0) {
-                        clearInterval(intervalId); // 如果成功，停止轮询
-
-                        const performanceParams: GetPerformanceReportReq = {
-                            profileName,
-                            recordId
-                        };
-                        console.log("111")
-                        const performanceResponse: GetPerformanceMidiResp = await api.record.getPerformanceReport(performanceParams);
-
-                        if (performanceResponse.code === 0) {
-                            const response = await fetch(performanceResponse.presignedurl);
-                            const data = await response.json();
-
-                            setNoteAccuracy(data['Note accuracy']);
-                            setVelocityAccuracy(data['Velocity accuracy']);
-                            setDurationAccuracy(data['Duration accuracy']);
-                            setComment(data['Comment']);
-                            setErrors(data['Errors']);
-                            setFeedback(data['Detailed_Feedback']);
-                            setRecommendations(data['Recommendations']);
-                        } else {
-                            console.error('Error fetching performance report:', performanceResponse.msg);
-                            setNoteAccuracy('Error');
-                            setVelocityAccuracy('Error');
-                            setDurationAccuracy('Error');
-                            setComment('Error');
-                            setErrors('Error');
-                            setFeedback('Error');
-                            setRecommendations('Error');
-                        }
-
-                        const referenceParams: GetReferenceReq = {
-                            refId: referenceId
-                        };
-                        const referenceResponse: GetReferenceResp = await api.reference.getReference(referenceParams);
-
-                        if (referenceResponse.code === 0) {
-                            setSongName(referenceResponse.data.title);
-                        } else {
-                            console.error('Error fetching reference:', referenceResponse.msg);
-                            setSongName('Error');
-                        }
-                    } else {
-                        setWaitMessage(`Please wait... ${analysisResponse.msg}`);
-                    }
-                }, 1000);
-
-            } catch (error) {
-                console.error('Error:', error);
-                setNoteAccuracy('Error');
-                setVelocityAccuracy('Error');
-                setDurationAccuracy('Error');
-                setComment('Error');
-                setErrors('Error');
-                setFeedback('Error');
-                setRecommendations('Error');
-                setSongName('Error');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchAnalysisResult();
+        // const fetchAnalysisResult = async () => {
+        //     try {
+        //         setLoading(true);
+        //
+        //         const analysisParams: GetAnalysisResultReqParams = {
+        //             analysisId: analysisId
+        //         };
+        //         console.log(analysisParams);
+        //
+        //         intervalId = setInterval(async () => {
+        //             const analysisResponse: GetAnalysisResultResp = await api.analysis.getAnalysisResult(analysisParams);
+        //
+        //             console.log(123213);
+        //             console.log(analysisResponse);
+        //             if (analysisResponse.code === 0) {
+        //                 clearInterval(intervalId); // 如果成功，停止轮询
+        //
+        //                 const performanceParams: GetPerformanceReportReq = {
+        //                     profileName,
+        //                     recordId
+        //                 };
+        //                 console.log("111")
+        //
+        //             } else {
+        //                 setWaitMessage(`Please wait... ${analysisResponse.msg}`);
+        //             }
+        //         }, 1000);
+        //
+        //     } catch (error) {
+        //         console.error('Error:', error);
+        //         setNoteAccuracy('Error');
+        //         setVelocityAccuracy('Error');
+        //         setDurationAccuracy('Error');
+        //         setComment('Error');
+        //         setErrors('Error');
+        //         setFeedback('Error');
+        //         setRecommendations('Error');
+        //         setSongName('Error');
+        //     } finally {
+        //         setLoading(false);
+        //     }
+        // };
+        //
+        // fetchAnalysisResult();
 
         return () => clearInterval(intervalId);
     }, [recordId, referenceId]);

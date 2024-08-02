@@ -74,13 +74,15 @@ const UploadMethod: React.FC<Props> = ({ navigation,route }) => {
     const handleUpload = async () => {
         if (aov=='video' && videoUri) {
             const recordId = await UploadVideo(videoUri, profileName,refId);
-            navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, referenceId: context.refId, analysisId: 0} ); //, refId: context.refId, analysisId: analysisId
+            navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, referenceId: context.refId} ); //, refId: context.refId, analysisId: analysisId
             Alert.alert('Video uploaded successfully');
         }
         if (aov=='audio' && audioUri) {
             try {
                 const [analysisId, recordId] = await UploadAudio(api, audioUri, context.profileName, context.refId);
-                navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, referenceId: context.refId, analysisId: analysisId} ); //, refId: context.refId, analysisId: analysisId
+
+
+                navigation.navigate('Result',{profileName:context.profileName, recordId: recordId, referenceId: context.refId} ); //, refId: context.refId, analysisId: analysisId
             } catch (error) {
                 console.error('Upload failed:', error);
                 Alert.alert('Error', 'Failed to upload audio.');
