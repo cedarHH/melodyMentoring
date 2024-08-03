@@ -59,6 +59,7 @@ func (c *AnalysisResultConsumer) handleMessage(message string) {
 
 	if isRef == "TRUE" {
 		updates := map[string]interface{}{
+			"Audio":     fileName + ".mp3",
 			"Midi":      fileName + ".mid",
 			"Sheet":     fileName + ".musicxml",
 			"Waterfall": fileName + ".png",
@@ -70,6 +71,7 @@ func (c *AnalysisResultConsumer) handleMessage(message string) {
 		}
 	} else {
 		updates := map[string]interface{}{
+			"Audio":     fileName + ".mp3",
 			"Midi":      fileName + ".mid",
 			"Sheet":     fileName + ".musicxml",
 			"Waterfall": fileName + ".png",

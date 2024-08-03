@@ -1,8 +1,10 @@
 import re
+import os
 import pika
 import json
 import yaml
 import logging
+from preprocessing import convert2audio
 from reprocessing import parse, waterfall, midi2sheet, errorExtraction
 from inference import transcribe
 from feedback import feedback
@@ -51,16 +53,31 @@ class AudioProcessor:
         logging.info(f"Sent notification for job_id: {job_id}")
 
     def process_audio(
-            self, is_ref, job_id, sub_user_id, record_id, ref_id, file_name,
+            self, is_ref, job_id, sub_user_id, record_id, ref_id, file_name, video_url,
             audio_url, midi_url, sheet_url, waterfall_url, report_url, json_url):
 
         logging.info(f"Received job {job_id} for processing")
 
-        s3.download_file_from_s3(
-            presigned_url=audio_url,
-            save_directory="./tempFile/",
-            filename=file_name + ".mp3"
-        )
+        if video_url == "":
+            s3.download_file_from_s3(
+                presigned_url=audio_url,
+                save_directory="./tempFile/",
+                filename=file_name + ".mp3"
+            )
+        else:
+            s3.download_file_from_s3(
+                presigned_url=video_url,
+                save_directory="./tempFile/",
+                filename=file_name + ".mp4"
+            )
+            convert2audio.convert(
+                file_path = "./tempFile/" + file_name + ".mp4",
+                output_mp3_path= "./tempFile/" + file_name + ".mp3"
+            )
+            s3.upload_file_to_s3(
+                file_path="./tempFile/" + file_name + ".mp3",
+                presigned_url=audio_url
+            )
 
         transcribe.transcribe(
             intput_file_path="./tempFile/" + file_name + ".mp3",
@@ -130,6 +147,14 @@ class AudioProcessor:
 
         self.send_notification(is_ref, job_id, sub_user_id, record_id, ref_id, file_name)
         logging.info(f"Processed and sent notification for job {job_id}")
+        self.delete_file("./tempFile/" + file_name + ".mp4")
+        self.delete_file("./tempFile/" + file_name + ".mp3")
+        self.delete_file("./tempFile/" + file_name + ".mid")
+        self.delete_file("./tempFile/" + file_name + ".png")
+        self.delete_file("./tempFile/" + file_name + ".musicxml")
+        self.delete_file("./tempFile/" + file_name + ".json")
+        self.delete_file("./tempFile/" + file_name + "_ref" + ".json")
+        self.delete_file("./tempFile/" + file_name + "_notes" + ".mp3")
 
     def callback(self, ch, method, properties, body):
         try:
@@ -140,6 +165,7 @@ class AudioProcessor:
             record_id = data['recordId']
             ref_id = data['refId']
             file_name = data['fileName']
+            video_url = data['videoURL']
             audio_url = data['audioURL']
             midi_url = data['midiURL']
             sheet_url = data['sheetURL']
@@ -147,7 +173,7 @@ class AudioProcessor:
             report_url = data['reportURL']
             json_url = data['jsonURL']
 
-            self.process_audio(is_ref, job_id, sub_user_id, record_id, ref_id, file_name, audio_url, midi_url,
+            self.process_audio(is_ref, job_id, sub_user_id, record_id, ref_id, file_name, video_url, audio_url, midi_url,
                                sheet_url, waterfall_url, report_url, json_url)
             ch.basic_ack(delivery_tag=method.delivery_tag)
             logging.info(f"Acknowledged job {job_id}")
@@ -167,6 +193,15 @@ class AudioProcessor:
         if self.connection and not self.connection.is_closed:
             self.connection.close()
             logging.info('Closed connection.')
+
+    def delete_file(self, file_path):
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")
+        else:
+            print(f"The file {file_path} does not exist.")
 
 
 def main():

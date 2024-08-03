@@ -38,7 +38,7 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
                 api.setIdToken(idToken);
                 // console.log(idToken);
 
-                const response = await axios.get('http://10.4.131.115:8888/api/user/getSubUsers', {
+                const response = await axios.get('http://192.168.1.105:8888/api/user/getSubUsers', {
                     headers: {
                         Authorization: `Bearer ${idToken}`,
                     },
