@@ -255,38 +255,38 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
     const [tempLevel, setTempLevel] = useState('');
     const [tempAvatar, setTempAvatar] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                if (apiContext && activeKid) {
-                    const reqParams: GetSubUserByNameReqParams = {
+    const fetchUserData = async () => {
+        try {
+            if (apiContext && activeKid) {
+                const reqParams: GetSubUserByNameReqParams = {
+                    profileName: activeKid,
+                };
+                const response = await apiContext.user.getSubUserByName(reqParams);
+                if (response.code === 0) {
+                    const data = response.data;
+                    setProfileName(data.profileName);
+                    setGender(data.gender);
+                    setDob(data.dob);
+                    setInstrument(data.instrument);
+                    setBadges(data.badges); // 保留整个数组
+                    setBadge(data.badges && data.badges.length > 0 ? data.badges[data.badges.length - 1] : ''); // 只取最后一项
+                    setLevel(data.level);
+
+                    const getAvatarReq: GetAvatarReqParams = {
                         profileName: activeKid,
                     };
-                    const response = await apiContext.user.getSubUserByName(reqParams);
-                    if (response.code === 0) {
-                        const data = response.data;
-                        setProfileName(data.profileName);
-                        setGender(data.gender);
-                        setDob(data.dob);
-                        setInstrument(data.instrument);
-                        setBadges(data.badges); // 保留整个数组
-                        setBadge(data.badges && data.badges.length > 0 ? data.badges[data.badges.length - 1] : ''); // 只取最后一项
-                        setLevel(data.level);
-
-                        const getAvatarReq: GetAvatarReqParams = {
-                            profileName: activeKid,
-                        };
-                        const avatarResp = await apiContext.user.getAvatar(getAvatarReq);
-                        if (avatarResp.code === 0) {
-                            setAvatar(avatarResp.presignedurl);
-                        }
+                    const avatarResp = await apiContext.user.getAvatar(getAvatarReq);
+                    if (avatarResp.code === 0) {
+                        setAvatar(avatarResp.presignedurl);
                     }
                 }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchUserData().then(r => {});
     }, [activeKid, apiContext]);
 
@@ -296,7 +296,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
         setTempGender(gender);
         setTempDob(dob);
         setTempInstrument(instrument);
-        setTempBadge([...badges]); // 更新时，清空旧的 badge 内容
+        //setTempBadge([...badges]); // 更新时，清空旧的 badge 内容
         setTempLevel(level);
         setTempAvatar(avatar);
     }, [profileName, gender, dob, instrument, badges, level, avatar]);
@@ -314,15 +314,8 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
             if(apiContext){
                 const response = await apiContext.user.updateSubUserAttr(updateSubUserAttrReq);
                 if(response.code === 0){
-                    setProfileName(tempProfileName);
-                    setGender(tempGender);
-                    setDob(tempDob);
-                    setInstrument(tempInstrument);
-                    setBadge(tempBadge.join('')); // 更新主状态
-                    setLevel(tempLevel);
-                    setAvatar(tempAvatar);
+                    fetchUserData().then(r => {});
                     setIsEditing(false);
-                    setActiveKid(tempProfileName); // Update activeKid in Sidebar
                 }
             }
         } catch (error) {

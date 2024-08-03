@@ -306,8 +306,9 @@ const Home = () => {
     const [markedAccuracyPoints, setMarkedAccuracyPoints] = useState<number[]>([]);
 
     useEffect(() => {
-        const childrenKeys = Object.keys(childrenData);
-        setActiveKid(childrenKeys.length > 0 ? childrenKeys[0] : null);
+
+        // const childrenKeys = Object.keys(childrenData);
+        // setActiveKid(childrenKeys.length > 0 ? childrenKeys[0] : null);
 
         const handleResize = () => {
             setResizeKey(prevKey => prevKey + 1); // Increment key to force re-render
@@ -331,7 +332,7 @@ const Home = () => {
 
     const handleChartClick = (type: 'practice' | 'accuracy' | 'musicHistory') => {
         setActiveChartData(type);
-        setChartType('bar'); // 设置为优先展示柱形图
+        setChartType('bar');
         setIsModalOpen(true);
     };
 
