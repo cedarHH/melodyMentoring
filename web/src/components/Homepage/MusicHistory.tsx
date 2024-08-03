@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import { MusicItem, getMusicDataByKid } from '../../constants/musicData';
+import {GetPerformanceReportReq, GetRecordReq, GetReferenceReq} from "../../contexts/api/mediaComponents";
+import apiContext, {ApiContext} from "../../contexts/ApiContext";
 
 const MusicHistoryContainer = styled.div`
     background-color: #1B1C1E;
@@ -157,15 +159,66 @@ interface MusicHistoryProps {
 
 const MusicHistory: React.FC<MusicHistoryProps> = ({ activeKid, onClick }) => {
     const [musicData, setMusicData] = useState<MusicItem[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
+    const apiContext = useContext(ApiContext);
     const itemsPerPage = 11;
 
     useEffect(() => {
-        if (activeKid) {
-            const data = getMusicDataByKid(activeKid);
-            setMusicData(data);
-            setCurrentPage(1); // Reset to first page when activeKid changes
+        const fetchData = async () => {
+            if (activeKid && apiContext) {
+                const recordsReq: GetRecordReq = {
+                    profileName: activeKid,
+                    limit: itemsPerPage,
+                    offset: currentPage*itemsPerPage,
+                    start: -1,
+                    end: -1,
+                }
+                const recordsResp = await apiContext.record.getRecord(recordsReq);
+                if(recordsResp.code === 0) {
+                    if(recordsResp.data.length != 0) {
+                        console.log(recordsResp.data[0].RecordId)
+                        console.log(recordsResp.data[0].composition)
+                        console.log(recordsResp.data[0].reference)
+
+                        const refReq: GetReferenceReq = {
+                            refId: recordsResp.data[0].reference,
+                        }
+                        const refResp = await apiContext.record.getReference(refReq)
+                        if(refResp.code === 0) {
+                            console.log(refResp.data.title)
+                            console.log(refResp.data.composer)
+                            console.log(refResp.data.style)
+                            console.log(refResp.data.instrument)
+                        }
+
+                        const recordReq: GetPerformanceReportReq = {
+                            profileName: activeKid,
+                            recordId: recordsResp.data[0].RecordId,
+                        }
+                        const recordResp = await apiContext.record.getPerformanceReport(recordReq)
+                        if(recordResp.code === 0 ) {
+                            const response = await fetch(recordResp.presignedurl)
+                            if (response.ok) {
+                                const report = await response.json();
+                                console.log(report["Note accuracy"])
+                                console.log(report["Comment"])
+                                console.log(report["Detailed_Feedback"])
+                                console.log(report["Errors"])
+                                console.log(report["raw_diff"])
+                                console.log(report["Recommendations"])
+                                console.log(report["Detailed_Feedback"])
+                            }
+                        }
+                    }
+                }
+
+                // const data = getMusicDataByKid(activeKid);
+                // setMusicData(data);
+                // setCurrentPage(1); // Reset to first page when activeKid changes
+            }
         }
+
+        fetchData().then(r => {});
     }, [activeKid]);
 
     const indexOfLastItem = currentPage * itemsPerPage;
