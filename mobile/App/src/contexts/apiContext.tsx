@@ -152,8 +152,8 @@ interface ApiProviderProps {
 
 export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
     const [token, setToken] = useState<string | null>(null);
-    const userUrl = 'http://172.20.10.2:8888';
-    const mediaUrl = 'http://172.20.10.2:8889'
+    const userUrl = 'http://192.168.1.105:8888';
+    const mediaUrl = 'http://192.168.1.105:8889'
 
     const axiosInstance: AxiosInstance = axios.create({
         headers: {
