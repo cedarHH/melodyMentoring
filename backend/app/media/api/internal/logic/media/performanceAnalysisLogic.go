@@ -50,12 +50,28 @@ func (l *PerformanceAnalysisLogic) PerformanceAnalysis(
 		return nil, fmt.Errorf("failed to get record: %w", err)
 	}
 
-	fileName := record.Audio[:len(record.Audio)-4]
+	fileName, videoURL, audioURL := "", "", ""
 
-	audioURL, err := l.svcCtx.AudioModel.GetPresignedDownloadURL(l.ctx, record.Audio, 3600)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get presigned URL: %w", err)
+	if len(record.Audio) != 0 {
+		audioURL, err = l.svcCtx.AudioModel.GetPresignedDownloadURL(l.ctx, record.Audio, 3600)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get presigned URL: %w", err)
+		}
+		fileName = record.Audio[:len(record.Audio)-4]
+	} else if len(record.Video) != 0 {
+		fileName = record.Video[:len(record.Video)-4]
+		videoURL, err = l.svcCtx.VideoModel.GetPresignedDownloadURL(l.ctx, record.Video, 3600)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get presigned URL: %w", err)
+		}
+		audioURL, err = l.svcCtx.AudioModel.GetPresignedUploadURL(l.ctx, fileName+".mp3", 3600)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get presigned URL: %w", err)
+		}
+	} else {
+		return nil, fmt.Errorf("failed to get audio and video: %w", err)
 	}
+
 	midiURL, err := l.svcCtx.MidiModel.GetPresignedUploadURL(
 		l.ctx, fileName+".mid", 3600)
 	if err != nil {
@@ -87,10 +103,10 @@ func (l *PerformanceAnalysisLogic) PerformanceAnalysis(
 	message := fmt.Sprintf(
 		`{"isRef":"%s", "jobId":%d, "subUserId":"%s",
 				 "recordId":%d, "refId":"%s", "fileName":"%s", 
-				"audioURL":"%s", "midiURL":"%s", "sheetURL":"%s", 
+				"videoURL":"%s", "audioURL":"%s", "midiURL":"%s", "sheetURL":"%s", 
 				"waterfallURL":"%s", "reportURL":"%s", "jsonURL":"%s"}`,
 		"FALSE", jobId, subUserId, recordId, "", fileName,
-		audioURL, midiURL, sheetURL, waterfallURL, reportURL, jsonURL)
+		videoURL, audioURL, midiURL, sheetURL, waterfallURL, reportURL, jsonURL)
 
 	err = l.svcCtx.AudioProcessingQueue.SendMessage(message)
 	if err != nil {

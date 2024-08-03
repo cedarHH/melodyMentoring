@@ -40,8 +40,8 @@ def get_feedback(
         "numerator": Displays relevant data in user_performance,
         "denominator": Displays relevant data in user_performance
         "Note accuracy": "xx%",
-        "Velocity accuracy": "moderate",
-        "Duration accuracy": "outstanding",
+        "Velocity accuracy": "Unsatisfactory|Poor|Needs Improvement|Acceptable|Satisfactory|Excellent|Outstanding",
+        "Duration accuracy": "Unsatisfactory|Poor|Needs Improvement|Acceptable|Satisfactory|Excellent|Outstanding",
         "Comment": "generated comment",
         "Errors": [
             {{
