@@ -1,4 +1,5 @@
 import re
+import os
 import pika
 import json
 import yaml
@@ -146,6 +147,14 @@ class AudioProcessor:
 
         self.send_notification(is_ref, job_id, sub_user_id, record_id, ref_id, file_name)
         logging.info(f"Processed and sent notification for job {job_id}")
+        self.delete_file("./tempFile/" + file_name + ".mp4")
+        self.delete_file("./tempFile/" + file_name + ".mp3")
+        self.delete_file("./tempFile/" + file_name + ".mid")
+        self.delete_file("./tempFile/" + file_name + ".png")
+        self.delete_file("./tempFile/" + file_name + ".musicxml")
+        self.delete_file("./tempFile/" + file_name + ".json")
+        self.delete_file("./tempFile/" + file_name + "_ref" + ".json")
+        self.delete_file("./tempFile/" + file_name + "_notes" + ".mp3")
 
     def callback(self, ch, method, properties, body):
         try:
@@ -184,6 +193,15 @@ class AudioProcessor:
         if self.connection and not self.connection.is_closed:
             self.connection.close()
             logging.info('Closed connection.')
+
+    def delete_file(self, file_path):
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")
+        else:
+            print(f"The file {file_path} does not exist.")
 
 
 def main():

@@ -75,10 +75,10 @@ func (l *UploadRefAudioSuccessLogic) UploadRefAudioSuccess(
 
 	message := fmt.Sprintf(
 		`{"isRef":"%s", "jobId":%d, "subUserId":"%s",
-				 "recordId":%d, "refId":"%s", "fileName":"%s", 
+				 "recordId":%d, "refId":"%s", "fileName":"%s","videoURL":"%s",  
 				"audioURL":"%s", "midiURL":"%s", "sheetURL":"%s", 
 				"waterfallURL":"%s", "reportURL":"%s", "jsonURL":"%s"}`,
-		"TRUE", jobId, "", 0, refId, refId,
+		"TRUE", jobId, "", 0, refId, refId, "",
 		audioURL, midiURL, sheetURL, waterfallURL, "", jsonURL)
 
 	err = l.svcCtx.AudioProcessingQueue.SendMessage(message)
