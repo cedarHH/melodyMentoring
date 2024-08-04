@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, StyleSheet, Text, FlatList, TouchableOpacity, Modal, TextInput, Image, Alert } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../contexts/types';
+import React, {useEffect, useState, useCallback} from 'react';
+import {View, StyleSheet, Text, FlatList, TouchableOpacity, Modal, TextInput, Image, Alert} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../contexts/types';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AddForm from './AddForm';
-import { useApi } from '../../contexts/apiContext';
-import { VerifypinReq, VerifypinResp } from '../../contexts/apiParams/usercenterComponents';
+import {useApi} from '../../contexts/apiContext';
+import {VerifypinReq, VerifypinResp} from '../../contexts/apiParams/usercenterComponents';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type SubUserNavigationProp = StackNavigationProp<RootStackParamList, 'SubUser'>;
 
@@ -17,13 +18,14 @@ interface Item {
     profileName: string;
 }
 
-const SubUser: React.FC<Props> = ({ navigation }) => {
+const SubUser: React.FC<Props> = ({navigation}) => {
     const [data, setData] = useState<Item[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [pinModalVisible, setPinModalVisible] = useState(false);
     const [pin, setPin] = useState<string>('');
-    const [selectedProfileName, setSelectedProfileName] = useState<string | null>(null);
+    const [selectedProfileName, setSelectedProfileName] = useState<string>('');
+    const [isFirstLogin, setIsFirstLogin] = useState<boolean | null>(null);
     const api = useApi();
     const logo = require('../../assets/img/logo/mygo1.png');
 
@@ -40,23 +42,37 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
         }
     };
 
+    const checkFirstLogin = async (profileName: string) => {
+        try {
+            const storedValue = await AsyncStorage.getItem(`isFirstLogin_${profileName}`);
+            if (storedValue === null) {
+                await AsyncStorage.setItem(`isFirstLogin_${profileName}`, 'false');
+                setIsFirstLogin(true);
+            } else {
+                setIsFirstLogin(storedValue === 'true');
+            }
+        } catch (error) {
+            console.error('Error checking first login:', error);
+        }
+    };
+
     useEffect(() => {
         fetchData().catch(console.error);
     }, []);
 
-    const onPressHandler = useCallback(({ item, index }: { item: typeof data[0], index: number }) => {
+    const onPressHandler = useCallback(({item, index}: { item: typeof data[0], index: number }) => {
         setSelectedProfileName(item.profileName);
         setSelectedIndex(index);
         setPinModalVisible(true);
     }, [selectedIndex]);
 
-    const renderItem = useCallback(({ item, index }: { item: typeof data[0], index: number }) => {
+    const renderItem = useCallback(({item, index}: { item: typeof data[0], index: number }) => {
         const isSelected = selectedIndex === index;
 
         return (
             <TouchableOpacity
                 style={[styles.card, isSelected && styles.cardSelected]}
-                onPress={() => onPressHandler({ item, index })}
+                onPress={() => onPressHandler({item, index})}
                 activeOpacity={0.7}
             >
                 <Text>{item.profileName}</Text>
@@ -74,16 +90,20 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
     };
 
     const handlePinSubmit = async () => {
-        if (selectedProfileName && pin) {
+        if (pin) {
             try {
-                const reqParams: VerifypinReq = { profileName: selectedProfileName, pin: pin };
-                console.log(reqParams);
+                const reqParams: VerifypinReq = {profileName: selectedProfileName, pin: pin};
                 const response: VerifypinResp = await api.user.verifyPin(reqParams);
-                console.log(response);
 
                 if (response.code === 0) {
+                    await checkFirstLogin(selectedProfileName);
                     setPinModalVisible(false);
-                    navigation.navigate('Configure', { profileName: selectedProfileName });
+
+                    if (isFirstLogin !== null && isFirstLogin) {
+                        navigation.navigate('Configure', {profileName: selectedProfileName});
+                    } else {
+                        navigation.navigate('Home', {profileName: selectedProfileName});
+                    }
                 } else {
                     Alert.alert('Error', 'Invalid PIN');
                 }
@@ -109,9 +129,9 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
                 />
             </View>
             <View style={styles.adduser}>
-                <Icon name='add' size={40} color={'#05fdfd'} onPress={handleAddUserPress} />
+                <Icon name='add' size={40} color={'#05fdfd'} onPress={handleAddUserPress}/>
             </View>
-            <AddForm visible={isModalVisible} onClose={handleCloseModal} />
+            <AddForm visible={isModalVisible} onClose={handleCloseModal}/>
 
             {/* PIN Modal */}
             <Modal
@@ -122,7 +142,7 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Image source={logo} style={styles.logo} />
+                        <Image source={logo} style={styles.logo}/>
                         <Text style={styles.modalTitle}>Enter PIN</Text>
                         <TextInput
                             style={styles.pinInput}
@@ -182,16 +202,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         shadowColor: 'white',
-        shadowOffset: { width: 0, height: 5 },
+        shadowOffset: {width: 0, height: 5},
         shadowOpacity: 0.8,
         elevation: 8,
     },
     cardSelected: {
         shadowColor: '#05fdfd',
-        shadowOffset: { width: 0, height: 5 },
+        shadowOffset: {width: 0, height: 5},
         shadowOpacity: 0.8,
         elevation: 12,
-        transform: [{ scale: 1.2 }]
+        transform: [{scale: 1.2}]
     },
     modalContainer: {
         flex: 1,

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import CustomButton from '../../../components/MISC/Button';
-import { responsiveHeight, responsiveWidth, responsiveFontSize,  } from 'react-native-responsive-dimensions';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { useAppDispatch, useAppSelector, RootState, setAuthMode, AuthMode, showNotificationWithTimeout } from '../../../store';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../contexts/types';
-import { useApi } from '../../../contexts/apiContext';
 import Notification from '../../../components/MISC/Notification';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Welcome'>;
