@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MusicXML Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vexflow/1.2.93/vexflow-min.js"></script>
+</head>
+<body>
+    <div id="music-container"></div>
+    <script>
+        document.addEventListener("message", function(event) {
+            const musicXML = event.data;
+            const vf = new Vex.Flow.Factory({
+                renderer: {elementId: 'music-container', width: 800, height: 400}
+            });
+            const score = vf.EasyScore();
+            const system = vf.System();
+
+            // Convert MusicXML to VexFlow format (this is a simplified example)
+            // You might need to use a library to fully convert MusicXML to VexFlow format
+            const voice = score.voice(score.notes('C#5/q, B4, A4, G#4'));
+
+            system.addStave({
+                voices: [voice]
+            }).addClef('treble').addTimeSignature('4/4');
+
+            vf.draw();
+        });
+    </script>
+</body>
+</html>
