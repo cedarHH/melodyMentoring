@@ -1,17 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../contexts/types';
-import {RouteProp} from '@react-navigation/native';
-import {useApi} from '../../contexts/apiContext';
-import {styles} from './ui';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../contexts/types';
+import { RouteProp } from '@react-navigation/native';
+import { useApi } from '../../contexts/apiContext';
+import { styles } from './ui';
 import {
     GetPerformanceReportReq,
-    GetPerformanceReportResp,
-    GetAnalysisResultReqParams,
-    GetAnalysisResultResp,
+    GetPerformanceReportResp
 } from "../../contexts/apiParams/mediaComponents";
-import {GetReferenceReq, GetReferenceResp} from "../../contexts/apiParams/mediaComponents";
+import { GetReferenceReq, GetReferenceResp } from "../../contexts/apiParams/mediaComponents";
 
 type ResultScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Result'>;
 type ResultScreenRouteProp = RouteProp<RootStackParamList, 'Result'>;
@@ -21,8 +19,8 @@ type Props = {
     route: ResultScreenRouteProp;
 };
 
-const ResultScreen: React.FC<Props> = ({navigation, route}) => {
-    const {profileName, recordId, referenceId} = route.params;
+const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
+    const { profileName, recordId, referenceId } = route.params;
     const [noteAccuracy, setNoteAccuracy] = useState<string>('Loading...');
     const [velocityAccuracy, setVelocityAccuracy] = useState<string>('Loading...');
     const [durationAccuracy, setDurationAccuracy] = useState<string>('Loading...');
@@ -31,35 +29,57 @@ const ResultScreen: React.FC<Props> = ({navigation, route}) => {
     const [feedback, setFeedback] = useState<string>('Loading...');
     const [recommendations, setRecommendations] = useState<string>('Loading...');
     const [loading, setLoading] = useState<boolean>(true);
-    const [songName, setSongName] = useState<string>('Loading...');
-    const [waitMessage, setWaitMessage] = useState<string>('Please wait...');
-    const [analysisCompleted, setAnalysisCompleted] = useState<boolean>(false);
+    const [songName, setSongName] = useState<string>('Loading...'); // 新增状态
+
     const api = useApi();
 
-    const fetchResults = async () => {
-        try {
-            setLoading(true);
+    useEffect(() => {
+        const fetchPerformanceReport = async () => {
+            try {
+                setLoading(true);
 
-            const performanceParams: GetPerformanceReportReq = {
-                profileName,
-                recordId
-            };
-            console.log("111")
-            const performanceResponse: GetPerformanceReportResp = await api.record.getPerformanceReport(performanceParams);
+                const performanceParams: GetPerformanceReportReq = {
+                    profileName,
+                    recordId
+                };
+                const performanceResponse: GetPerformanceReportResp = await api.record.getPerformanceReport(performanceParams);
 
-            if (performanceResponse.code === 0) {
-                const response = await fetch(performanceResponse.presignedurl);
-                const data = await response.json();
+                if (performanceResponse.code === 0) {
+                    const response = await fetch(performanceResponse.presignedurl);
+                    const data = await response.json();
 
-                setNoteAccuracy(data['Note accuracy']);
-                setVelocityAccuracy(data['Velocity accuracy']);
-                setDurationAccuracy(data['Duration accuracy']);
-                setComment(data['Comment']);
-                setErrors(data['Errors']);
-                setFeedback(data['Detailed_Feedback']);
-                setRecommendations(data['Recommendations']);
-            } else {
-                console.error('Error fetching performance report:', performanceResponse.msg);
+                    setNoteAccuracy(data['Note accuracy']);
+                    setVelocityAccuracy(data['Velocity accuracy']);
+                    setDurationAccuracy(data['Duration accuracy']);
+                    setComment(data['Comment']);
+                    setErrors(data['Errors']);
+                    setFeedback(data['Detailed_Feedback']);
+                    setRecommendations(data['Recommendations']);
+                } else {
+                    console.error('Error fetching performance report:', performanceResponse.msg);
+                    setNoteAccuracy('Error');
+                    setVelocityAccuracy('Error');
+                    setDurationAccuracy('Error');
+                    setComment('Error');
+                    setErrors('Error');
+                    setFeedback('Error');
+                    setRecommendations('Error');
+                }
+
+                // 获取Reference信息
+                const referenceParams: GetReferenceReq = {
+                    refId: referenceId
+                };
+                const referenceResponse: GetReferenceResp = await api.reference.getReference(referenceParams);
+
+                if (referenceResponse.code === 0) {
+                    setSongName(referenceResponse.data.title);
+                } else {
+                    console.error('Error fetching reference:', referenceResponse.msg);
+                    setSongName('Error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
                 setNoteAccuracy('Error');
                 setVelocityAccuracy('Error');
                 setDurationAccuracy('Error');
@@ -67,81 +87,20 @@ const ResultScreen: React.FC<Props> = ({navigation, route}) => {
                 setErrors('Error');
                 setFeedback('Error');
                 setRecommendations('Error');
-            }
-
-            const referenceParams: GetReferenceReq = {
-                refId: referenceId
-            };
-            const referenceResponse: GetReferenceResp = await api.reference.getReference(referenceParams);
-
-            if (referenceResponse.code === 0) {
-                setSongName(referenceResponse.data.title);
-            } else {
-                console.error('Error fetching reference:', referenceResponse.msg);
                 setSongName('Error');
+            } finally {
+                setLoading(false); // 请求完成时设置为false
             }
-        } finally {
-            setLoading(false);
-        }
-    };
+        };
 
-    useEffect(() => {
-        // 声明 intervalId 变量
-        let intervalId: NodeJS.Timeout;
-
-        // const fetchAnalysisResult = async () => {
-        //     try {
-        //         setLoading(true);
-        //
-        //         const analysisParams: GetAnalysisResultReqParams = {
-        //             analysisId: analysisId
-        //         };
-        //         console.log(analysisParams);
-        //
-        //         intervalId = setInterval(async () => {
-        //             const analysisResponse: GetAnalysisResultResp = await api.analysis.getAnalysisResult(analysisParams);
-        //
-        //             console.log(123213);
-        //             console.log(analysisResponse);
-        //             if (analysisResponse.code === 0) {
-        //                 clearInterval(intervalId); // 如果成功，停止轮询
-        //
-        //                 const performanceParams: GetPerformanceReportReq = {
-        //                     profileName,
-        //                     recordId
-        //                 };
-        //                 console.log("111")
-        //
-        //             } else {
-        //                 setWaitMessage(`Please wait... ${analysisResponse.msg}`);
-        //             }
-        //         }, 1000);
-        //
-        //     } catch (error) {
-        //         console.error('Error:', error);
-        //         setNoteAccuracy('Error');
-        //         setVelocityAccuracy('Error');
-        //         setDurationAccuracy('Error');
-        //         setComment('Error');
-        //         setErrors('Error');
-        //         setFeedback('Error');
-        //         setRecommendations('Error');
-        //         setSongName('Error');
-        //     } finally {
-        //         setLoading(false);
-        //     }
-        // };
-        //
-        // fetchAnalysisResult();
-
-        return () => clearInterval(intervalId);
+        fetchPerformanceReport();
     }, [recordId, referenceId]);
 
     if (loading) {
         return (
             <View style={[styles.container, styles.loadingContainer]}>
-                <ActivityIndicator size="large" color="#05fdfd"/>
-                <Text style={styles.loadingText}>{waitMessage}</Text>
+                <ActivityIndicator size="large" color="#05fdfd" />
+                <Text style={styles.loadingText}>Loading performance report...</Text>
             </View>
         );
     }
@@ -200,7 +159,7 @@ const ResultScreen: React.FC<Props> = ({navigation, route}) => {
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity
                         style={styles.playAgainButton}
-                        onPress={() => navigation.navigate('Main', {profileName: profileName})}
+                        onPress={() => navigation.navigate('Home', {profileName: profileName})}
                     >
                         <Text style={styles.playAgainButtonText}>Play again</Text>
                     </TouchableOpacity>
