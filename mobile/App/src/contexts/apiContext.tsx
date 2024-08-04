@@ -88,7 +88,7 @@ import {
     UploadVideoSuccessReq,
     UploadVideoSuccessResp
 } from "./apiParams/mediaComponents";
-
+import {REACT_APP_USER_URL, REACT_APP_MEDIA_URL} from '@env';
 
 interface ApiContextType {
     user: {
@@ -152,8 +152,8 @@ interface ApiProviderProps {
 
 export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
     const [token, setToken] = useState<string | null>(null);
-    const userUrl = 'http://10.4.131.115:8888';
-    const mediaUrl = 'http://10.4.131.115:8889'
+    const userUrl = REACT_APP_USER_URL;
+    const mediaUrl = REACT_APP_MEDIA_URL;
 
     const axiosInstance: AxiosInstance = axios.create({
         headers: {
