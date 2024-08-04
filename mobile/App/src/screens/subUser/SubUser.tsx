@@ -2,12 +2,10 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet, Text, FlatList, TouchableOpacity, Modal, TextInput, Image, Alert } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../contexts/types';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AddForm from './AddForm';
 import { useApi } from '../../contexts/apiContext';
-import { CreateSubUserResp, VerifypinReq, VerifypinResp } from '../../contexts/apiParams/usercenterComponents';
+import { VerifypinReq, VerifypinResp } from '../../contexts/apiParams/usercenterComponents';
 
 type SubUserNavigationProp = StackNavigationProp<RootStackParamList, 'SubUser'>;
 
@@ -31,26 +29,11 @@ const SubUser: React.FC<Props> = ({ navigation }) => {
 
     const fetchData = async () => {
         try {
-            const tokenStr = await AsyncStorage.getItem('Token');
-            if (tokenStr) {
-                const tokenData = JSON.parse(tokenStr);
-                const idToken = tokenData.idToken;
-                api.setIdToken(idToken);
-                // console.log(idToken);
-
-                const response = await axios.get('http://192.168.1.105:8888/api/user/getSubUsers', {
-                    headers: {
-                        Authorization: `Bearer ${idToken}`,
-                    },
-                });
-
-                if (response.data.code === 0) {
-                    setData(response.data.data);
-                } else {
-                    console.error('Error fetching data:', response.data.msg);
-                }
+            const response = await api.user.getSubUsers();
+            if (response.code === 0) {
+                setData(response.data);
             } else {
-                console.error('No token found');
+                console.error('Error fetching data:', response.msg);
             }
         } catch (error) {
             console.error('Error fetching data:', error);

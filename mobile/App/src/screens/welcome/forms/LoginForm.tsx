@@ -5,6 +5,7 @@ import { responsiveHeight, responsiveWidth, responsiveFontSize,  } from 'react-n
 import { useAppDispatch, useAppSelector, RootState, setAuthMode, AuthMode, showNotificationWithTimeout } from '../../../store';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../contexts/types';
+import { useApi } from '../../../contexts/apiContext';
 import Notification from '../../../components/MISC/Notification';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Welcome'>;
@@ -22,11 +23,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onBack, onLogin, navigation }) =>
     const loading = useAppSelector((state: RootState) => state.auth.loading);
 
     const handleLogin = () => {
-        if (!email || !password) {
-            dispatch(showNotificationWithTimeout("Email and Password are required"));
-            return;
+        try {
+            onLogin(email, password, navigation);
+        } catch (error: any) {
+            const errorMessage = error.message;
+            dispatch(showNotificationWithTimeout(errorMessage));
         }
-        onLogin(email, password, navigation);
     };
 
     const handleForgotPassword = () => {
@@ -55,7 +57,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onBack, onLogin, navigation }) =>
                 />
             </View>
 
-            <Notification width="60%" />
+            <Notification width="50%" />
 
             <View style={styles.forgetContainer}>
                 <TouchableOpacity onPress={handleForgotPassword}>

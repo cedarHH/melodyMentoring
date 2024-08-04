@@ -17,18 +17,13 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onBack }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleSignUp = () => {
-        if (!email || !username || !password || !confirmPassword) {
-            const errorMessage = 'All fields are required';
-            dispatch(showNotificationWithTimeout(errorMessage)); // Show notification
-            return;
+    const handleSignUp = async () => {
+        try {
+            onSignUp(email, username, password, confirmPassword);
+        } catch (error: any) {
+            const errorMessage = error.message;
+            dispatch(showNotificationWithTimeout(errorMessage));
         }
-        if (password !== confirmPassword) {
-            const errorMessage = 'Passwords do not match';
-            dispatch(showNotificationWithTimeout(errorMessage)); // Show notification
-            return;
-        }
-        onSignUp(email, username, password, confirmPassword);
     };
 
     return (
@@ -68,13 +63,14 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onBack }) => {
                     secureTextEntry
                 />
             </View>
-            <Notification width="60%" />
+            <Notification width="50%" />
             <View style={styles.buttonContainer}>
                 <CustomButton
                     text="Sign Up"
                     onPress={handleSignUp}
                     style={styles.button_1}
                 />
+                <View style={{ width: responsiveWidth(2) }} />
                 <CustomButton
                     text="Back"
                     onPress={onBack}
@@ -98,8 +94,8 @@ const styles = StyleSheet.create({
     },
     input: {
         width: responsiveWidth(45),
-        height: responsiveHeight(5.5),
-        padding: 10,
+        height: responsiveHeight(4.5),
+        padding: 5,
         marginVertical: 5,
         borderWidth: 1,
         borderColor: '#ccc',
@@ -108,15 +104,20 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         display: 'flex',
+        flexDirection: 'row',
+        margin: 0,
+        justifyContent: "space-between",
     },
     button_1: {
-        width: responsiveWidth(45),
-        height: responsiveHeight(5),
+        display: 'flex',
+        width: responsiveWidth(20),
+        height: responsiveHeight(4),
         padding: 0,
     },
     button_2: {
-        width: responsiveWidth(45),
-        height: responsiveHeight(5),
+        display: 'flex',
+        width: responsiveWidth(20),
+        height: responsiveHeight(4),
         padding: 0,
         backgroundColor: '#666666',
     },

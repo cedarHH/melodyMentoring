@@ -23,6 +23,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onBack }) => {
             await dispatch(resetPassword(email, verificationCode, newPassword) as any);
             dispatch(showNotification("Password Reset Successful: You can now log in with your new password."));
         } catch (err: any) {
+            console.error(err);
             dispatch(showNotification(err.message || 'Error resetting password'));
         }
     };
@@ -36,19 +37,9 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onBack }) => {
         }
     };
 
-    useEffect(() => {
-        if (notification) {
-            const timer = setTimeout(() => {
-                dispatch(hideNotification());
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [notification, dispatch]);
-
     return (
         <View style={styles.container}>
-            {notification && <Notification width="100%" />}
+            {notification && <Notification width="50%" />}
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
@@ -85,10 +76,11 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onBack }) => {
             </View>
             <View style={styles.buttonContainer}>
                 <CustomButton
-                    text={loading ? "Resetting..." : "Reset Password"}
+                    text={loading ? "Resetting..." : "Reset"}
                     onPress={handleReset}
                     style={styles.button_1}
                 />
+                <View style={{ width: responsiveWidth(2) }} />
                 <CustomButton
                     text="Back"
                     onPress={onBack}
@@ -103,18 +95,17 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         alignItems: 'center',
-        marginTop: -responsiveHeight(25),
+        marginTop: -responsiveHeight(40),
         width: '100%',
     },
     inputContainer: {
         display: 'flex',
-
     },
     input: {
         width: responsiveWidth(45),
-        height: responsiveHeight(6),
+        height: responsiveHeight(5),
         margin: 20,
-        padding: 10,
+        padding: 5,
         marginVertical: 5,
         borderWidth: 1,
         borderColor: '#ccc',
@@ -122,16 +113,17 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     verificationContainer: {
+        display: "flex",
         flexDirection: 'row',
         alignItems: 'center',
         width: responsiveWidth(45),
+        marginLeft: responsiveWidth(5.2),
         marginVertical: 5,
     },
     verificationInput: {
-        flex: 1,
-        width: responsiveWidth(50),
-        height: responsiveHeight(6),
-        padding: 10,
+        width: responsiveWidth(45),
+        height: responsiveHeight(5),
+        padding: 5,
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
@@ -139,20 +131,21 @@ const styles = StyleSheet.create({
     },
     sendButton: {
         marginLeft: 10,
-        width: responsiveWidth(20),
-        height: responsiveHeight(6),
+        width: responsiveWidth(18),
+        height: responsiveHeight(5),
         padding: 0,
     },
     buttonContainer: {
         display: 'flex',
+        flexDirection: "row",
     },
     button_1: {
-        width: responsiveWidth(45),
+        width: responsiveWidth(20),
         height: responsiveHeight(5),
         padding: 0,
     },
     button_2: {
-        width: responsiveWidth(45),
+        width: responsiveWidth(20),
         height: responsiveHeight(5),
         padding: 0,
         backgroundColor: '#666666',
