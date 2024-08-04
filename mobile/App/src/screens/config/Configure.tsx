@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Image, Alert} from 'react-native';
 import CustomButton from '../../components/MISC/Button';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../contexts/types';
 import {responsiveHeight, responsiveWidth, responsiveFontSize} from 'react-native-responsive-dimensions';
 import {RouteProp} from '@react-navigation/native';
-import {useAppDispatch, useAppSelector, setFirstLogin, RootState} from '../../store';
+import {useAppDispatch, setFirstLogin} from '../../store';
 import {useApi} from '../../contexts/apiContext';
 import * as ImagePicker from 'expo-image-picker';
 import {
@@ -24,7 +24,6 @@ type Props = {
 
 const Configure: React.FC<Props> = ({navigation, route}) => {
     const dispatch = useAppDispatch();
-    const isFirstLogin = useAppSelector((state: RootState) => state.firstLogin.isFirstLogin);
     const {profileName} = route.params;
     const api = useApi();
 
@@ -33,12 +32,6 @@ const Configure: React.FC<Props> = ({navigation, route}) => {
     const [level, setLevel] = useState('');
     const [instrument, setInstrument] = useState('');
     const [dob, setDob] = useState('');
-
-    useEffect(() => {
-        if (isFirstLogin === false) {
-            navigation.replace('Home', {profileName});
-        }
-    }, [isFirstLogin, navigation]);
 
     const handleCompleteSetup = async() => {
         try {

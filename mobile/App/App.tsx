@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Provider} from 'react-redux';
-import {store, RootState, checkFirstLogin, useAppDispatch, useAppSelector} from './src/store';
+import {store} from './src/store';
 import Welcome from './src/screens/welcome/main/Welcome';
 import Home from './src/screens/home/Home';
 import User from './src/screens/user/User';
@@ -18,9 +18,6 @@ import {ApiProvider} from './src/contexts/apiContext';
 const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
-    const dispatch = useAppDispatch();
-    const isFirstLogin = useAppSelector((state: RootState) => state.firstLogin.isFirstLogin);
-
     useEffect(() => {
         ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
             .then(() => {
@@ -30,13 +27,7 @@ const AppNavigator = () => {
                 console.error('Failed to lock screen orientation:', error);
             });
 
-        dispatch(checkFirstLogin());
-    }, [dispatch]);
-
-    if (isFirstLogin === null) {
-        // You can return a loading screen or null until the initial route is determined
-        return null;
-    }
+    });
 
     return (
         <NavigationContainer>

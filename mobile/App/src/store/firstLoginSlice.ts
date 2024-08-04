@@ -2,39 +2,44 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch } from './index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+interface SubUserLoginState {
+    [profileName: string]: boolean | null;
+}
+
 interface FirstLoginState {
-    isFirstLogin: boolean | null;
+    subUserLogins: SubUserLoginState;
 }
 
 const initialState: FirstLoginState = {
-    isFirstLogin: null,
+    subUserLogins: {},
 };
 
 const firstLoginSlice = createSlice({
     name: 'firstLogin',
     initialState,
     reducers: {
-        setFirstLogin(state, action: PayloadAction<boolean>) {
-            state.isFirstLogin = action.payload;
-        },
+        setFirstLogin(state, action: PayloadAction<{ profileName: string, isFirstLogin: boolean }>) {
+            state.subUserLogins[action.payload.profileName] = action.payload.isFirstLogin;
+            console.log(`Set first login state for ${action.payload.profileName}:`, action.payload.isFirstLogin);
+            },
     },
 });
 
 export const { setFirstLogin } = firstLoginSlice.actions;
 
-export const checkFirstLogin = () => async (dispatch: AppDispatch) => {
+export const checkFirstLogin = (profileName: string) => async (dispatch: AppDispatch) => {
     try {
-        const isFirstLogin = await AsyncStorage.getItem('isFirstLogin');
-        if (isFirstLogin === null) {
-            await AsyncStorage.setItem('isFirstLogin', 'false');
-            dispatch(setFirstLogin(true));
+        const storedValue = await AsyncStorage.getItem(`isFirstLogin_${profileName}`);
+        if (storedValue === null) {
+            await AsyncStorage.setItem(`isFirstLogin_${profileName}`, 'false');
+            dispatch(setFirstLogin({ profileName, isFirstLogin: true }));
+        } else if (storedValue === 'true') {
+            dispatch(setFirstLogin({profileName, isFirstLogin: true}));
         } else {
-            dispatch(setFirstLogin(false));
+            dispatch(setFirstLogin({ profileName, isFirstLogin: false }));
         }
-        // // test, always true
-        // dispatch(setFirstLogin(true));
     } catch (error) {
-        console.error('Failed to check first login:', error);
+        console.error('check first login false', error);
     }
 };
 
