@@ -88,7 +88,7 @@ import {
     UploadVideoSuccessReq,
     UploadVideoSuccessResp
 } from "./apiParams/mediaComponents";
-
+import { REACT_APP_URL } from '@env';
 
 interface ApiContextType {
     user: {
@@ -152,10 +152,10 @@ interface ApiProviderProps {
 
 export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
     const [token, setToken] = useState<string | null>(null);
-    const userUrl = 'http://192.168.1.105:8888';
-    const mediaUrl = 'http://192.168.1.105:8889'
+    const baseUrl = REACT_APP_URL;
 
     const axiosInstance: AxiosInstance = axios.create({
+        baseURL: baseUrl,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -182,7 +182,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @description "get the list of sub-users"
          */
         getSubUsers: async (): Promise<GetSubUsersResp> => {
-            const response = await axiosInstance.get<GetSubUsersResp>(`${userUrl}/api/user/getSubUsers`);
+            const response = await axiosInstance.get<GetSubUsersResp>(`/api/user/getSubUsers`);
             return response.data;
         },
 
@@ -191,7 +191,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param params
          */
         getSubUserByName: async (params: GetSubUserByNameReqParams): Promise<GetSubUserByNameResp> => {
-            const response = await axiosInstance.get<GetSubUserByNameResp>(`${userUrl}/api/user/getSubUserByName?profileName=${params.profileName}`);
+            const response = await axiosInstance.get<GetSubUserByNameResp>(`/api/user/getSubUserByName?profileName=${params.profileName}`);
             return response.data;
         },
 
@@ -200,7 +200,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         createSubUser: async (req: CreateSubUserReq): Promise<CreateSubUserResp> => {
-            const response = await axiosInstance.post<CreateSubUserResp>(`${userUrl}/api/user/createSubUser`, req);
+            const response = await axiosInstance.post<CreateSubUserResp>(`/api/user/createSubUser`, req);
             return response.data;
         },
 
@@ -209,7 +209,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         deleteSubUserByName: async (req: DeleteSubUserByNameReq): Promise<DeleteSubUserByNameResp> => {
-            const response = await axiosInstance.post<DeleteSubUserByNameResp>(`${userUrl}/api/user/deleteSubUserByName`, req);
+            const response = await axiosInstance.post<DeleteSubUserByNameResp>(`/api/user/deleteSubUserByName`, req);
             return response.data;
         },
 
@@ -218,7 +218,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param params
          */
         getAvatar: async (params: GetAvatarReqParams): Promise<GetAvatarResp> => {
-            const response = await axiosInstance.get<GetAvatarResp>(`${userUrl}/api/user/getAvatar?profileName=${params.profileName}`);
+            const response = await axiosInstance.get<GetAvatarResp>(`/api/user/getAvatar?profileName=${params.profileName}`);
             return response.data;
         },
 
@@ -227,7 +227,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param params
          */
         getAvatarUploadUrl: async (params: GetAvatarUploadUrlReqParams): Promise<GetAvatarUploadUrlResp> => {
-            const response = await axiosInstance.get<GetAvatarUploadUrlResp>(`${userUrl}/api/user/getAvatarUploadUrl?profileName=${params.profileName}`);
+            const response = await axiosInstance.get<GetAvatarUploadUrlResp>(`/api/user/getAvatarUploadUrl?profileName=${params.profileName}`);
             return response.data;
         },
 
@@ -236,7 +236,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         updateAvatarSuccess: async (req: UpdateAvatarSuccessReq): Promise<UpdateAvatarSuccessResp> => {
-            const response = await axiosInstance.post<UpdateAvatarSuccessResp>(`${userUrl}/api/user/updateAvatarSuccess`, req);
+            const response = await axiosInstance.post<UpdateAvatarSuccessResp>(`/api/user/updateAvatarSuccess`, req);
             return response.data;
         },
 
@@ -245,7 +245,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         updateSubUserAttr: async (req: UpdateSubUserAttrReq): Promise<UpdateSubUserAttrResp> => {
-            const response = await axiosInstance.post<UpdateSubUserAttrResp>(`${userUrl}/api/user/updateSubUserAttr`, req);
+            const response = await axiosInstance.post<UpdateSubUserAttrResp>(`/api/user/updateSubUserAttr`, req);
             return response.data;
         },
 
@@ -254,7 +254,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         verifyPin: async (req: VerifypinReq): Promise<VerifypinResp> => {
-            const response = await axiosInstance.post<VerifypinResp>(`${userUrl}/api/user/verifypin`, req);
+            const response = await axiosInstance.post<VerifypinResp>(`/api/user/verifypin`, req);
             return response.data;
         }
     };
@@ -265,7 +265,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         createRecord: async (req: CreateRecordReq): Promise<CreateRecordResp> => {
-            const response = await axiosInstance.post<CreateRecordResp>(`${mediaUrl}/api/media/record/createRecord`, req);
+            const response = await axiosInstance.post<CreateRecordResp>(`/api/media/record/createRecord`, req);
             return response.data;
         },
 
@@ -274,7 +274,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         deleteRecord: async (req: DeleteRecordReq): Promise<DeleteRecordResp> => {
-            const response = await axiosInstance.post<DeleteRecordResp>(`${mediaUrl}/api/media/record/deleteRecord`, req);
+            const response = await axiosInstance.post<DeleteRecordResp>(`/api/media/record/deleteRecord`, req);
             return response.data;
         },
 
@@ -283,7 +283,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getAudioUrl: async (req: GetAudioUrlReq): Promise<GetAudioUrlResp> => {
-            const response = await axiosInstance.post<GetAudioUrlResp>(`${mediaUrl}/api/media/record/getAudioUrl`, req);
+            const response = await axiosInstance.post<GetAudioUrlResp>(`/api/media/record/getAudioUrl`, req);
             return response.data;
         },
 
@@ -292,7 +292,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getPerformanceAudio: async (req: GetPerformanceAudioReq): Promise<GetPerformanceAudioResp> => {
-            const response = await axiosInstance.post<GetPerformanceAudioResp>(`${mediaUrl}/api/media/record/getPerformanceAudio`, req);
+            const response = await axiosInstance.post<GetPerformanceAudioResp>(`/api/media/record/getPerformanceAudio`, req);
             return response.data;
         },
 
@@ -301,7 +301,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getPerformanceImg: async (req: GetPerformanceImgReq): Promise<GetPerformanceImgResp> => {
-            const response = await axiosInstance.post<GetPerformanceImgResp>(`${mediaUrl}/api/media/record/getPerformanceImg`, req);
+            const response = await axiosInstance.post<GetPerformanceImgResp>(`/api/media/record/getPerformanceImg`, req);
             return response.data;
         },
 
@@ -310,7 +310,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getPerformanceMidi: async (req: GetPerformanceMidiReq): Promise<GetPerformanceMidiResp> => {
-            const response = await axiosInstance.post<GetPerformanceMidiResp>(`${mediaUrl}/api/media/record/getPerformanceMidi`, req);
+            const response = await axiosInstance.post<GetPerformanceMidiResp>(`/api/media/record/getPerformanceMidi`, req);
             return response.data;
         },
 
@@ -319,7 +319,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getPerformanceReport: async (req: GetPerformanceReportReq): Promise<GetPerformanceReportResp> => {
-            const response = await axiosInstance.post<GetPerformanceReportResp>(`${mediaUrl}/api/media/record/getPerformanceReport`, req);
+            const response = await axiosInstance.post<GetPerformanceReportResp>(`/api/media/record/getPerformanceReport`, req);
             return response.data;
         },
 
@@ -328,7 +328,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getPerformanceSheet: async (req: GetPerformanceSheetReq): Promise<GetPerformanceSheetResp> => {
-            const response = await axiosInstance.post<GetPerformanceSheetResp>(`${mediaUrl}/api/media/record/getPerformanceSheet`, req);
+            const response = await axiosInstance.post<GetPerformanceSheetResp>(`/api/media/record/getPerformanceSheet`, req);
             return response.data;
         },
 
@@ -337,7 +337,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getPerformanceVideo: async (req: GetPerformanceVideoReq): Promise<GetPerformanceVideoResp> => {
-            const response = await axiosInstance.post<GetPerformanceVideoResp>(`${mediaUrl}/api/media/record/getPerformanceVideo`, req);
+            const response = await axiosInstance.post<GetPerformanceVideoResp>(`/api/media/record/getPerformanceVideo`, req);
             return response.data;
         },
 
@@ -346,7 +346,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getPerformanceWaterfall: async (req: GetPerformanceWaterfallReq): Promise<GetPerformanceWaterfallResp> => {
-            const response = await axiosInstance.post<GetPerformanceWaterfallResp>(`${mediaUrl}/api/media/record/getPerformanceWaterfall`, req);
+            const response = await axiosInstance.post<GetPerformanceWaterfallResp>(`/api/media/record/getPerformanceWaterfall`, req);
             return response.data;
         },
 
@@ -355,7 +355,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRecord: async (req: GetRecordReq): Promise<GetRecordResp> => {
-            const response = await axiosInstance.post<GetRecordResp>(`${mediaUrl}/api/media/record/getRecord`, req);
+            const response = await axiosInstance.post<GetRecordResp>(`/api/media/record/getRecord`, req);
             return response.data;
         },
 
@@ -364,7 +364,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getVideoUrl: async (req: GetVideoUrlReq): Promise<GetVideoUrlResp> => {
-            const response = await axiosInstance.post<GetVideoUrlResp>(`${mediaUrl}/api/media/record/getVideoUrl`, req);
+            const response = await axiosInstance.post<GetVideoUrlResp>(`/api/media/record/getVideoUrl`, req);
             return response.data;
         },
 
@@ -373,7 +373,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         setAsReference: async (req: SetAsReferenceReq): Promise<SetAsReferenceResp> => {
-            const response = await axiosInstance.post<SetAsReferenceResp>(`${mediaUrl}/api/media/record/setAsReference`, req);
+            const response = await axiosInstance.post<SetAsReferenceResp>(`/api/media/record/setAsReference`, req);
             return response.data;
         },
 
@@ -382,7 +382,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         uploadAudioSuccess: async (req: UploadAudioSuccessReq): Promise<UploadAudioSuccessResp> => {
-            const response = await axiosInstance.post<UploadAudioSuccessResp>(`${mediaUrl}/api/media/record/uploadAudioSuccess`, req);
+            const response = await axiosInstance.post<UploadAudioSuccessResp>(`/api/media/record/uploadAudioSuccess`, req);
             return response.data;
         },
 
@@ -391,7 +391,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         uploadVideoSuccess: async (req: UploadVideoSuccessReq): Promise<UploadVideoSuccessResp> => {
-            const response = await axiosInstance.post<UploadVideoSuccessResp>(`${mediaUrl}/api/media/record/uploadVideoSuccess`, req);
+            const response = await axiosInstance.post<UploadVideoSuccessResp>(`/api/media/record/uploadVideoSuccess`, req);
             return response.data;
         },
     };
@@ -402,7 +402,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         createReference: async (req: CreateReferenceReq): Promise<CreateReferenceResp> => {
-            const response = await axiosInstance.post<CreateReferenceResp>(`${mediaUrl}/api/media/reference/createReference`, req);
+            const response = await axiosInstance.post<CreateReferenceResp>(`/api/media/reference/createReference`, req);
             return response.data;
         },
 
@@ -411,7 +411,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         deleteReference: async (req: DeleteReferenceReq): Promise<DeleteReferenceResp> => {
-            const response = await axiosInstance.post<DeleteReferenceResp>(`${mediaUrl}/api/media/reference/deleteReference`, req);
+            const response = await axiosInstance.post<DeleteReferenceResp>(`/api/media/reference/deleteReference`, req);
             return response.data;
         },
 
@@ -420,7 +420,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefAudio: async (req: GetRefAudioReq): Promise<GetRefAudioResp> => {
-            const response = await axiosInstance.post<GetRefAudioResp>(`${mediaUrl}/api/media/reference/getRefAudio`, req);
+            const response = await axiosInstance.post<GetRefAudioResp>(`/api/media/reference/getRefAudio`, req);
             return response.data;
         },
 
@@ -429,7 +429,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefAudioUrl: async (req: GetRefAudioUrlReq): Promise<GetRefAudioUrlResp> => {
-            const response = await axiosInstance.post<GetRefAudioUrlResp>(`${mediaUrl}/api/media/reference/getRefAudioUrl`, req);
+            const response = await axiosInstance.post<GetRefAudioUrlResp>(`/api/media/reference/getRefAudioUrl`, req);
             return response.data;
         },
 
@@ -438,7 +438,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefImg: async (req: GetRefImgReq): Promise<GetRefImgResp> => {
-            const response = await axiosInstance.post<GetRefImgResp>(`${mediaUrl}/api/media/reference/getRefImg`, req);
+            const response = await axiosInstance.post<GetRefImgResp>(`/api/media/reference/getRefImg`, req);
             return response.data;
         },
 
@@ -447,7 +447,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefImgUrl: async (req: GetRefImgUrlReq): Promise<GetRefImgUrlResp> => {
-            const response = await axiosInstance.post<GetRefImgUrlResp>(`${mediaUrl}/api/media/reference/getRefImgUrl`, req);
+            const response = await axiosInstance.post<GetRefImgUrlResp>(`/api/media/reference/getRefImgUrl`, req);
             return response.data;
         },
 
@@ -456,7 +456,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefMidi: async (req: GetRefMidiReq): Promise<GetRefMidiResp> => {
-            const response = await axiosInstance.post<GetRefMidiResp>(`${mediaUrl}/api/media/reference/getRefMidi`, req);
+            const response = await axiosInstance.post<GetRefMidiResp>(`/api/media/reference/getRefMidi`, req);
             return response.data;
         },
 
@@ -465,7 +465,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefSheet: async (req: GetRefSheetReq): Promise<GetRefSheetResp> => {
-            const response = await axiosInstance.post<GetRefSheetResp>(`${mediaUrl}/api/media/reference/getRefSheet`, req);
+            const response = await axiosInstance.post<GetRefSheetResp>(`/api/media/reference/getRefSheet`, req);
             return response.data;
         },
 
@@ -474,7 +474,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefVideo: async (req: GetRefVideoReq): Promise<GetRefVideoResp> => {
-            const response = await axiosInstance.post<GetRefVideoResp>(`${mediaUrl}/api/media/reference/getRefVideo`, req);
+            const response = await axiosInstance.post<GetRefVideoResp>(`/api/media/reference/getRefVideo`, req);
             return response.data;
         },
 
@@ -483,7 +483,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefVideoUrl: async (req: GetRefVideoUrlReq): Promise<GetRefVideoUrlResp> => {
-            const response = await axiosInstance.post<GetRefVideoUrlResp>(`${mediaUrl}/api/media/reference/getRefVideoUrl`, req);
+            const response = await axiosInstance.post<GetRefVideoUrlResp>(`/api/media/reference/getRefVideoUrl`, req);
             return response.data;
         },
 
@@ -492,7 +492,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getRefWaterfall: async (req: GetRefWaterfallReq): Promise<GetRefWaterfallResp> => {
-            const response = await axiosInstance.post<GetRefWaterfallResp>(`${mediaUrl}/api/media/reference/getRefWaterfall`, req);
+            const response = await axiosInstance.post<GetRefWaterfallResp>(`/api/media/reference/getRefWaterfall`, req);
             return response.data;
         },
 
@@ -501,7 +501,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getReference: async (req: GetReferenceReq): Promise<GetReferenceResp> => {
-            const response = await axiosInstance.post<GetReferenceResp>(`${mediaUrl}/api/media/reference/getReference`, req);
+            const response = await axiosInstance.post<GetReferenceResp>(`/api/media/reference/getReference`, req);
             return response.data;
         },
 
@@ -510,7 +510,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         queryReference: async (req: QueryReferenceReq): Promise<QueryReferenceResp> => {
-            const response = await axiosInstance.post<QueryReferenceResp>(`${mediaUrl}/api/media/reference/queryReference`, req);
+            const response = await axiosInstance.post<QueryReferenceResp>(`/api/media/reference/queryReference`, req);
             return response.data;
         },
 
@@ -519,7 +519,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         uploadRefAudioSuccess: async (req: UploadRefAudioSuccessReq): Promise<UploadRefAudioSuccessResp> => {
-            const response = await axiosInstance.post<UploadRefAudioSuccessResp>(`${mediaUrl}/api/media/reference/uploadRefAudioSuccess`, req);
+            const response = await axiosInstance.post<UploadRefAudioSuccessResp>(`/api/media/reference/uploadRefAudioSuccess`, req);
             return response.data;
         },
 
@@ -528,7 +528,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         uploadRefImgSuccess: async (req: UploadRefImgSuccessReq): Promise<UploadRefImgSuccessResp> => {
-            const response = await axiosInstance.post<UploadRefImgSuccessResp>(`${mediaUrl}/api/media/reference/uploadRefImgSuccess`, req);
+            const response = await axiosInstance.post<UploadRefImgSuccessResp>(`/api/media/reference/uploadRefImgSuccess`, req);
             return response.data;
         },
 
@@ -537,7 +537,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         uploadRefVideoSuccess: async (req: UploadRefVideoSuccessReq): Promise<UploadRefVideoSuccessResp> => {
-            const response = await axiosInstance.post<UploadRefVideoSuccessResp>(`${mediaUrl}/api/media/reference/uploadRefVideoSuccess`, req);
+            const response = await axiosInstance.post<UploadRefVideoSuccessResp>(`/api/media/reference/uploadRefVideoSuccess`, req);
             return response.data;
         },
 
@@ -549,7 +549,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         performanceAnalysis: async (req: PerformanceAnalysisReq): Promise<PerformanceAnalysisResp> => {
-            const response = await axiosInstance.post<PerformanceAnalysisResp>(`${mediaUrl}/api/media/analysis/performanceAnalysis`, req);
+            const response = await axiosInstance.post<PerformanceAnalysisResp>(`/api/media/analysis/performanceAnalysis`, req);
             return response.data;
         },
 
@@ -558,7 +558,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getAnalysisResult: async (req: GetAnalysisResultReqParams): Promise<GetAnalysisResultResp> => {
-            const response = await axiosInstance.get<GetAnalysisResultResp>(`${mediaUrl}/api/media/analysis/getAnalysisResult?analysisResult=analysisId=${req.analysisId}`);
+            const response = await axiosInstance.get<GetAnalysisResultResp>(`/api/media/analysis/getAnalysisResult?analysisResult=analysisId=${req.analysisId}`);
             return response.data;
         },
     };

@@ -18,6 +18,7 @@ import RegisterForm from '../forms/RegisterForm';
 import VerifyForm from '../forms/VerifyForm';
 import ResetPasswordForm from '../forms/ResetPasswordForm';
 import ImageGrid from '../../../components/ImageGrid';
+import {useApi} from "../../../contexts/apiContext";
 import welcomeStyles from '../ui';
 import styles from './ui';
 
@@ -32,9 +33,10 @@ type Props = {
 const Welcome: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const { authMode, emailForVerification } = useAppSelector((state: RootState) => state.auth);
+  const api = useApi();
 
   const handleLogin = async (email: string, password: string, navigation: WelcomeScreenNavigationProp) => {
-    dispatch(login(email, password, navigation));
+    dispatch(login(email, password, navigation, api));
   };
 
   const handleSignUp = async (email: string, username: string, password: string, confirmPassword: string) => {

@@ -1,5 +1,5 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React ,{ useState, useRef,useContext } from "react";
+import React ,{ useState, useRef,useContext, useEffect } from "react";
 import { View, Button, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { Audio } from 'expo-av';
 import { RootStackParamList } from "../../contexts/types";
@@ -7,6 +7,10 @@ import { RouteProp } from "@react-navigation/native";
 import { UploadContext } from './UploadContext';
 import { UploadAudio, UploadRefAudio } from "./mediaUtils";
 import {useApi} from "../../contexts/apiContext";
+import { GetRefMidiReq, GetRefSheetReq, GetRefSheetResp } from "src/contexts/apiParams/mediaComponents";
+import { WebView } from 'react-native-webview';
+
+
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Practice'>;
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
@@ -17,13 +21,38 @@ type Props = {
     route: UploadScreenRouteProp;
 };
 
-const Practice: React.FC<Props> = ({ navigation }) => {
+const Practice: React.FC<Props> = ({ navigation}) => {
+    
     const [recording, setRecording] = useState<Audio.Recording | null>(null);
     const [permissionResponse, requestPermission] = Audio.usePermissions();
     const [recordingUri, setRecordingUri] = useState<string|null>('');
     const [sound, setSound] = useState<Audio.Sound | null>(null);
+    const [sheet, setSheet] = useState('');
     const context = useContext(UploadContext);
     const api = useApi();
+    const webViewRef = useRef<WebView>(null);
+    const refId = context?.refId ?? "";
+
+    const fetchSheet = async () => {
+        const reqParams: GetRefSheetReq = {
+            refId: refId,
+        }
+        const resp: GetRefSheetResp = await api.reference.getRefSheet(reqParams)
+        if (resp.code === 0) {
+            setSheet(resp.presignedurl);
+            // Send the MusicXML data to WebView
+            fetch(resp.presignedurl)
+                .then(response => response.text())
+                .then(data => {
+                    if (webViewRef.current) {
+                        webViewRef.current.postMessage(data);
+                    }
+                });
+        }
+    }
+    useEffect(()=> {
+        fetchSheet()
+    }, [])
 
     if (!context) {
         throw new Error('UploadMethod must be used within an UploadProvider');
@@ -86,7 +115,14 @@ const Practice: React.FC<Props> = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.musicContainer}>
-
+                {/* <WebView
+                        ref={webViewRef}
+                        source={{ uri: '../../assets/audio/musicxml.html' }} // Adjust path based on your platform and file location
+                        style={{ flex: 1 }}
+                        javaScriptEnabled={true}
+                        domStorageEnabled={true}
+                        originWhitelist={['*']}
+                    /> */}
             </View>
             <View style={styles.buttonContainer}>
 
