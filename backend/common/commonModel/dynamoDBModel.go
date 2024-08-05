@@ -183,6 +183,7 @@ func (m *BaseModel) QueryByPartitionKey(
 		KeyConditionExpression:    aws.String(keyConditionExpression),
 		ExpressionAttributeNames:  expressionAttributeNames,
 		ExpressionAttributeValues: expressionAttributeValues,
+		ScanIndexForward:          aws.Bool(false),
 	}
 
 	if limit != -1 {
