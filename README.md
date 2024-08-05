@@ -65,6 +65,12 @@ PS:The PIN must be a four-digit number.
 Double-click the icon to enter the sub-user.
 
 ![Image 9](./Docs/img/9.png)
+
+---
+
+#### Section 3: Configuration Screen
+
+
 ![Image 10](./Docs/img/10.png)
 
 After entering the sub-user for the first time, you will need to fill out the configuration information.
@@ -75,22 +81,52 @@ PS: Can be modified in user screen.
 ![Image 12](./Docs/img/12.png)
 ![Image 13](./Docs/img/13.png)
 ![Image 14](./Docs/img/14.png)
+
+---
+
+#### Section 4: Home Screen
+
 ![Image 15](./Docs/img/15.png)
+
+If you want to upload your own reference music (which can be either audio or video), you can use it as a reference (the AI will analyze based on the reference music you upload).
+
 ![Image 16](./Docs/img/16.png)
+
+You need to upload an image for your reference music, and then upload the music or video.
+
+Then, fill in the reference music's title (required), style (required), composer, and the instruments used.
+
+PS: Currently, our app can only search based on style and only recognizes "Classic." So for now, please only enter "Classic" for the style, or else it won't be found in the search.
+
 ![Image 17](./Docs/img/17.png)
 ![Image 18](./Docs/img/18.png)
 ![Image 19](./Docs/img/19.png)
 ![Image 20](./Docs/img/20.png)
 ![Image 21](./Docs/img/21.png)
+
+Click Upload Reference to finish your operation.
+
 ![Image 22](./Docs/img/22.png)
 ![Image 23](./Docs/img/23.png)
 ![Image 24](./Docs/img/24.png)
 ![Image 25](./Docs/img/25.png)
+
+Double-click the music you want to practice
+
 ![Image 26](./Docs/img/26.png)
 ![Image 27](./Docs/img/27.png)
+
+You can view the video or play the music
+
 ![Image 28](./Docs/img/28.png)
+
+Upload your video or audio
+
 ![Image 29](./Docs/img/29.png)
 ![Image 30](./Docs/img/30.png)
+
+Waiting for AI Analysis(according to the size of file)
+
 ![Image 31](./Docs/img/31.png)
 ![Image 32](./Docs/img/32.png)
 ![Image 33](./Docs/img/33.png)
