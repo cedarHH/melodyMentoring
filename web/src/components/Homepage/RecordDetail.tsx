@@ -41,6 +41,7 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
         setIsModalOpen(true);
 
         const fetchData = async () => {
+            // Fetch performance video URL
             try {
                 const getVideoUrl: GetPerformanceVideoReq = {
                     profileName: profileName,
@@ -48,21 +49,36 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
                 };
                 const videoResp = await apiContext.record.getPerformanceVideo(getVideoUrl);
                 setVideoUrl(videoResp);
+            } catch (error) {
+                console.error("Error fetching performance video:", error);
+            }
 
+            // Fetch performance audio URL
+            try {
                 const getAudioUrl: GetPerformanceAudioReq = {
                     profileName: profileName,
                     recordId: recordId,
                 };
                 const audioResp = await apiContext.record.getPerformanceAudio(getAudioUrl);
                 setAudioUrl(audioResp);
+            } catch (error) {
+                console.error("Error fetching performance audio:", error);
+            }
 
+            // Fetch performance waterfall image URL
+            try {
                 const getWaterfallUrl: GetPerformanceWaterfallReq = {
                     profileName: profileName,
                     recordId: recordId,
                 };
                 const waterfallResp = await apiContext.record.getPerformanceWaterfall(getWaterfallUrl);
                 setImgUrl(waterfallResp.presignedurl);
+            } catch (error) {
+                console.error("Error fetching performance waterfall:", error);
+            }
 
+            // Fetch performance report
+            try {
                 const getReportUrl: GetPerformanceReportReq = {
                     profileName: profileName,
                     recordId: recordId,
@@ -81,27 +97,41 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
                         });
                     }
                 }
+            } catch (error) {
+                console.error("Error fetching performance report:", error);
+            }
 
+            // Fetch reference video URL
+            try {
                 const getRefVideoUrl: GetRefVideoReq = {
                     refId: refId
                 };
                 const refVideoResp = await apiContext.record.getRefVideo(getRefVideoUrl);
                 setRefVideoUrl(refVideoResp);
+            } catch (error) {
+                console.error("Error fetching reference video:", error);
+            }
 
+            // Fetch reference audio URL
+            try {
                 const getRefAudioUrl: GetRefAudioReq = {
                     refId: refId
                 };
                 const refAudioResp = await apiContext.record.getRefAudio(getRefAudioUrl);
                 setRefAudioUrl(refAudioResp);
+            } catch (error) {
+                console.error("Error fetching reference audio:", error);
+            }
 
+            // Fetch reference waterfall image URL
+            try {
                 const getRefWaterfallUrl: GetRefWaterfallReq = {
                     refId: refId
                 };
                 const refWaterfallResp = await apiContext.record.getRefWaterfall(getRefWaterfallUrl);
                 setRefWaterfallUrl(refWaterfallResp.presignedurl);
-
             } catch (error) {
-                console.error("Error fetching data:", error);
+                console.error("Error fetching reference waterfall:", error);
             }
         };
 
