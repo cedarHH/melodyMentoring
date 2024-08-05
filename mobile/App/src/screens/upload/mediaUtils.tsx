@@ -1,9 +1,27 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
-import { CreateRecordReq, CreateRecordResp, CreateReferenceReq, CreateReferenceResp, GetAudioUrlReq, GetAudioUrlResp, GetRefAudioUrlReq, GetRefAudioUrlResp, GetRefVideoUrlReq, GetRefVideoUrlResp, GetVideoUrlReq, GetVideoUrlResp, PerformanceAnalysisReq, UploadAudioSuccessReq } from '../../contexts/apiParams/mediaComponents';
-import { useApi } from '../../contexts/apiContext';
-import { Alert } from 'react-native';
-import { useState } from 'react';
+import {
+    CreateRecordReq,
+    CreateRecordResp,
+    CreateReferenceReq,
+    CreateReferenceResp,
+    GetAudioUrlReq,
+    GetAudioUrlResp,
+    GetRefAudioUrlReq,
+    GetRefAudioUrlResp,
+    GetRefVideoUrlReq,
+    GetRefVideoUrlResp,
+    GetVideoUrlReq,
+    GetVideoUrlResp,
+    PerformanceAnalysisReq,
+    UploadAudioSuccessReq,
+    UploadVideoSuccessReq,
+    UploadRefAudioSuccessReq,
+    UploadRefVideoSuccessReq
+} from '../../contexts/apiParams/mediaComponents';
+import {useApi} from '../../contexts/apiContext';
+import {Alert} from 'react-native';
+import {useState} from 'react';
 import result from "../result/Result";
 import {ApiContext} from "@reduxjs/toolkit/query";
 
@@ -22,10 +40,7 @@ export const SelectVideo = async (): Promise<string | null> => {
     }
 };
 
-export const UploadVideo = async (videoUri: string, profileName: string, refId:string): Promise<number> => {
-
-
-    const api = useApi();
+export const UploadVideo = async (api: any, videoUri: string, profileName: string, refId: string): Promise<[number, number]> => {
     try {
         const reqRecord: CreateRecordReq = {
             profileName: profileName,
@@ -33,7 +48,7 @@ export const UploadVideo = async (videoUri: string, profileName: string, refId:s
         }
         const respRecord: CreateRecordResp = await api.record.createRecord(reqRecord)
 
-        if(respRecord.code === 0) {
+        if (respRecord.code === 0) {
             const id = respRecord.recordId;
             const reqUri: GetVideoUrlReq = {
                 profileName: profileName,
@@ -51,8 +66,23 @@ export const UploadVideo = async (videoUri: string, profileName: string, refId:s
                     body: videoBlob,
                 });
                 if (response.ok) {
-                    return id;
-                    Alert.alert('Success', 'Video uploaded successfully!');
+                    const UploadVideoSuccessReq: UploadVideoSuccessReq = {
+                        profileName: profileName,
+                        recordId: id,
+                        fileName: respUri.data.fileName,
+                    }
+                    const respSuccess = await api.record.uploadVideoSuccess(UploadVideoSuccessReq)
+                    if (respSuccess.code === 0) {
+                        const analysisReq: PerformanceAnalysisReq = {
+                            profileName: profileName,
+                            recordId: id
+                        }
+                        const analysisResp = await api.analysis.performanceAnalysis(analysisReq)
+                        if (analysisResp.code === 0) {
+                            console.log(`${analysisResp.analysisId} !! ${id}`);
+                            return [analysisResp.analysisId, id]
+                        }
+                    }
                 } else {
                     Alert.alert('Error', 'Failed to upload video.');
                 }
@@ -62,7 +92,7 @@ export const UploadVideo = async (videoUri: string, profileName: string, refId:s
         const errorMessage = error instanceof Error ? error.message : 'An error occurred';
         Alert.alert('Error', errorMessage);
     }
-    return 1;
+    return [-1,-1];
 };
 
 export const SelectAudio = async (): Promise<string | null> => {
@@ -116,16 +146,16 @@ export const UploadAudio = async (api: any, audioUri: string, profileName: strin
                         fileName: respUri.data.fileName,
                     }
                     const respSuccess = await api.record.uploadAudioSuccess(UploadAudioSuccessReq)
-                    if( respSuccess.code === 0) {
-                        const analysisReq:PerformanceAnalysisReq = {
+                    if (respSuccess.code === 0) {
+                        const analysisReq: PerformanceAnalysisReq = {
                             profileName: profileName,
                             recordId: id
                         }
                         const analysisResp = await api.analysis.performanceAnalysis(analysisReq)
-                        if( analysisResp.code === 0) {
+                        if (analysisResp.code === 0) {
                             console.log(`${analysisResp.analysisId} !! ${id}`);
-
-                            return [analysisResp.analysisId,id]
+                            //TODO
+                            return [analysisResp.analysisId, id]
                         }
                     }
                 } else {
@@ -143,43 +173,39 @@ export const UploadAudio = async (api: any, audioUri: string, profileName: strin
     }
 
 
-
-    return [1,1];
+    return [1, 1];
 };
 
 
-export const UploadRefVideo = async (videoUri: string, profileName: string, recId: string, title: string, style: string, composer: string, instrument: string): Promise<void> => {
-    const api = useApi();
+export const UploadRefVideo = async (api: any, videoUri: string, profileName: string, refId: string, title: string, style: string, composer: string, instrument: string): Promise<void> => {
     try {
-        const reqRef: CreateReferenceReq = {
-            title: title,
-            style: style,
-            composer: composer,
-            instrument: instrument,
+        const reqUri: GetRefVideoUrlReq = {
+            refId: refId
         }
-        const respRef: CreateReferenceResp = await api.reference.createReference(reqRef)
-
-        if(respRef.code === 0) {
-            const id = respRef.refId;
-            const reqUri: GetRefVideoUrlReq = {
-                refId: id
-            }
-            const respUri: GetRefVideoUrlResp = await api.reference.getRefVideoUrl(reqUri);
-            if (respUri.code === 0) {
-                const videoFile = await fetch(videoUri);
-                const videoBlob = await videoFile.blob();
-                const response = await fetch(respUri.data.presignedurl, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'video/mp4',
-                    },
-                    body: videoBlob,
-                });
-                if (response.ok) {
-                    Alert.alert('Success', 'Video uploaded successfully!');
-                } else {
-                    Alert.alert('Error', 'Failed to upload video.');
+        const respUri: GetRefVideoUrlResp = await api.reference.getRefVideoUrl(reqUri);
+        if (respUri.code === 0) {
+            console.log(respUri.data.presignedurl)
+            const videoFile = await fetch(videoUri);
+            const videoBlob = await videoFile.blob();
+            const response = await fetch(respUri.data.presignedurl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'video/mp4',
+                },
+                body: videoBlob,
+            });
+            if (response.ok) {
+                const refVideoSuccess: UploadRefVideoSuccessReq = {
+                    refId: refId     ,
+                    fileName: respUri.data.fileName,
                 }
+                const refVideoSuccessResp = await api.reference.uploadRefVideoSuccess(refVideoSuccess);
+                if(refVideoSuccessResp.code === 0) {
+                    Alert.alert('Success', 'Video uploaded successfully!');
+                }
+            } else {
+                console.log(`${await response.text()}`)
+                Alert.alert('Error', 'Failed to upload video.');
             }
         }
     } catch (error) {
@@ -188,8 +214,7 @@ export const UploadRefVideo = async (videoUri: string, profileName: string, recI
     }
 };
 
-export const UploadRefAudio = async (audioUri: string, profileName: string, recId: string, title: string, style: string, composer: string, instrument: string): Promise<void> => {
-    const api = useApi();
+export const UploadRefAudio = async (api: any, audioUri: string, profileName: string, refId: string, title: string, style: string, composer: string, instrument: string): Promise<void> => {
     try {
         const reqRef: CreateReferenceReq = {
             title: title,
@@ -199,7 +224,7 @@ export const UploadRefAudio = async (audioUri: string, profileName: string, recI
         }
         const respRef: CreateReferenceResp = await api.reference.createReference(reqRef)
 
-        if(respRef.code === 0) {
+        if (respRef.code === 0) {
             const id = respRef.refId;
             const reqUri: GetRefAudioUrlReq = {
                 refId: id
@@ -216,7 +241,14 @@ export const UploadRefAudio = async (audioUri: string, profileName: string, recI
                     body: audioBlob,
                 });
                 if (response.ok) {
-                    Alert.alert('Success', 'audio uploaded successfully!');
+                    const refAudioSuccess: UploadRefAudioSuccessReq = {
+                        refId: refId,
+                        fileName: respUri.data.fileName,
+                    }
+                    const refAudioSuccessResp = await api.reference.uploadRefAudioSuccess(refAudioSuccess);
+                    if(refAudioSuccessResp.code === 0) {
+                        Alert.alert('Success', 'Video uploaded successfully!');
+                    }
                 } else {
                     Alert.alert('Error', 'Failed to upload audio.');
                 }
