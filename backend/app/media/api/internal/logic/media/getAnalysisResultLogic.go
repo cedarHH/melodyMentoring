@@ -34,7 +34,7 @@ func (l *GetAnalysisResultLogic) GetAnalysisResult(
 	}
 
 	return &types.GetAnalysisResultResp{
-		Code: 1,
+		Code: 0,
 		Data: types.ResultData{AnalysisRank: rank},
 		Msg:  msg,
 	}, nil

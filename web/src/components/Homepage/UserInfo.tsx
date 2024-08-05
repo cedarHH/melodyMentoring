@@ -416,18 +416,18 @@ const UserInfo: React.FC<UserInfoProps> = ({ activeKid, setActiveKid }) => {
                             <InfoValue>{level}</InfoValue>
                         </InfoRow>
                     </InfoColumn>
-                    <InfoColumn isRight>
+                    <InfoColumn>
                         <InfoRow>
                             <InfoLabel>Birthday:</InfoLabel>
-                            <InfoValue isRight>{dob}</InfoValue>
+                            <InfoValue>{dob}</InfoValue>
                         </InfoRow>
                         <InfoRow>
                             <InfoLabel>Instrument:</InfoLabel>
-                            <InfoValue isRight>{instrument}</InfoValue>
+                            <InfoValue>{instrument}</InfoValue>
                         </InfoRow>
                         <InfoRow>
                             <InfoLabel>Badge:</InfoLabel>
-                            <InfoValue isRight>{badge}</InfoValue>
+                            <InfoValue>{badge}</InfoValue>
                         </InfoRow>
                     </InfoColumn>
                 </InfoBlock>
