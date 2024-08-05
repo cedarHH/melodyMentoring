@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GetRecordReq, GetReferenceReq } from '../../contexts/api/mediaComponents';
-import {ApiContext, IApiContext} from '../../contexts/ApiContext';
+import { ApiContext, IApiContext } from '../../contexts/ApiContext';
 import RecordDetail from "./RecordDetail";
 
 interface MusicHistoryProps {
@@ -16,13 +16,15 @@ interface MusicData {
     instrument: string;
     date: string;
     recordId: number;
+    refId: string;
 }
 
-const MusicHistory: React.FC<MusicHistoryProps> = ({ activeKid, setIsModalOpen, setModalContent, }) => {
+const MusicHistory: React.FC<MusicHistoryProps> = ({ activeKid, setIsModalOpen, setModalContent }) => {
     const [musicData, setMusicData] = useState<MusicData[]>([]);
     const [currentPage, setCurrentPage] = useState(0);
-    const apiContext: IApiContext | undefined  = useContext(ApiContext);
+    const apiContext: IApiContext | undefined = useContext(ApiContext);
     const itemsPerPage = 11;
+    const [selectedRecord, setSelectedRecord] = useState<{ recordId: number, refId: string } | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,7 +58,8 @@ const MusicHistory: React.FC<MusicHistoryProps> = ({ activeKid, setIsModalOpen, 
                                             minute: '2-digit',
                                             hour12: false,
                                         }),
-                                        recordId: record.RecordId, // Store RecordId
+                                        recordId: record.RecordId,
+                                        refId: record.reference,
                                     };
                                 }
                                 return null;
@@ -79,15 +82,19 @@ const MusicHistory: React.FC<MusicHistoryProps> = ({ activeKid, setIsModalOpen, 
         setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(musicData.length / itemsPerPage) - 1));
     const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
 
-    const handleItemClick = (recordId: number) => {
+    const handleItemClick = (recordId: number, refId: string) => {
         if (activeKid && recordId && apiContext) {
-            RecordDetail({
-                profileName: activeKid,
-                recordId: recordId,
-                apiContext: apiContext,
-                setIsModalOpen: setIsModalOpen,
-                setModalContent: setModalContent
-            });
+            setSelectedRecord({ recordId, refId });
+            setIsModalOpen(true);
+            setModalContent(
+                <RecordDetail
+                    profileName={activeKid}
+                    recordId={recordId}
+                    refId={refId}
+                    apiContext={apiContext}
+                    setIsModalOpen={setIsModalOpen}
+                />
+            );
         }
     };
 
@@ -108,7 +115,7 @@ const MusicHistory: React.FC<MusicHistoryProps> = ({ activeKid, setIsModalOpen, 
                         {musicData
                             .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
                             .map((item, index) => (
-                                <TableRow key={index} onClick={() => handleItemClick(item.recordId)}>
+                                <TableRow key={index} onClick={() => handleItemClick(item.recordId, item.refId)}>
                                     <TableData>{item.title}</TableData>
                                     <TableData>{item.style}</TableData>
                                     <TableData>{item.instrument}</TableData>

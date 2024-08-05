@@ -32,7 +32,10 @@ import {
     GetAudioUrlResp,
     GetPerformanceAudioReq,
     GetPerformanceAudioResp,
-    GetPerformanceImgReq, GetPerformanceImgResp, GetPerformanceMidiReq, GetPerformanceMidiResp,
+    GetPerformanceImgReq,
+    GetPerformanceImgResp,
+    GetPerformanceMidiReq,
+    GetPerformanceMidiResp,
     GetPerformanceReportReq,
     GetPerformanceReportResp,
     GetPerformanceSheetReq,
@@ -42,7 +45,14 @@ import {
     GetPerformanceWaterfallReq,
     GetPerformanceWaterfallResp,
     GetRecordReq,
-    GetRecordResp, GetReferenceReq, GetReferenceResp,
+    GetRecordResp,
+    GetRefAudioReq,
+    GetRefAudioResp,
+    GetReferenceReq,
+    GetReferenceResp,
+    GetRefSheetReq, GetRefSheetResp,
+    GetRefVideoReq,
+    GetRefVideoResp, GetRefWaterfallReq, GetRefWaterfallResp,
     GetVideoUrlReq,
     GetVideoUrlResp,
     SetAsReferenceReq,
@@ -88,6 +98,10 @@ interface IRecordApiContext {
     uploadAudioSuccess: (req: UploadAudioSuccessReq) => Promise<UploadAudioSuccessResp>;
     uploadVideoSuccess: (req: UploadVideoSuccessReq) => Promise<UploadVideoSuccessResp>;
     getReference: (req: GetReferenceReq) => Promise<GetReferenceResp>;
+    getRefAudio: (req: GetRefAudioReq) => Promise<GetRefAudioResp>;
+    getRefSheet: (req: GetRefSheetReq) => Promise<GetRefSheetResp>;
+    getRefVideo: (req: GetRefVideoReq) => Promise<GetRefVideoResp>;
+    getRefWaterfall: (req: GetRefWaterfallReq) => Promise<GetRefWaterfallResp>;
 }
 
 export interface IApiContext {
@@ -319,6 +333,38 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
         return webapi.post<GetReferenceResp>(`${BASE_URL}/api/media/reference/getReference`, req);
     };
 
+    /**
+     * @description "get reference video"
+     * @param req
+     */
+    const getRefVideo = async (req: GetRefVideoReq) => {
+        return webapi.post<GetRefVideoResp>(`${BASE_URL}/api/media/reference/getRefVideo`, req);
+    };
+
+    /**
+     * @description "get reference audio"
+     * @param req
+     */
+    const getRefAudio = async (req: GetRefAudioReq) => {
+        return webapi.post<GetRefAudioResp>(`${BASE_URL}/api/media/reference/getRefAudio`, req);
+    };
+
+    /**
+     * @description "get reference sheet"
+     * @param req
+     */
+    const getRefSheet = async (req: GetRefSheetReq) => {
+        return webapi.post<GetRefSheetResp>(`${BASE_URL}/api/media/reference/getRefSheet`, req);
+    };
+
+    /**
+     * @description "get reference waterfall"
+     * @param req
+     */
+    const getRefWaterfall = async (req: GetRefWaterfallReq) => {
+        return webapi.post<GetRefWaterfallResp>(`${BASE_URL}/api/media/reference/getRefWaterfall`, req);
+    };
+
     const userApi: IUserApiContext = {
         setTokens,
         refreshTokens,
@@ -350,6 +396,10 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
         uploadAudioSuccess,
         uploadVideoSuccess,
         getReference,
+        getRefVideo,
+        getRefAudio,
+        getRefSheet,
+        getRefWaterfall
     };
 
     const api: IApiContext = {
