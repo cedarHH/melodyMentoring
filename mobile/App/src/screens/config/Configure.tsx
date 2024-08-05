@@ -5,7 +5,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../contexts/types';
 import {responsiveHeight, responsiveWidth, responsiveFontSize} from 'react-native-responsive-dimensions';
 import {RouteProp} from '@react-navigation/native';
-import {useAppDispatch, setFirstLogin} from '../../store';
+import {useAppDispatch} from '../../store';
 import {useApi} from '../../contexts/apiContext';
 import * as ImagePicker from 'expo-image-picker';
 import {
@@ -54,8 +54,7 @@ const Configure: React.FC<Props> = ({navigation, route}) => {
             Alert.alert('Error', errorMessage);
         }
 
-        dispatch(setFirstLogin(false));
-        navigation.replace('Home', {profileName});
+        navigation.navigate('Home', {profileName: profileName});
     };
 
     const pickImage = async () => {

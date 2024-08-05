@@ -13,6 +13,7 @@ import { PermissionsAndroid } from 'react-native';
 import UploadMethod from './UploadMethod';
 import { UploadVideo } from './mediaUtils';
 import { UploadContext } from './UploadContext';
+import {useApi} from "../../contexts/apiContext";
 
 type UploadScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CameraRecorder'>;
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Upload'>;
@@ -30,6 +31,7 @@ const CameraRecorder: React.FC<Props> = ({ navigation,route }) => {
     const [videoUri, setVideoUri] = useState<string>('');
     // @ts-ignore
     const cameraRef = useRef<Camera>(null);
+    const api = useApi();
     
     const context = useContext(UploadContext);
     if (!context) {
@@ -77,7 +79,7 @@ const CameraRecorder: React.FC<Props> = ({ navigation,route }) => {
     const handleUploadVideo = async () => {
         console.log(videoUri)
         Alert.alert('Upload', 'Uploading video...');
-        await UploadVideo(videoUri, profileName, refId);
+        await UploadVideo(api, videoUri, profileName, refId);
     };
     
     const handleBackToCamera = () => {

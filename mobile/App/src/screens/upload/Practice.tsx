@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import { RootStackParamList } from "../../contexts/types";
 import { RouteProp } from "@react-navigation/native";
 import { UploadContext } from './UploadContext';
-import { UploadAudio, UploadRefAudio } from "./mediaUtils";
+import { UploadAudio } from "./mediaUtils";
 import {useApi} from "../../contexts/apiContext";
 import { GetRefMidiReq, GetRefSheetReq, GetRefSheetResp } from "src/contexts/apiParams/mediaComponents";
 import { WebView } from 'react-native-webview';

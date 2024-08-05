@@ -138,19 +138,9 @@ const User: React.FC<Props> = ({ navigation, route }) => {
                     <Image source={{ uri: avatarUri }} style={styles.avatarImage} />
                 </TouchableOpacity>
                 <View style={styles.infoItemContainer}>
-                    <TouchableOpacity onPress={() => handleFieldEdit('profileName')}>
-                        <Text style={styles.nameText}>
-                            {`${profileName}`}
-                        </Text>
-                    </TouchableOpacity>
-                    {editingField === 'profileName' && (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter new profile name"
-                            value={newValue}
-                            onChangeText={setNewValue}
-                        />
-                    )}
+                    <Text style={styles.nameText}>
+                        {`${profileName}`}
+                    </Text>
                 </View>
                 <View style={styles.infoItemContainer}>
                     <TouchableOpacity onPress={() => handleFieldEdit('level')}>
@@ -169,7 +159,7 @@ const User: React.FC<Props> = ({ navigation, route }) => {
                 </View>
             </View>
             <View style={styles.infoSection}>
-                {['gender', 'dob', 'instrument', 'badges', 'consecutivedays'].map((field) => (
+                {['gender', 'dob', 'instrument'].map((field) => (
                     <View style={styles.infoItemContainer} key={field}>
                         <View style={styles.infoItemLeft}>
                             <TouchableOpacity onPress={() => handleFieldEdit(field)}>
@@ -196,6 +186,15 @@ const User: React.FC<Props> = ({ navigation, route }) => {
                         <CustomButton text="Save" onPress={handleSave} style={styles.editButton} />
                     </View>
                 )}
+                {['badges', 'consecutivedays'].map((field) => (
+                    <View style={styles.infoItemContainer} key={field}>
+                        <View style={styles.infoItemLeft}>
+                            <Text style={styles.infoItem}>
+                                {`${field.charAt(0).toUpperCase() + field.slice(1)}: ${userData[field as keyof typeof userData] || ''}`}
+                            </Text>
+                        </View>
+                    </View>
+                ))}
             </View>
             <View style={styles.bottomSection}>
                 <CustomButton
@@ -280,7 +279,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         margin: responsiveWidth(1),
         width: responsiveWidth(15),
-        height: responsiveWidth(6),
+        height: responsiveWidth(7),
     },
     bottomSection: {
         flexDirection: 'row',

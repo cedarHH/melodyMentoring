@@ -56,7 +56,7 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                     setFeedback(data['Detailed_Feedback']);
                     setRecommendations(data['Recommendations']);
                 } else {
-                    console.error('Error fetching performance report:', performanceResponse.msg);
+                    console.log('Error fetching performance report:', performanceResponse.msg);
                     setNoteAccuracy('Error');
                     setVelocityAccuracy('Error');
                     setDurationAccuracy('Error');
@@ -66,7 +66,6 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                     setRecommendations('Error');
                 }
 
-                // 获取Reference信息
                 const referenceParams: GetReferenceReq = {
                     refId: referenceId
                 };
@@ -89,7 +88,7 @@ const ResultScreen: React.FC<Props> = ({ navigation, route }) => {
                 setRecommendations('Error');
                 setSongName('Error');
             } finally {
-                setLoading(false); // 请求完成时设置为false
+                setLoading(false);
             }
         };
 

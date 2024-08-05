@@ -48,11 +48,15 @@ const SubUser: React.FC<Props> = ({navigation}) => {
             if (storedValue === null) {
                 await AsyncStorage.setItem(`isFirstLogin_${profileName}`, 'false');
                 setIsFirstLogin(true);
+                return true;
             } else {
-                setIsFirstLogin(storedValue === 'true');
+                const firstLogin = storedValue === 'true';
+                setIsFirstLogin(firstLogin);
+                return firstLogin;
             }
         } catch (error) {
             console.error('Error checking first login:', error);
+            return false;
         }
     };
 
@@ -96,10 +100,10 @@ const SubUser: React.FC<Props> = ({navigation}) => {
                 const response: VerifypinResp = await api.user.verifyPin(reqParams);
 
                 if (response.code === 0) {
-                    await checkFirstLogin(selectedProfileName);
+                    const firstLogin = await checkFirstLogin(selectedProfileName);
                     setPinModalVisible(false);
 
-                    if (isFirstLogin !== null && isFirstLogin) {
+                    if (firstLogin) {
                         navigation.navigate('Configure', {profileName: selectedProfileName});
                     } else {
                         navigation.navigate('Home', {profileName: selectedProfileName});

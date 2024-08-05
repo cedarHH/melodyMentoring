@@ -152,10 +152,9 @@ interface ApiProviderProps {
 
 export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
     const [token, setToken] = useState<string | null>(null);
-    const baseUrl = REACT_APP_URL;
 
     const axiosInstance: AxiosInstance = axios.create({
-        baseURL: baseUrl,
+        baseURL: REACT_APP_URL,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -558,7 +557,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({children}) => {
          * @param req
          */
         getAnalysisResult: async (req: GetAnalysisResultReqParams): Promise<GetAnalysisResultResp> => {
-            const response = await axiosInstance.get<GetAnalysisResultResp>(`/api/media/analysis/getAnalysisResult?analysisResult=analysisId=${req.analysisId}`);
+            const response = await axiosInstance.get<GetAnalysisResultResp>(`/api/media/analysis/getAnalysisResult?analysisId=${req.analysisId}`);
             return response.data;
         },
     };
