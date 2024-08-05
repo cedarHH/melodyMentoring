@@ -52,71 +52,6 @@ const Home = () => {
         }
     };
 
-    // const renderChart = () => {
-    //     if (activeChartData === 'musicHistory') {
-    //         const currentMusicData = getMusicDataByKid(activeKid || ''); // 使用 activeKid 获取当前子用户的音乐数据
-    //         const levelCounts: LevelCounts = currentMusicData.reduce((acc: LevelCounts, curr: MusicItem) => {
-    //             acc[curr.level] = (acc[curr.level] || 0) + 1;
-    //             return acc;
-    //         }, {});
-    //         const chartData = {
-    //             labels: Object.keys(levelCounts).map(level => `Level ${level}`),
-    //             datasets: [
-    //                 {
-    //                     label: '',
-    //                     data: Object.values(levelCounts),
-    //                     backgroundColor: ['rgb(255, 99, 132, 0.6)', 'rgb(54, 162, 235, 0.6)', 'rgb(255, 206, 86, 0.6)'],
-    //                     hoverBackgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)']
-    //                 }
-    //             ]
-    //         };
-    //         const options = {
-    //             responsive: true,
-    //             maintainAspectRatio: false,
-    //             plugins: {
-    //                 legend: {
-    //                     display: false
-    //                 }
-    //             }
-    //         };
-    //         return chartType === 'pie' ? (
-    //             <Pie data={chartData} options={options} />
-    //         ) : (
-    //             <Bar data={chartData} options={options} />
-    //         );
-    //     } else {
-    //         const currentChartData = chartDataMap[activeKid || ''] || chartDataMap['Amy'];
-    //         const data = activeChartData === 'practice' ? currentChartData.practiceData : currentChartData.accuracyData;
-    //
-    //         // 生成可供选择的子用户列表，用于对比
-    //         const compareDataSets = Object.keys(chartDataMap).filter(kid => kid !== activeKid).map(kid => {
-    //             return {
-    //                 label: kid,
-    //                 data: activeChartData === 'practice' ? chartDataMap[kid].practiceData : chartDataMap[kid].accuracyData
-    //             };
-    //         });
-    //
-    //         const ChartComponent = activeChartData === 'practice' ? MusicPracticeChart : AccuracyRateChart;
-    //         const chartOptions = {
-    //             ...options,
-    //             maintainAspectRatio: false,
-    //             responsive: true,
-    //         };
-    //         const validChartType = chartType === 'line' || chartType === 'bar' ? chartType : 'bar';
-    //         return (
-    //             <ChartComponent
-    //                 data={data}
-    //                 compareDataSets={compareDataSets} // 使用动态生成的 compareDataSets
-    //                 options={chartOptions}
-    //                 chartType={validChartType}
-    //                 openModal={() => setIsModalOpen(true)}
-    //                 markedPoints={activeChartData === 'practice' ? markedPracticePoints : markedAccuracyPoints}
-    //                 setMarkedPoints={activeChartData === 'practice' ? setMarkedPracticePoints : setMarkedAccuracyPoints}
-    //                 isModalOpen={isModalOpen}
-    //             />
-    //         );
-    //     }
-    // };
 
     const sign_out_button = async () => {
         if (authContext.signOut){
@@ -161,7 +96,9 @@ const Home = () => {
             </Content>
             {isModalOpen && (
                 <ModalOverlay>
-                    {modalContent}
+                    <ModalContent>
+                        {modalContent}
+                    </ModalContent>
                 </ModalOverlay>
             )}
             {isSignOutModalOpen && (
@@ -307,6 +244,16 @@ const ModalOverlay = styled.div`
     z-index: 1000;
 `;
 
+const ModalContent = styled.div`
+    background-color: #272525; /* Light gray background */
+    border-radius: 15px; /* Rounded corners */
+    padding: 20px; /* Add some padding */
+    max-width: 90%; /* Responsive width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for depth */
+    overflow-y: auto; /* Enable scrolling for overflow content */
+    max-height: 80%; /* Limit the maximum height */
+`;
+
 const ChartContainer = styled.div`
     flex-grow: 1;
     width: 100%;
@@ -361,18 +308,6 @@ const Button2 = styled.button`
         font-size: 17px;
         padding: 5px 10px;
     }
-`;
-
-const ModalContent = styled.div`
-    background: #333;
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80%;
-    max-width: 800px;
-    height: 50vh;
 `;
 
 const SignOutModal = styled.div`
