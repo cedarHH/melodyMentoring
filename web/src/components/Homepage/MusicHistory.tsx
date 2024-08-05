@@ -1,22 +1,163 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { MusicItem, getMusicDataByKid } from '../../constants/musicData';
-import {GetPerformanceReportReq, GetRecordReq, GetReferenceReq} from "../../contexts/api/mediaComponents";
-import apiContext, {ApiContext} from "../../contexts/ApiContext";
+import { GetRecordReq, GetReferenceReq } from '../../contexts/api/mediaComponents';
+import { ApiContext, IApiContext } from '../../contexts/ApiContext';
+import RecordDetail from "./RecordDetail";
+
+interface MusicHistoryProps {
+    activeKid: string | null;
+    setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setModalContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
+}
+
+interface MusicData {
+    title: string;
+    style: string;
+    instrument: string;
+    date: string;
+    recordId: number;
+    refId: string;
+}
+
+const MusicHistory: React.FC<MusicHistoryProps> = ({ activeKid, setIsModalOpen, setModalContent }) => {
+    const [musicData, setMusicData] = useState<MusicData[]>([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const apiContext: IApiContext | undefined = useContext(ApiContext);
+    const itemsPerPage = 11;
+    const [selectedRecord, setSelectedRecord] = useState<{ recordId: number, refId: string } | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (activeKid && apiContext) {
+                const recordsReq: GetRecordReq = {
+                    profileName: activeKid,
+                    limit: itemsPerPage,
+                    offset: currentPage * itemsPerPage,
+                    start: -1,
+                    end: -1,
+                };
+                const recordsResp = await apiContext.record.getRecord(recordsReq);
+                if (recordsResp.code === 0) {
+                    if (recordsResp.data && recordsResp.data.length !== 0) {
+                        const newMusicData = await Promise.all(
+                            recordsResp.data.map(async (record: any) => {
+                                const refReq: GetReferenceReq = {
+                                    refId: record.reference,
+                                };
+                                const refResp = await apiContext.record.getReference(refReq);
+                                if (refResp.code === 0) {
+                                    return {
+                                        title: refResp.data.title,
+                                        style: refResp.data.style,
+                                        instrument: refResp.data.instrument,
+                                        date: new Date(record.RecordId * 1000).toLocaleString('en-US', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: false,
+                                        }),
+                                        recordId: record.RecordId,
+                                        refId: record.reference,
+                                    };
+                                }
+                                return null;
+                            })
+                        );
+
+                        // @ts-ignore
+                        setMusicData(newMusicData.filter((item) => item !== null));
+                    } else {
+                        setMusicData([]); // Ensure musicData is empty if no records
+                    }
+                }
+            }
+        };
+
+        fetchData();
+    }, [activeKid, apiContext, currentPage]);
+
+    const nextPage = () =>
+        setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(musicData.length / itemsPerPage) - 1));
+    const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
+
+    const handleItemClick = (recordId: number, refId: string) => {
+        if (activeKid && recordId && apiContext) {
+            setSelectedRecord({ recordId, refId });
+            setIsModalOpen(true);
+            setModalContent(
+                <RecordDetail
+                    profileName={activeKid}
+                    recordId={recordId}
+                    refId={refId}
+                    apiContext={apiContext}
+                    setIsModalOpen={setIsModalOpen}
+                />
+            );
+        }
+    };
+
+    return (
+        <MusicHistoryContainer>
+            <TitleContainer>
+                <Title>Music History</Title>
+            </TitleContainer>
+            {musicData.length === 0 ? (
+                <div>No records found.</div>
+            ) : (
+                <>
+                    <Table>
+                        <TableHeader>Title</TableHeader>
+                        <TableHeader>Style</TableHeader>
+                        <TableHeader>Instrument</TableHeader>
+                        <TableHeader>Date</TableHeader>
+                        {musicData
+                            .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+                            .map((item, index) => (
+                                <TableRow key={index} onClick={() => handleItemClick(item.recordId, item.refId)}>
+                                    <TableData>{item.title}</TableData>
+                                    <TableData>{item.style}</TableData>
+                                    <TableData>{item.instrument}</TableData>
+                                    <TableData>{item.date}</TableData>
+                                </TableRow>
+                            ))}
+                    </Table>
+                    <PaginationContainer>
+                        <PaginationButton onClick={prevPage} disabled={currentPage === 0}>
+                            &lt;
+                        </PaginationButton>
+                        <span>
+                            {currentPage + 1} / {Math.ceil(musicData.length / itemsPerPage)}
+                        </span>
+                        <PaginationButton
+                            onClick={nextPage}
+                            disabled={currentPage >= Math.ceil(musicData.length / itemsPerPage) - 1}
+                        >
+                            &gt;
+                        </PaginationButton>
+                    </PaginationContainer>
+                </>
+            )}
+        </MusicHistoryContainer>
+    );
+};
+
+export default MusicHistory;
 
 const MusicHistoryContainer = styled.div`
-    background-color: #1B1C1E;
+    background-color: #1b1c1e;
     padding: 20px;
     border-radius: 10px;
     overflow-y: auto;
     margin-top: 20px;
     font-family: 'Arial', serif;
-    border: 2px solid #4B4B4B;
+    border: 2px solid #4b4b4b;
 `;
 
 const Table = styled.div`
     display: grid;
-    grid-template-columns: 1fr 20% 20%;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr; /* Adjusted column width for the date */
     width: 100%;
 `;
 
@@ -29,11 +170,10 @@ const TableHeader = styled.div`
     &:nth-child(1) {
         text-align: left;
     }
-    &:nth-child(2) {
+    &:nth-child(2),
+    &:nth-child(3),
+    &:nth-child(4) {
         text-align: center;
-    }
-    &:nth-child(3) {
-        text-align: right;
     }
 `;
 
@@ -51,11 +191,10 @@ const TableData = styled.div`
     &:nth-child(1) {
         text-align: left;
     }
-    &:nth-child(2) {
+    &:nth-child(2),
+    &:nth-child(3),
+    &:nth-child(4) {
         text-align: center;
-    }
-    &:nth-child(3) {
-        text-align: right;
     }
 
     @media (max-width: 1736px) {
@@ -97,7 +236,7 @@ const Title = styled.h3`
 `;
 
 const ChartButton = styled.button`
-    background-color: #292A2C;
+    background-color: #292a2c;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -151,112 +290,3 @@ const PaginationButton = styled.button`
         cursor: not-allowed;
     }
 `;
-
-interface MusicHistoryProps {
-    activeKid: string | null;
-    onClick: () => void;
-}
-
-const MusicHistory: React.FC<MusicHistoryProps> = ({ activeKid, onClick }) => {
-    const [musicData, setMusicData] = useState<MusicItem[]>([]);
-    const [currentPage, setCurrentPage] = useState(0);
-    const apiContext = useContext(ApiContext);
-    const itemsPerPage = 11;
-
-    useEffect(() => {
-        const fetchData = async () => {
-            if (activeKid && apiContext) {
-                const recordsReq: GetRecordReq = {
-                    profileName: activeKid,
-                    limit: itemsPerPage,
-                    offset: currentPage*itemsPerPage,
-                    start: -1,
-                    end: -1,
-                }
-                const recordsResp = await apiContext.record.getRecord(recordsReq);
-                if(recordsResp.code === 0) {
-                    if(recordsResp.data.length != 0) {
-                        console.log(recordsResp.data[0].RecordId)
-                        console.log(recordsResp.data[0].composition)
-                        console.log(recordsResp.data[0].reference)
-
-                        const refReq: GetReferenceReq = {
-                            refId: recordsResp.data[0].reference,
-                        }
-                        const refResp = await apiContext.record.getReference(refReq)
-                        if(refResp.code === 0) {
-                            console.log(refResp.data.title)
-                            console.log(refResp.data.composer)
-                            console.log(refResp.data.style)
-                            console.log(refResp.data.instrument)
-                        }
-
-                        const recordReq: GetPerformanceReportReq = {
-                            profileName: activeKid,
-                            recordId: recordsResp.data[0].RecordId,
-                        }
-                        const recordResp = await apiContext.record.getPerformanceReport(recordReq)
-                        if(recordResp.code === 0 ) {
-                            const response = await fetch(recordResp.presignedurl)
-                            if (response.ok) {
-                                const report = await response.json();
-                                console.log(report["Note accuracy"])
-                                console.log(report["Comment"])
-                                console.log(report["Detailed_Feedback"])
-                                console.log(report["Errors"])
-                                console.log(report["raw_diff"])
-                                console.log(report["Recommendations"])
-                                console.log(report["Detailed_Feedback"])
-                            }
-                        }
-                    }
-                }
-
-                // const data = getMusicDataByKid(activeKid);
-                // setMusicData(data);
-                // setCurrentPage(1); // Reset to first page when activeKid changes
-            }
-        }
-
-        fetchData().then(r => {});
-    }, [activeKid]);
-
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = musicData.slice(indexOfFirstItem, indexOfLastItem);
-
-    const nextPage = () => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(musicData.length / itemsPerPage)));
-    const prevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
-
-    return (
-        <MusicHistoryContainer>
-            <TitleContainer>
-                <Title>Music History</Title>
-                <ChartButton onClick={onClick}>Show Levels</ChartButton>
-            </TitleContainer>
-            <Table>
-                <TableHeader>Name</TableHeader>
-                <TableHeader>Level</TableHeader>
-                <TableHeader>Date</TableHeader>
-                {currentItems.map((item, index) => (
-                    <TableRow key={index}>
-                        <TableData>{item.name}</TableData>
-                        <TableData>{item.level}</TableData>
-                        <TableData>{item.date}</TableData>
-                    </TableRow>
-                ))}
-            </Table>
-            <PaginationContainer>
-                <PaginationButton onClick={prevPage} disabled={currentPage === 1}>
-                    &lt;
-                </PaginationButton>
-                <span>{currentPage} / {Math.ceil(musicData.length / itemsPerPage)}</span>
-                <PaginationButton onClick={nextPage} disabled={currentPage === Math.ceil(musicData.length / itemsPerPage)}>
-                    &gt;
-                </PaginationButton>
-            </PaginationContainer>
-        </MusicHistoryContainer>
-    );
-};
-
-export default MusicHistory;

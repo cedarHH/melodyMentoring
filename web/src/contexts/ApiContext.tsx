@@ -1,6 +1,6 @@
 import React, {createContext, useState, useEffect, ReactNode, useContext} from 'react';
 import webapi from './api/gocliRequest';
-import {USER_URL, MEDIA_URL} from "../constants/apiConf";
+import {BASE_URL} from "../constants/apiConf";
 import {
     SetTokensReq,
     SetTokensResp,
@@ -32,7 +32,10 @@ import {
     GetAudioUrlResp,
     GetPerformanceAudioReq,
     GetPerformanceAudioResp,
-    GetPerformanceImgReq, GetPerformanceImgResp, GetPerformanceMidiReq, GetPerformanceMidiResp,
+    GetPerformanceImgReq,
+    GetPerformanceImgResp,
+    GetPerformanceMidiReq,
+    GetPerformanceMidiResp,
     GetPerformanceReportReq,
     GetPerformanceReportResp,
     GetPerformanceSheetReq,
@@ -42,7 +45,14 @@ import {
     GetPerformanceWaterfallReq,
     GetPerformanceWaterfallResp,
     GetRecordReq,
-    GetRecordResp, GetReferenceReq, GetReferenceResp,
+    GetRecordResp,
+    GetRefAudioReq,
+    GetRefAudioResp,
+    GetReferenceReq,
+    GetReferenceResp,
+    GetRefSheetReq, GetRefSheetResp,
+    GetRefVideoReq,
+    GetRefVideoResp, GetRefWaterfallReq, GetRefWaterfallResp,
     GetVideoUrlReq,
     GetVideoUrlResp,
     SetAsReferenceReq,
@@ -88,9 +98,13 @@ interface IRecordApiContext {
     uploadAudioSuccess: (req: UploadAudioSuccessReq) => Promise<UploadAudioSuccessResp>;
     uploadVideoSuccess: (req: UploadVideoSuccessReq) => Promise<UploadVideoSuccessResp>;
     getReference: (req: GetReferenceReq) => Promise<GetReferenceResp>;
+    getRefAudio: (req: GetRefAudioReq) => Promise<GetRefAudioResp>;
+    getRefSheet: (req: GetRefSheetReq) => Promise<GetRefSheetResp>;
+    getRefVideo: (req: GetRefVideoReq) => Promise<GetRefVideoResp>;
+    getRefWaterfall: (req: GetRefWaterfallReq) => Promise<GetRefWaterfallResp>;
 }
 
-interface IApiContext {
+export interface IApiContext {
     user: IUserApiContext;
     record: IRecordApiContext;
 }
@@ -110,21 +124,21 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const setTokens = async (req: SetTokensReq) => {
-        return webapi.post<SetTokensResp>(`${USER_URL}/api/user/setTokens`, req);
+        return webapi.post<SetTokensResp>(`${BASE_URL}/api/user/setTokens`, req);
     }
 
     /**
      * @description "refreshTokens"
      */
     const refreshTokens = async () => {
-        return webapi.get<RefreshTokensResp>(`${USER_URL}/api/user/refreshTokens`, {});
+        return webapi.get<RefreshTokensResp>(`${BASE_URL}/api/user/refreshTokens`, {});
     }
 
     /**
      * @description "get the list of sub-users"
      */
     const getSubUsers = async () => {
-        return webapi.get<GetSubUsersResp>(`${USER_URL}/api/user/getSubUsers`, {}, defaultConfig);
+        return webapi.get<GetSubUsersResp>(`${BASE_URL}/api/user/getSubUsers`, {}, defaultConfig);
     };
 
     /**
@@ -132,7 +146,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param params
      */
     const getSubUserByName = async (params: GetSubUserByNameReqParams) => {
-        return webapi.get<GetSubUserByNameResp>(`${USER_URL}/api/user/getSubUserByName?profileName=${params.profileName}`, {}, defaultConfig);
+        return webapi.get<GetSubUserByNameResp>(`${BASE_URL}/api/user/getSubUserByName?profileName=${params.profileName}`, {}, defaultConfig);
     };
 
     /**
@@ -140,7 +154,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const createSubUser = async (req: CreateSubUserReq) => {
-        return webapi.post<CreateSubUserResp>(`${USER_URL}/api/user/createSubUser`, req, defaultConfig);
+        return webapi.post<CreateSubUserResp>(`${BASE_URL}/api/user/createSubUser`, req, defaultConfig);
     };
 
     /**
@@ -148,7 +162,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const deleteSubUserByName = async (req: DeleteSubUserByNameReq) => {
-        return webapi.post<DeleteSubUserByNameResp>(`${USER_URL}/api/user/deleteSubUserByName`, req, defaultConfig);
+        return webapi.post<DeleteSubUserByNameResp>(`${BASE_URL}/api/user/deleteSubUserByName`, req, defaultConfig);
     };
 
     /**
@@ -156,7 +170,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param params
      */
     const getAvatar = async (params: GetAvatarReqParams) => {
-        return webapi.get<GetAvatarResp>(`${USER_URL}/api/user/getAvatar?profileName=${params.profileName}`, {}, defaultConfig);
+        return webapi.get<GetAvatarResp>(`${BASE_URL}/api/user/getAvatar?profileName=${params.profileName}`, {}, defaultConfig);
     };
 
     /**
@@ -164,7 +178,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param params
      */
     const getAvatarUploadUrl = async (params: GetAvatarUploadUrlReqParams) => {
-        return webapi.get<GetAvatarUploadUrlResp>(`${USER_URL}/api/user/getAvatarUploadUrl?profileName=${params.profileName}`, {}, defaultConfig);
+        return webapi.get<GetAvatarUploadUrlResp>(`${BASE_URL}/api/user/getAvatarUploadUrl?profileName=${params.profileName}`, {}, defaultConfig);
     };
 
     /**
@@ -172,7 +186,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const updateAvatarSuccess = async (req: UpdateAvatarSuccessReq) => {
-        return webapi.post<UpdateAvatarSuccessResp>(`${USER_URL}/api/user/updateAvatarSuccess`, req, defaultConfig);
+        return webapi.post<UpdateAvatarSuccessResp>(`${BASE_URL}/api/user/updateAvatarSuccess`, req, defaultConfig);
     };
 
     /**
@@ -180,7 +194,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const updateSubUserAttr = async (req: UpdateSubUserAttrReq) => {
-        return webapi.post<UpdateSubUserAttrResp>(`${USER_URL}/api/user/updateSubUserAttr`, req, defaultConfig);
+        return webapi.post<UpdateSubUserAttrResp>(`${BASE_URL}/api/user/updateSubUserAttr`, req, defaultConfig);
     };
 
     /**
@@ -188,7 +202,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const verifyPin = async (req: VerifypinReq) => {
-        return webapi.post<VerifypinResp>(`${USER_URL}/api/user/verifyPin`, req, defaultConfig);
+        return webapi.post<VerifypinResp>(`${BASE_URL}/api/user/verifyPin`, req, defaultConfig);
     };
 
     /**
@@ -196,7 +210,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const createRecord = async (req: CreateRecordReq) => {
-        return webapi.post<CreateRecordResp>(`${MEDIA_URL}/api/media/record/createRecord`, req);
+        return webapi.post<CreateRecordResp>(`${BASE_URL}/api/media/record/createRecord`, req);
     };
 
     /**
@@ -204,7 +218,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const deleteRecord = async (req: DeleteRecordReq) => {
-        return webapi.post<DeleteRecordResp>(`${MEDIA_URL}/api/media/record/deleteRecord`, req);
+        return webapi.post<DeleteRecordResp>(`${BASE_URL}/api/media/record/deleteRecord`, req);
     };
 
     /**
@@ -212,7 +226,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getAudioUrl = async (req: GetAudioUrlReq) => {
-        return webapi.post<GetAudioUrlResp>(`${MEDIA_URL}/api/media/record/getAudioUrl`, req);
+        return webapi.post<GetAudioUrlResp>(`${BASE_URL}/api/media/record/getAudioUrl`, req);
     };
 
     /**
@@ -220,7 +234,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getPerformanceAudio = async (req: GetPerformanceAudioReq) => {
-        return webapi.post<GetPerformanceAudioResp>(`${MEDIA_URL}/api/media/record/getPerformanceAudio`, req);
+        return webapi.post<GetPerformanceAudioResp>(`${BASE_URL}/api/media/record/getPerformanceAudio`, req);
     };
 
     /**
@@ -228,7 +242,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getPerformanceImg = async (req: GetPerformanceImgReq) => {
-        return webapi.post<GetPerformanceImgResp>(`${MEDIA_URL}/api/media/record/getPerformanceImg`, req);
+        return webapi.post<GetPerformanceImgResp>(`${BASE_URL}/api/media/record/getPerformanceImg`, req);
     };
 
     /**
@@ -236,7 +250,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getPerformanceMidi = async (req: GetPerformanceMidiReq) => {
-        return webapi.post<GetPerformanceMidiResp>(`${MEDIA_URL}/api/media/record/getPerformanceMidi`, req);
+        return webapi.post<GetPerformanceMidiResp>(`${BASE_URL}/api/media/record/getPerformanceMidi`, req);
     };
 
     /**
@@ -244,7 +258,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getPerformanceReport = async (req: GetPerformanceReportReq) => {
-        return webapi.post<GetPerformanceReportResp>(`${MEDIA_URL}/api/media/record/getPerformanceReport`, req);
+        return webapi.post<GetPerformanceReportResp>(`${BASE_URL}/api/media/record/getPerformanceReport`, req);
     };
 
     /**
@@ -252,7 +266,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getPerformanceSheet = async (req: GetPerformanceSheetReq) => {
-        return webapi.post<GetPerformanceSheetResp>(`${MEDIA_URL}/api/media/record/getPerformanceSheet`, req);
+        return webapi.post<GetPerformanceSheetResp>(`${BASE_URL}/api/media/record/getPerformanceSheet`, req);
     };
 
     /**
@@ -260,7 +274,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getPerformanceVideo = async (req: GetPerformanceVideoReq) => {
-        return webapi.post<GetPerformanceVideoResp>(`${MEDIA_URL}/api/media/record/getPerformanceVideo`, req);
+        return webapi.post<GetPerformanceVideoResp>(`${BASE_URL}/api/media/record/getPerformanceVideo`, req);
     };
 
     /**
@@ -268,7 +282,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getPerformanceWaterfall = async (req: GetPerformanceWaterfallReq) => {
-        return webapi.post<GetPerformanceWaterfallResp>(`${MEDIA_URL}/api/media/record/getPerformanceWaterfall`, req);
+        return webapi.post<GetPerformanceWaterfallResp>(`${BASE_URL}/api/media/record/getPerformanceWaterfall`, req);
     };
 
     /**
@@ -276,7 +290,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getRecord = async (req: GetRecordReq) => {
-        return webapi.post<GetRecordResp>(`${MEDIA_URL}/api/media/record/getRecord`, req);
+        return webapi.post<GetRecordResp>(`${BASE_URL}/api/media/record/getRecord`, req);
     };
 
     /**
@@ -284,7 +298,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getVideoUrl = async (req: GetVideoUrlReq) => {
-        return webapi.post<GetVideoUrlResp>(`${MEDIA_URL}/api/media/record/getVideoUrl`, req);
+        return webapi.post<GetVideoUrlResp>(`${BASE_URL}/api/media/record/getVideoUrl`, req);
     };
 
     /**
@@ -292,7 +306,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const setAsReference = async (req: SetAsReferenceReq) => {
-        return webapi.post<SetAsReferenceResp>(`${MEDIA_URL}/api/media/record/setAsReference`, req);
+        return webapi.post<SetAsReferenceResp>(`${BASE_URL}/api/media/record/setAsReference`, req);
     };
 
     /**
@@ -300,7 +314,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const uploadAudioSuccess = async (req: UploadAudioSuccessReq) => {
-        return webapi.post<UploadAudioSuccessResp>(`${MEDIA_URL}/api/media/record/uploadAudioSuccess`, req);
+        return webapi.post<UploadAudioSuccessResp>(`${BASE_URL}/api/media/record/uploadAudioSuccess`, req);
     };
 
     /**
@@ -308,7 +322,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const uploadVideoSuccess = async (req: UploadVideoSuccessReq) => {
-        return webapi.post<UploadVideoSuccessResp>(`${MEDIA_URL}/api/media/record/uploadVideoSuccess`, req);
+        return webapi.post<UploadVideoSuccessResp>(`${BASE_URL}/api/media/record/uploadVideoSuccess`, req);
     };
 
     /**
@@ -316,7 +330,39 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
      * @param req
      */
     const getReference = async (req: GetReferenceReq) => {
-        return webapi.post<GetReferenceResp>(`${MEDIA_URL}/api/media/reference/getReference`, req);
+        return webapi.post<GetReferenceResp>(`${BASE_URL}/api/media/reference/getReference`, req);
+    };
+
+    /**
+     * @description "get reference video"
+     * @param req
+     */
+    const getRefVideo = async (req: GetRefVideoReq) => {
+        return webapi.post<GetRefVideoResp>(`${BASE_URL}/api/media/reference/getRefVideo`, req);
+    };
+
+    /**
+     * @description "get reference audio"
+     * @param req
+     */
+    const getRefAudio = async (req: GetRefAudioReq) => {
+        return webapi.post<GetRefAudioResp>(`${BASE_URL}/api/media/reference/getRefAudio`, req);
+    };
+
+    /**
+     * @description "get reference sheet"
+     * @param req
+     */
+    const getRefSheet = async (req: GetRefSheetReq) => {
+        return webapi.post<GetRefSheetResp>(`${BASE_URL}/api/media/reference/getRefSheet`, req);
+    };
+
+    /**
+     * @description "get reference waterfall"
+     * @param req
+     */
+    const getRefWaterfall = async (req: GetRefWaterfallReq) => {
+        return webapi.post<GetRefWaterfallResp>(`${BASE_URL}/api/media/reference/getRefWaterfall`, req);
     };
 
     const userApi: IUserApiContext = {
@@ -350,6 +396,10 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
         uploadAudioSuccess,
         uploadVideoSuccess,
         getReference,
+        getRefVideo,
+        getRefAudio,
+        getRefSheet,
+        getRefWaterfall
     };
 
     const api: IApiContext = {

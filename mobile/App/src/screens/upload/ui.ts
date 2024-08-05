@@ -17,6 +17,11 @@ export const styles = StyleSheet.create({
         width: '70%',
         height: '25%',
     },
+    uploadRefVideoImg: {
+        height:'60%',
+        aspectRatio:1,
+        alignSelf:'center',
+    },
     uploadButton: {
         height:'60%',
         aspectRatio:1,
@@ -54,6 +59,33 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         marginHorizontal: 10,
         padding: 10,
-        color: 'white'
-    }
+        color: 'black'
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: '80%',
+        maxWidth: 300,
+        height: '30%',
+        maxHeight: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgb(240, 240, 240)',
+        borderRadius: 10,
+        padding: 20,
+    },
+    modalLogo: {
+        width: '30%',
+        height: '30%',
+        marginBottom: 20,
+    },
+    modalText: {
+        color: 'rgb(90, 90, 90)',
+        fontSize: 18,
+        marginTop: 20,
+    },
 });

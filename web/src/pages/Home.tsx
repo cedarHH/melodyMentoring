@@ -6,12 +6,117 @@ import MusicHistory from '../components/Homepage/MusicHistory';
 import MusicPracticeChart from '../components/Homepage/MusicPracticeChart';
 import AccuracyRateChart from '../components/Homepage/AccuracyRateChart';
 import { AuthContext } from "../contexts/AuthContext";
-import { chartDataMap, options } from '../constants/chartData';
-import { getMusicDataByKid, MusicItem } from '../constants/musicData';
-import { childrenData } from '../constants/childrenData';
 import { Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+
+interface LevelCounts {
+    [key: number]: number;
+}
+
+const Home = () => {
+    const authContext = useContext(AuthContext);
+    const [activeKid, setActiveKid] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
+    const [activeChartData, setActiveChartData] = useState<'practice' | 'accuracy' | 'musicHistory'>('practice');
+    const [chartType, setChartType] = useState<'line' | 'bar' | 'pie'>('bar');
+    const [resizeKey, setResizeKey] = useState(0); // State to manage the resize key
+    const [markedPracticePoints, setMarkedPracticePoints] = useState<number[]>([]);
+    const [markedAccuracyPoints, setMarkedAccuracyPoints] = useState<number[]>([]);
+    const [modalContent, setModalContent] = useState<React.ReactNode>(null);
+
+    useEffect(() => {
+
+        // const childrenKeys = Object.keys(childrenData);
+        // setActiveKid(childrenKeys.length > 0 ? childrenKeys[0] : null);
+
+        const handleResize = () => {
+            setResizeKey(prevKey => prevKey + 1); // Increment key to force re-render
+            window.scrollTo(0, 0); // Scroll to the top on resize
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const toggleChartType = () => {
+        if (activeChartData === 'musicHistory') {
+            setChartType(prev => prev === 'pie' ? 'bar' : 'pie');
+        } else {
+            setChartType(prev => prev === 'line' ? 'bar' : 'line');
+        }
+    };
+
+
+    const sign_out_button = async () => {
+        if (authContext.signOut){
+            authContext.signOut();
+        }
+    }
+
+    const handleSignOutClick = () => {
+        setIsSignOutModalOpen(true);
+    };
+
+    const handleConfirmSignOut = () => {
+        setIsSignOutModalOpen(false);
+        sign_out_button();
+    };
+
+    const handleCancelSignOut = () => {
+        setIsSignOutModalOpen(false);
+    };
+
+    return (
+        <MainContainer>
+            <Header>
+                <Logo>MyGO!!!</Logo>
+                <Button2 onClick={handleSignOutClick}>Log Out</Button2>
+            </Header>
+            <Content key={resizeKey}>
+                <SidebarContainer>
+                    <Sidebar activeKid={activeKid} setActiveKid={setActiveKid} />
+                </SidebarContainer>
+                <MainView>
+                    <UserInfo activeKid={activeKid} setActiveKid={setActiveKid} />
+                    <MusicHistory
+                        activeKid={activeKid}
+                        setIsModalOpen={setIsModalOpen}
+                        setModalContent={setModalContent}
+                    />
+                </MainView>
+                <ChartsContainer>
+
+                </ChartsContainer>
+            </Content>
+            {isModalOpen && (
+                <ModalOverlay>
+                    <ModalContent>
+                        {modalContent}
+                    </ModalContent>
+                </ModalOverlay>
+            )}
+            {isSignOutModalOpen && (
+                <ModalOverlay>
+                    <SignOutModal>
+                        <SignOutModalTitle>Are you sure you want to sign out?</SignOutModalTitle>
+                        <SignOutButtonContainer>
+                            <SignOutButton1 onClick={handleConfirmSignOut}>Yes</SignOutButton1>
+                            <SignOutButton2 onClick={handleCancelSignOut}>No</SignOutButton2>
+                        </SignOutButtonContainer>
+                    </SignOutModal>
+                </ModalOverlay>
+            )}
+        </MainContainer>
+    );
+}
+
+export default Home;
 
 const MainContainer = styled.div`
     display: flex;
@@ -139,6 +244,16 @@ const ModalOverlay = styled.div`
     z-index: 1000;
 `;
 
+const ModalContent = styled.div`
+    background-color: #272525; /* Light gray background */
+    border-radius: 15px; /* Rounded corners */
+    padding: 20px; /* Add some padding */
+    max-width: 90%; /* Responsive width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for depth */
+    overflow-y: auto; /* Enable scrolling for overflow content */
+    max-height: 80%; /* Limit the maximum height */
+`;
+
 const ChartContainer = styled.div`
     flex-grow: 1;
     width: 100%;
@@ -193,18 +308,6 @@ const Button2 = styled.button`
         font-size: 17px;
         padding: 5px 10px;
     }
-`;
-
-const ModalContent = styled.div`
-    background: #333;
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80%;
-    max-width: 800px;
-    height: 50vh;
 `;
 
 const SignOutModal = styled.div`
@@ -289,224 +392,3 @@ const ModalTitle = styled.h2`
     font-weight: bold;
     margin-bottom: 20px;
 `;
-
-interface LevelCounts {
-    [key: number]: number;
-}
-
-const Home = () => {
-    const authContext = useContext(AuthContext);
-    const [activeKid, setActiveKid] = useState<string | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
-    const [activeChartData, setActiveChartData] = useState<'practice' | 'accuracy' | 'musicHistory'>('practice');
-    const [chartType, setChartType] = useState<'line' | 'bar' | 'pie'>('bar');
-    const [resizeKey, setResizeKey] = useState(0); // State to manage the resize key
-    const [markedPracticePoints, setMarkedPracticePoints] = useState<number[]>([]);
-    const [markedAccuracyPoints, setMarkedAccuracyPoints] = useState<number[]>([]);
-
-    useEffect(() => {
-
-        // const childrenKeys = Object.keys(childrenData);
-        // setActiveKid(childrenKeys.length > 0 ? childrenKeys[0] : null);
-
-        const handleResize = () => {
-            setResizeKey(prevKey => prevKey + 1); // Increment key to force re-render
-            window.scrollTo(0, 0); // Scroll to the top on resize
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    const toggleChartType = () => {
-        if (activeChartData === 'musicHistory') {
-            setChartType(prev => prev === 'pie' ? 'bar' : 'pie');
-        } else {
-            setChartType(prev => prev === 'line' ? 'bar' : 'line');
-        }
-    };
-
-    const handleChartClick = (type: 'practice' | 'accuracy' | 'musicHistory') => {
-        setActiveChartData(type);
-        setChartType('bar');
-        setIsModalOpen(true);
-    };
-
-    const renderChart = () => {
-        if (activeChartData === 'musicHistory') {
-            const currentMusicData = getMusicDataByKid(activeKid || ''); // 使用 activeKid 获取当前子用户的音乐数据
-            const levelCounts: LevelCounts = currentMusicData.reduce((acc: LevelCounts, curr: MusicItem) => {
-                acc[curr.level] = (acc[curr.level] || 0) + 1;
-                return acc;
-            }, {});
-            const chartData = {
-                labels: Object.keys(levelCounts).map(level => `Level ${level}`),
-                datasets: [
-                    {
-                        label: '',
-                        data: Object.values(levelCounts),
-                        backgroundColor: ['rgb(255, 99, 132, 0.6)', 'rgb(54, 162, 235, 0.6)', 'rgb(255, 206, 86, 0.6)'],
-                        hoverBackgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)']
-                    }
-                ]
-            };
-            const options = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            };
-            return chartType === 'pie' ? (
-                <Pie data={chartData} options={options} />
-            ) : (
-                <Bar data={chartData} options={options} />
-            );
-        } else {
-            const currentChartData = chartDataMap[activeKid || ''] || chartDataMap['Amy'];
-            const data = activeChartData === 'practice' ? currentChartData.practiceData : currentChartData.accuracyData;
-
-            // 生成可供选择的子用户列表，用于对比
-            const compareDataSets = Object.keys(chartDataMap).filter(kid => kid !== activeKid).map(kid => {
-                return {
-                    label: kid,
-                    data: activeChartData === 'practice' ? chartDataMap[kid].practiceData : chartDataMap[kid].accuracyData
-                };
-            });
-
-            const ChartComponent = activeChartData === 'practice' ? MusicPracticeChart : AccuracyRateChart;
-            const chartOptions = {
-                ...options,
-                maintainAspectRatio: false,
-                responsive: true,
-            };
-            const validChartType = chartType === 'line' || chartType === 'bar' ? chartType : 'bar';
-            return (
-                <ChartComponent
-                    data={data}
-                    compareDataSets={compareDataSets} // 使用动态生成的 compareDataSets
-                    options={chartOptions}
-                    chartType={validChartType}
-                    openModal={() => setIsModalOpen(true)}
-                    markedPoints={activeChartData === 'practice' ? markedPracticePoints : markedAccuracyPoints}
-                    setMarkedPoints={activeChartData === 'practice' ? setMarkedPracticePoints : setMarkedAccuracyPoints}
-                    isModalOpen={isModalOpen}
-                />
-            );
-        }
-    };
-
-    const sign_out_button = async () => {
-        if (authContext.signOut){
-            authContext.signOut();
-        }
-    }
-
-    const handleSignOutClick = () => {
-        setIsSignOutModalOpen(true);
-    };
-
-    const handleConfirmSignOut = () => {
-        setIsSignOutModalOpen(false);
-        sign_out_button();
-    };
-
-    const handleCancelSignOut = () => {
-        setIsSignOutModalOpen(false);
-    };
-
-    return (
-        <MainContainer>
-            <Header>
-                <Logo>MyGO!!!</Logo>
-                <Button2 onClick={handleSignOutClick}>Log Out</Button2>
-            </Header>
-            <Content key={resizeKey}>
-                <SidebarContainer>
-                    <Sidebar activeKid={activeKid} setActiveKid={setActiveKid} />
-                </SidebarContainer>
-                <MainView>
-                    <UserInfo activeKid={activeKid} setActiveKid={setActiveKid} />
-                    <MusicHistory activeKid={activeKid} onClick={() => handleChartClick('musicHistory')} />
-                </MainView>
-                <ChartsContainer>
-                    <ChartWrapper>
-                        <MusicPracticeChart
-                            data={chartDataMap[activeKid || 'Amy'].practiceData}
-                            compareDataSets={Object.keys(chartDataMap).filter(kid => kid !== activeKid).map(kid => ({
-                                label: kid,
-                                data: chartDataMap[kid].practiceData
-                            }))}
-                            options={{
-                                ...options,
-                                maintainAspectRatio: false,
-                                responsive: true,
-                                title: { display: true, text: 'Daily Music Practice Duration' }
-                            }}
-                            chartType="line"
-                            openModal={() => handleChartClick('practice')}
-                            markedPoints={markedPracticePoints}
-                            setMarkedPoints={setMarkedPracticePoints}
-                            isModalOpen={isModalOpen}
-                        />
-                    </ChartWrapper>
-                    <ChartWrapper>
-                        <AccuracyRateChart
-                            data={chartDataMap[activeKid || 'Amy'].accuracyData}
-                            compareDataSets={Object.keys(chartDataMap).filter(kid => kid !== activeKid).map(kid => ({
-                                label: kid,
-                                data: chartDataMap[kid].accuracyData
-                            }))} // 动态生成 compareDataSets
-                            options={{
-                                ...options,
-                                maintainAspectRatio: false,
-                                responsive: true,
-                                title: { display: true, text: 'Daily Practice Accuracy Rate' }
-                            }}
-                            chartType="line"
-                            openModal={() => handleChartClick('accuracy')}
-                            markedPoints={markedAccuracyPoints}
-                            setMarkedPoints={setMarkedAccuracyPoints}
-                            isModalOpen={isModalOpen}
-                        />
-                    </ChartWrapper>
-                </ChartsContainer>
-            </Content>
-            {isModalOpen && (
-                <ModalOverlay>
-                    <ModalContent>
-                        {activeChartData === 'musicHistory' && <ModalTitle>Levels of Music History</ModalTitle>}
-                        <ChartContainer>
-                            {renderChart()}
-                        </ChartContainer>
-                        <ButtonsContainer>
-                            <Button1 onClick={toggleChartType}>
-                                Toggle to {chartType === 'pie' ? 'Bar' : 'Pie'} Chart
-                            </Button1>
-                            <Button1 onClick={() => setIsModalOpen(false)}>Close</Button1>
-                        </ButtonsContainer>
-                    </ModalContent>
-                </ModalOverlay>
-            )}
-            {isSignOutModalOpen && (
-                <ModalOverlay>
-                    <SignOutModal>
-                        <SignOutModalTitle>Are you sure you want to sign out?</SignOutModalTitle>
-                        <SignOutButtonContainer>
-                            <SignOutButton1 onClick={handleConfirmSignOut}>Yes</SignOutButton1>
-                            <SignOutButton2 onClick={handleCancelSignOut}>No</SignOutButton2>
-                        </SignOutButtonContainer>
-                    </SignOutModal>
-                </ModalOverlay>
-            )}
-        </MainContainer>
-    );
-}
-
-export default Home;
