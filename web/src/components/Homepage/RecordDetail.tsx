@@ -4,14 +4,15 @@ import { IApiContext } from "../../contexts/ApiContext";
 import {
     GetPerformanceAudioReq,
     GetPerformanceAudioResp,
-    GetPerformanceReportReq,
+    GetPerformanceReportReq, GetPerformanceSheetReq, GetPerformanceSheetResp,
     GetPerformanceVideoReq,
     GetPerformanceVideoResp,
     GetPerformanceWaterfallReq,
-    GetRefAudioReq,
-    GetRefVideoReq,
+    GetRefAudioReq, GetRefAudioResp, GetRefSheetReq, GetRefSheetResp,
+    GetRefVideoReq, GetRefVideoResp,
     GetRefWaterfallReq
 } from "../../contexts/api/mediaComponents";
+import MusicSheet from "./MusicSheet";
 
 interface RecordDetailProps {
     profileName: string;
@@ -32,10 +33,12 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
     const [videoUrl, setVideoUrl] = useState<GetPerformanceVideoResp | null>(null);
     const [audioUrl, setAudioUrl] = useState<GetPerformanceAudioResp | null>(null);
     const [imgUrl, setImgUrl] = useState<string | null>(null);
+    const [sheetUrl, setSheetUrl] = useState<GetPerformanceSheetResp | null>(null);
     const [reportData, setReportData] = useState<any | null>(null);
-    const [refVideoUrl, setRefVideoUrl] = useState<GetPerformanceVideoResp | null>(null);
-    const [refAudioUrl, setRefAudioUrl] = useState<GetPerformanceAudioResp | null>(null);
+    const [refVideoUrl, setRefVideoUrl] = useState<GetRefVideoResp | null>(null);
+    const [refAudioUrl, setRefAudioUrl] = useState<GetRefAudioResp | null>(null);
     const [refWaterfallUrl, setRefWaterfallUrl] = useState<string | null>(null);
+    const [refSheetUrl, setRefSheetUrl] = useState<GetRefSheetResp | null>(null);
 
     useEffect(() => {
         setIsModalOpen(true);
@@ -75,6 +78,18 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
                 setImgUrl(waterfallResp.presignedurl);
             } catch (error) {
                 console.error("Error fetching performance waterfall:", error);
+            }
+
+            // Fetch performance sheet URL
+            try {
+                const getPerformanceSheetUrl: GetPerformanceSheetReq = {
+                    profileName: profileName,
+                    recordId: recordId,
+                };
+                const sheetResp = await apiContext.record.getPerformanceSheet(getPerformanceSheetUrl);
+                setSheetUrl(sheetResp);
+            } catch (error) {
+                console.error("Error fetching reference audio:", error);
             }
 
             // Fetch performance report
@@ -133,6 +148,17 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
             } catch (error) {
                 console.error("Error fetching reference waterfall:", error);
             }
+
+            // Fetch reference sheet URL
+            try {
+                const getRefSheetUrl: GetRefSheetReq = {
+                    refId: refId
+                };
+                const refSheetResp = await apiContext.record.getRefSheet(getRefSheetUrl);
+                setRefSheetUrl(refSheetResp);
+            } catch (error) {
+                console.error("Error fetching reference audio:", error);
+            }
         };
 
         fetchData();
@@ -157,6 +183,14 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
                     <img src={imgUrl} alt="Waterfall" />
                 ) : (
                     <div>Waterfall content not available</div>
+                );
+            case 'sheet':
+                return sheetUrl && sheetUrl.code === 0 ? (
+                    <div style={containerStyle}>
+                        <MusicSheet fileUrl={sheetUrl.presignedurl}/>
+                    </div>
+                ) : (
+                    <div>Reference sheet not available</div>
                 );
             case 'report':
                 return reportData ? (
@@ -189,6 +223,14 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
                 ) : (
                     <div>Reference waterfall not available</div>
                 );
+            case 'refSheet':
+                return refSheetUrl && refSheetUrl.code === 0 ? (
+                    <div style={containerStyle}>
+                        <MusicSheet fileUrl={refSheetUrl.presignedurl}/>
+                    </div>
+                ) : (
+                    <div>Reference sheet not available</div>
+                );
             default:
                 return <div>Error loading content</div>;
         }
@@ -196,14 +238,16 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: '10px' }}>
+            <div style={{display: 'flex', justifyContent: 'space-around', marginBottom: '10px'}}>
                 <button style={buttonStyle} onClick={() => setActiveContent('video')}>User Video</button>
                 <button style={buttonStyle} onClick={() => setActiveContent('audio')}>User Audio</button>
                 <button style={buttonStyle} onClick={() => setActiveContent('waterfall')}>User Image</button>
+                <button style={buttonStyle} onClick={() => setActiveContent('sheet')}>User Sheet</button>
                 <button style={buttonStyle} onClick={() => setActiveContent('report')}>User Report</button>
                 <button style={buttonStyle} onClick={() => setActiveContent('refVideo')}>Ref Video</button>
                 <button style={buttonStyle} onClick={() => setActiveContent('refAudio')}>Ref Audio</button>
                 <button style={buttonStyle} onClick={() => setActiveContent('refWaterfall')}>Ref Image</button>
+                <button style={buttonStyle} onClick={() => setActiveContent('refSheet')}>Ref Sheet</button>
                 <button style={buttonStyle} onClick={() => setIsModalOpen(false)}>Close</button>
             </div>
             {renderContent()}
@@ -221,5 +265,16 @@ const buttonStyle = {
     margin: '5px',
     fontSize: '14px',
 };
+
+const containerStyle = {
+    backgroundColor: '#ffffff',
+    borderRadius: '15px',
+    padding: '20px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+};
+
 
 export default RecordDetail;
