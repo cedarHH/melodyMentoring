@@ -300,7 +300,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
             {isAddModalOpen && (
                 <ModalOverlay>
                     <AddKidModal>
-                        <AddKidModalTitle>Create a new kid account</AddKidModalTitle>
+                        <AddKidModalTitle>Create a new sub account</AddKidModalTitle>
                         <form onSubmit={handleAddKid}>
                             <Input
                                 type="text"
