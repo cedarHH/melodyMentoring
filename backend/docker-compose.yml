@@ -63,6 +63,13 @@ services:
       - ./app/audioanalysis:/app/audioanalysis
     working_dir: /app/audioanalysis
     command: ["python", "consumer.py"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 
 networks:
   app-network:
