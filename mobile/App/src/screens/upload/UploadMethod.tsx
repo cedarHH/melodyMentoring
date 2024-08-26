@@ -100,8 +100,8 @@ const UploadMethod: React.FC<Props> = ({navigation, route}) => {
             try {
                 const reqParams: GetAnalysisResultReqParams = {analysisId: analysisId};
                 const resp: GetAnalysisResultResp = await api.analysis.getAnalysisResult(reqParams);
-                console.log(resp.code)
-                console.log(resp.data.analysisRank);
+                // console.log(resp.code)
+                // console.log(resp.data.analysisRank);
                 if (resp.code === 0 && resp.data.analysisRank === 0) {
                     setAnalysisCompleted(true);
                     setIsModalVisible(false);

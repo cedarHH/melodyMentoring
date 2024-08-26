@@ -327,7 +327,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
         {isDeleteModalOpen && (
             <ModalOverlay>
                 <AddKidModal>
-                    <AddKidModalTitle>Delete a kid account</AddKidModalTitle>
+                    <AddKidModalTitle>Delete a sub account</AddKidModalTitle>
                     <form onSubmit={handleDeleteKid}>
                         <Select
                             value={selectedKid}
