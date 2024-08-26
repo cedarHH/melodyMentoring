@@ -190,7 +190,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
         const fetchUsers = async () => {
             if (apiContext) {
                 const response = await apiContext.user.getSubUsers()
-                if (response.code === 0) {
+                if (response.code === 0 && response.data) {
                     const profileNames = response.data.map(
                         (subUser: SubUser) => subUser.profileName);
                     setSubUsers(profileNames);
