@@ -146,24 +146,24 @@ const ModalButton = styled.button`
 `;
 
 const Select = styled.select`
-width: 80%;
-padding: 8px;
-margin: 10px 0;
-border-radius: 5px;
-border: 1px solid #444;
-background-color: #333;
-color: #fff;
-font-size: 16px;
+    width: 80%;
+    padding: 8px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
 
-&:focus {
-    outline: none;
-    border-color: #777;
-}
+    &:focus {
+        outline: none;
+        border-color: #777;
+    }
 
-@media (max-width: 768px) {
-    width: 90%;
-    padding: 5px;
-}
+    @media (max-width: 768px) {
+        width: 90%;
+        padding: 5px;
+    }
 `;
 
 const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
@@ -190,7 +190,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
         const fetchUsers = async () => {
             if (apiContext) {
                 const response = await apiContext.user.getSubUsers()
-                if (response.code === 0) {
+                if (response.code === 0 && response.data) {
                     const profileNames = response.data.map(
                         (subUser: SubUser) => subUser.profileName);
                     setSubUsers(profileNames);
@@ -277,82 +277,82 @@ const Sidebar: React.FC<SidebarProps> = ({ activeKid, setActiveKid }) => {
         setIsDeleteModalOpen(false);
     };
 
-const toggleShowPin = () => {
-    setShowPin((prev) => !prev);
-};
+    const toggleShowPin = () => {
+        setShowPin((prev) => !prev);
+    };
 
-return (
-    <>
-        <List>
+    return (
+        <>
+            <List>
+                {subUsers.map((kid: string) => (
+                    <ListItem
+                        key={kid}
+                        $isActive={activeKid === kid}
+                        onClick={() => setActiveKid(kid)}
+                    >
+                        {kid}
+                    </ListItem>
+                ))}
+            </List>
+            <AddButton onClick={openAddModal}>+</AddButton>
+            <br />
+            <AddButton onClick={openDeleteModal}>-</AddButton>
+        {isAddModalOpen && (
+            <ModalOverlay>
+                <AddKidModal>
+                    <AddKidModalTitle>Create a new sub account</AddKidModalTitle>
+                    <form onSubmit={handleAddKid}>
+                        <Input
+                            type="text"
+                            placeholder="Name"
+                            value={newKidName}
+                            onChange={(e) => setNewKidName(e.target.value)}
+                            autoComplete="off"
+                        />
+                        <Input
+                            type={showPin ? "text" : "password"}
+                            placeholder="PIN"
+                            value={newKidPin}
+                            onChange={(e) => setNewKidPin(e.target.value)}
+                            autoComplete="new-password"
+                        />
+                        <ModalActions>
+                            <ModalButton type="submit">Confirm</ModalButton>
+                            <ModalButton type="button" onClick={closeAddModal}>Cancel</ModalButton>
+                        </ModalActions>
+                    </form>
+                </AddKidModal>
+            </ModalOverlay>
+    )}
+        {isDeleteModalOpen && (
+            <ModalOverlay>
+                <AddKidModal>
+                    <AddKidModalTitle>Delete a kid account</AddKidModalTitle>
+                    <form onSubmit={handleDeleteKid}>
+                        <Select
+                            value={selectedKid}
+                            onChange={(e) => setSelectedKid(e.target.value)}
+                        >
+                            <option value="">Select a kid</option>
             {subUsers.map((kid: string) => (
-                <ListItem
-                    key={kid}
-                    $isActive={activeKid === kid}
-                    onClick={() => setActiveKid(kid)}
-                >
+                <option key={kid} value={kid}>
                     {kid}
-                </ListItem>
+                </option>
             ))}
-        </List>
-        <AddButton onClick={openAddModal}>+</AddButton>
-        <br />
-        <AddButton onClick={openDeleteModal}>-</AddButton>
-    {isAddModalOpen && (
-        <ModalOverlay>
-            <AddKidModal>
-                <AddKidModalTitle>Create a new sub account</AddKidModalTitle>
-                <form onSubmit={handleAddKid}>
-                    <Input
-                        type="text"
-                        placeholder="Name"
-                        value={newKidName}
-                        onChange={(e) => setNewKidName(e.target.value)}
-                        autoComplete="off"
-                    />
-                    <Input
-                        type={showPin ? "text" : "password"}
-                        placeholder="PIN"
-                        value={newKidPin}
-                        onChange={(e) => setNewKidPin(e.target.value)}
-                        autoComplete="new-password"
-                    />
-                    <ModalActions>
-                        <ModalButton type="submit">Confirm</ModalButton>
-                        <ModalButton type="button" onClick={closeAddModal}>Cancel</ModalButton>
-                    </ModalActions>
-                </form>
-            </AddKidModal>
-        </ModalOverlay>
-)}
-{isDeleteModalOpen && (
-    <ModalOverlay>
-        <AddKidModal>
-            <AddKidModalTitle>Delete a kid account</AddKidModalTitle>
-            <form onSubmit={handleDeleteKid}>
-                <Select
-                    value={selectedKid}
-                    onChange={(e) => setSelectedKid(e.target.value)}
-                >
-                    <option value="">Select a kid</option>
-    {subUsers.map((kid: string) => (
-        <option key={kid} value={kid}>
-            {kid}
-        </option>
-    ))}
-</Select>
-<Input
-type={showPin ? "text" : "password"}
-placeholder="PIN"
-value={deleteKidPin}
-onChange={(e) => setDeleteKidPin(e.target.value)}
-autoComplete="new-password"
-                            />
-                            <ModalActions>
-                                <ModalButton type="submit">Confirm</ModalButton>
-                                <ModalButton type="button" onClick={closeDeleteModal}>Cancel</ModalButton>
-                            </ModalActions>
-                        </form>
-                    </AddKidModal>
+        </Select>
+        <Input
+            type={showPin ? "text" : "password"}
+            placeholder="PIN"
+            value={deleteKidPin}
+            onChange={(e) => setDeleteKidPin(e.target.value)}
+            autoComplete="new-password"
+        />
+        <ModalActions>
+            <ModalButton type="submit">Confirm</ModalButton>
+            <ModalButton type="button" onClick={closeDeleteModal}>Cancel</ModalButton>
+        </ModalActions>
+    </form>
+</AddKidModal>
                 </ModalOverlay>
         )}
     </>

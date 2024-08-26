@@ -10,30 +10,71 @@
     cd backend && docker compose down --rmi all
 ```
 
-```shell
-    cd web && npm start
-```
-
-```shell
-    cd backend/app/usercenter/api && go run usercenter.go
-```
-
-```shell
-    cd backend/app/media/api && go run media.go
-```
-
-```shell
-    cd backend/app/audioanalysis && source .venv/bin/activate && python3 consumer.py
-```
-
-
+- Start each microservice separately; the web and mobile terminals are used for debugging.
+    - web
+    ```shell
+        cd web && npm start
+    ```
+    - mobile
+    ```shell
+        cd mobile/App && npm start
+    ```
+    - user microservice
+    ```shell
+        cd backend/app/usercenter/api && go run usercenter.go
+    ```
+    - media microservice
+    ```shell
+        cd backend/app/media/api && go run media.go
+    ```
+    - audio analysis microservice
+    ```shell
+        cd backend/app/audioanalysis && source .venv/bin/activate && python3 consumer.py
+    ```
 
 
 ### How to use
 
 ---
+#### Web
+##### Section 1: Welcome page
+- New user should register an account. The password must include uppercase and lowercase letters, special characters, and be longer than 8 characters.
+![w1.png](./Docs/img/w1.png)
+![w2.png](./Docs/img/w2.png)
+- Once you have an account you can login by enter email and password. If you forget the password, you can reset it.
+![w3.png](./Docs/img/w3.png)
+![w4.png](./Docs/img/w4.png)
 
-#### Section 1: Welcome Screen
+##### Section 2: Sub-user management
+- The web client can only be used by the account owner, usually parents. They can create multiple sub accounts.
+![w5.png](./Docs/img/w5.png)
+- You can view each sub-user's basic information and music practice records
+![w6.png](./Docs/img/w6.png)
+- You can edit sub user’s information.
+![w7.png](./Docs/img/w7.png)
+
+##### Section 3: Historical performance details page
+On the details page, we can view various data for each performance, such as the user's performance and the corresponding reference performance's video and audio, the generated visualized images, sheet music, and summary reports.
+- View reference performance video.
+![w8.png](./Docs/img/w8.png)
+- View user performance audio.
+![w9.png](./Docs/img/w9.png)
+- View sheet music generated based on the reference performance video.
+![w10.png](./Docs/img/w10.png)
+- View feedback report.
+![w15.png](./Docs/img/w15.png)
+- Based on the feedback report, we can obtain the user's note accuracy, dynamic accuracy, and rhythm accuracy, as well as identify the notes where the user made errors during the performance.
+  - For example, based on the following section of the report, we can see that the user missed D4 on the third beat of the fourth measure.
+![w16.png](./Docs/img/w16.png)
+  - Below are the sheet music generated from the user's performance and the sheet music generated from the reference performance. We can clearly identify the notes that were missed in the user's performance.
+![w13.png](./Docs/img/w13.png)
+![w14.png](./Docs/img/w14.png)
+  - Similarly, based on the visualized waterfall chart, we can also identify the notes that the user played incorrectly, missed, or played extra during the performance.
+![w11.png](./Docs/img/w11.png)
+![w12.png](./Docs/img/w12.png)
+
+#### App
+##### Section 1: Welcome Screen
 ![Image 1](./Docs/img/1.png)
 ![Image 2](./Docs/img/2.png)
 
@@ -51,7 +92,7 @@ PS: If you accidentally exit while verifying your email, please log in with the 
 
 ---
 
-#### Section 2: Sub-User Screen
+##### Section 2: Sub-User Screen
 
 
 ![Image 7](./Docs/img/7.png)
@@ -68,7 +109,7 @@ Double-click the icon to enter the sub-user.
 
 ---
 
-#### Section 3: Configuration Screen
+##### Section 3: Configuration Screen
 
 
 ![Image 10](./Docs/img/10.png)
@@ -84,7 +125,7 @@ PS: Can be modified in user screen.
 
 ---
 
-#### Section 4: Home Screen
+##### Section 4: Home Screen
 
 ![Image 15](./Docs/img/15.png)
 

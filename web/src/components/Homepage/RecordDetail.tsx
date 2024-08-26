@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactPlayer from 'react-player';
-import { IApiContext } from "../../contexts/ApiContext";
+import {IApiContext} from "../../contexts/ApiContext";
 import {
     GetPerformanceAudioReq,
     GetPerformanceAudioResp,
@@ -92,6 +92,13 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
                 console.error("Error fetching reference audio:", error);
             }
 
+            const midiToNoteName = (midiNumber: number): string => {
+                const noteNames: string[] = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+                const octave: number = Math.floor(midiNumber / 12) - 1;
+                const note: string = noteNames[midiNumber % 12];
+                return `${note}${octave}`;
+            }
+
             // Fetch performance report
             try {
                 const getReportUrl: GetPerformanceReportReq = {
@@ -103,12 +110,118 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
                     const response = await fetch(reportUrl.presignedurl);
                     if (response.ok) {
                         const data = await response.json();
+
+                        const ticksPerBeat = data['ticks_per_beat'];
+                        const numerator = data['numerator'];
+                        const denominator = data['denominator'];
+                        const tempo = data['tempo'];
+                        const rawDiff = data['raw_diff'];
+
+                        const processNote = (note: any, ticksPerBeat: number, numerator: number, denominator: number, tempo: number): {
+                            duration: number,
+                            note: string,
+                            start_time: number,
+                            velocity_on: any,
+                            beat_number: number,
+                            duration_time: number,
+                            measure_number: number
+                        } => {
+                            return {
+                                note: midiToNoteName(note.note),
+                                velocity_on: note.velocity_on,
+                                measure_number: Math.floor(note.start_time / (ticksPerBeat * numerator)) + 1,
+                                beat_number: Math.round((note.start_time / (ticksPerBeat * numerator)) % 1 * denominator),
+                                start_time: note.start_time / ticksPerBeat * tempo / 1000000,
+                                duration_time: note.duration / ticksPerBeat * tempo / 1000000,
+                                duration: Math.round(note.duration / ticksPerBeat * denominator),
+                            };
+                        }
+
+                        const processedRawDiff = {
+                            adds: rawDiff.adds.map((addGroup: any[]) =>
+                                addGroup.map(note => processNote(note, ticksPerBeat, numerator, denominator, tempo))
+                            ),
+                            deletes: rawDiff.deletes.map((deleteGroup: any[]) =>
+                                deleteGroup.map(note => processNote(note, ticksPerBeat, numerator, denominator, tempo))
+                            ),
+                            changes: rawDiff.changes.map((changeGroup: [any[], any[]]) => {
+                                const [originalNoteArray, changedNoteArray] = changeGroup;
+                                const originalNote = originalNoteArray[0]; // Extracting the first element from the original note array
+                                const changedNote = changedNoteArray[0];  // Extracting the first element from the changed note array
+
+                                return {
+                                    original: processNote(originalNote, ticksPerBeat, numerator, denominator, tempo),
+                                    changed: processNote(changedNote, ticksPerBeat, numerator, denominator, tempo),
+                                };
+                            })
+                        };
+
+                        const generateReport = (processedRawDiff: any): string => {
+                            const report: string[] = [];
+
+                            // Adds
+                            if (processedRawDiff.adds.length > 0) {
+                                report.push("Extra Notes Played:");
+                                processedRawDiff.adds.forEach((addGroup: any[]) => {
+                                    addGroup.forEach(note => {
+                                        report.push(
+                                            `    ${note.note}:`,
+                                            `        Measure ${note.measure_number}, Beat ${note.beat_number}`,
+                                            `        Played for ${note.duration} beat(s), approximately ${note.duration_time.toFixed(2)} seconds`,
+                                            `        Velocity: ${note.velocity_on}`,
+                                            ""
+                                        );
+                                    });
+                                });
+                            }
+
+                            // Deletes
+                            if (processedRawDiff.deletes.length > 0) {
+                                report.push("Missed Notes:");
+                                processedRawDiff.deletes.forEach((deleteGroup: any[]) => {
+                                    deleteGroup.forEach(note => {
+                                        report.push(
+                                            `    ${note.note}:`,
+                                            `        Measure ${note.measure_number}, Beat ${note.beat_number}`,
+                                            `        Expected to be played for ${note.duration} beat(s), approximately ${note.duration_time.toFixed(2)} seconds`,
+                                            `        Velocity: ${note.velocity_on}`,
+                                            ""
+                                        );
+                                    });
+                                });
+                            }
+
+                            // Changes
+                            if (processedRawDiff.changes.length > 0) {
+                                report.push("Incorrectly Played Notes:");
+                                processedRawDiff.changes.forEach((changeGroup: any) => {
+                                    const { original, changed } = changeGroup;
+                                    report.push(
+                                        `    ${changed.note}:`,
+                                        `        Measure ${changed.measure_number}, Beat ${changed.beat_number}`,
+                                        `        Played for ${changed.duration} beat(s), approximately ${changed.duration_time.toFixed(2)} seconds`,
+                                        `        Velocity: ${changed.velocity_on}`,
+                                        `        Correct note should be ${original.note}:`,
+                                        `            Measure ${original.measure_number}, Beat ${original.beat_number}`,
+                                        `            Should be played for ${original.duration} beat(s), approximately ${original.duration_time.toFixed(2)} seconds`,
+                                        `            Velocity: ${original.velocity_on}`,
+                                        ""
+                                    );
+                                });
+                            }
+
+                            return report.join("\n");
+                        }
+
                         setReportData({
                             noteAccuracy: data['Note accuracy'],
                             velocityAccuracy: data['Velocity accuracy'],
                             durationAccuracy: data['Duration accuracy'],
                             comment: data['Comment'],
                             errors: data['Errors'],
+                            feedback: data['Detailed_Feedback'],
+                            recommendation: data['Recommendations'],
+                            rawDiff: generateReport(processedRawDiff),
                         });
                     }
                 }
@@ -168,19 +281,19 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
         switch (activeContent) {
             case 'video':
                 return videoUrl && videoUrl.code === 0 ? (
-                    <ReactPlayer url={videoUrl.presignedurl} controls={true} />
+                    <ReactPlayer url={videoUrl.presignedurl} controls={true}/>
                 ) : (
                     <div>Video content not available</div>
                 );
             case 'audio':
                 return audioUrl && audioUrl.code === 0 ? (
-                    <ReactPlayer url={audioUrl.presignedurl} controls={true} />
+                    <ReactPlayer url={audioUrl.presignedurl} controls={true}/>
                 ) : (
                     <div>Audio content not available</div>
                 );
             case 'waterfall':
                 return imgUrl ? (
-                    <img src={imgUrl} alt="Waterfall" />
+                    <img src={imgUrl} alt="Waterfall"/>
                 ) : (
                     <div>Waterfall content not available</div>
                 );
@@ -194,32 +307,42 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
                 );
             case 'report':
                 return reportData ? (
-                    <div>
+                    <div style={{whiteSpace: 'pre-wrap'}}>
                         <h3>Performance Report</h3>
                         <p><strong>Note Accuracy:</strong> {reportData.noteAccuracy}</p>
+                        <br/>
                         <p><strong>Velocity Accuracy:</strong> {reportData.velocityAccuracy}</p>
+                        <br/>
                         <p><strong>Duration Accuracy:</strong> {reportData.durationAccuracy}</p>
+                        <br/>
                         <p><strong>Comment:</strong> {reportData.comment}</p>
+                        <br/>
                         <p><strong>Errors:</strong> {reportData.errors}</p>
+                        <br/>
+                        <p><strong>Detailed feedback:</strong> {reportData.feedback}</p>
+                        <br/>
+                        <p><strong>Recommendations:</strong> {reportData.recommendation}</p>
+                        <br/>
+                        <p><strong>Errors:</strong> {reportData.rawDiff}</p>
                     </div>
                 ) : (
                     <div>Report content not available</div>
                 );
             case 'refVideo':
                 return refVideoUrl && refVideoUrl.code === 0 ? (
-                    <ReactPlayer url={refVideoUrl.presignedurl} controls={true} />
+                    <ReactPlayer url={refVideoUrl.presignedurl} controls={true}/>
                 ) : (
                     <div>Reference video not available</div>
                 );
             case 'refAudio':
                 return refAudioUrl && refAudioUrl.code === 0 ? (
-                    <ReactPlayer url={refAudioUrl.presignedurl} controls={true} />
+                    <ReactPlayer url={refAudioUrl.presignedurl} controls={true}/>
                 ) : (
                     <div>Reference audio not available</div>
                 );
             case 'refWaterfall':
                 return refWaterfallUrl ? (
-                    <img src={refWaterfallUrl} alt="Reference Waterfall" />
+                    <img src={refWaterfallUrl} alt="Reference Waterfall"/>
                 ) : (
                     <div>Reference waterfall not available</div>
                 );
@@ -237,7 +360,7 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
     };
 
     return (
-        <div>
+        <div style={{maxWidth: '1200px'}}>
             <div style={{display: 'flex', justifyContent: 'space-around', marginBottom: '10px'}}>
                 <button style={buttonStyle} onClick={() => setActiveContent('video')}>User Video</button>
                 <button style={buttonStyle} onClick={() => setActiveContent('audio')}>User Audio</button>
