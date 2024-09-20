@@ -29,6 +29,23 @@ services:
     networks:
       - app-network
 
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - app-network
+
   usercenter:
     build:
       context: .
@@ -37,6 +54,9 @@ services:
       - "8888:8888"
     networks:
       - app-network
+    depends_on:
+      - redis
+      - elasticsearch
 
   media:
     build:
@@ -45,6 +65,10 @@ services:
     ports:
       - "8889:8889"
     depends_on:
+      redis:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
       rabbitmq:
         condition: service_healthy
     networks:
