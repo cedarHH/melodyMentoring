@@ -1,5 +1,3 @@
-## It's MYGO!!!
-
 ### How to run
 - Run server
 ```shell
